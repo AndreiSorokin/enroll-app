@@ -43,11 +43,6 @@ User.init({
       defaultValue: true,
       allowNull: false,
    },
-   procedures: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
-      defaultValue: [],
-      allowNull: false,
-   },
 },
 {
    sequelize,

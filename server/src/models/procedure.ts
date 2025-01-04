@@ -4,12 +4,21 @@ const { sequelize } = require('../util/db');
 
 class Procedure extends Model {};
 
-// Procedure.init({
-//    id: {
-//       type: DataTypes.UUID,
-//       primaryKey: true,
-//       defaultValue: DataTypes.UUIDV4,
-//    },
-//    name: DataTypes.STRING,
-//    description: DataTypes.TEXT,
-// });
+Procedure.init({
+   id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+   },
+   price: {
+      type: DataTypes.DECIMAL(10, 2),
+   },
+   name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+   }
+}, {
+   sequelize,
+   modelName: 'Procedure',
+   tableName: 'procedures',
+});
