@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import 'ts-node/register';
 const { DATABASE_URL } = require('./config');
 import { Umzug, SequelizeStorage } from "umzug";
 
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
 
 const migrationConf = {
    migrations: {
-      glob: 'migrations/*.js',
+      glob: 'src/migrations/*.js',
    },
    storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
    context: sequelize.getQueryInterface(),
@@ -27,13 +28,14 @@ const runMigrations = async () => {
       files: migrations.map((mig) => mig.name),
    })
 }
+
 const connectToDatabase = async () => {
    try {
       await sequelize.authenticate()
       await runMigrations()
       console.log('connected to the database')
    } catch (err) {
-      console.log('failed to connect to the database')
+      console.log('failed to connect to the database: ', err)
       return process.exit(1)
    }
    return null
