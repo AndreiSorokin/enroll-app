@@ -1,34 +1,33 @@
-import { Model, DataTypes } from 'sequelize'
+import { sequelize, DataTypes, Model } from '../utils/db';
 
-const { sequelize } = require('../util/db');
+class UserProcedure extends Model {}
 
-class userProcedure extends Model {};
-
-userProcedure.init({
-   id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-   },
-   userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-         model: 'users',
-         key: 'id',
+   UserProcedure.init({
+      id: {
+         type: DataTypes.UUID,
+         primaryKey: true,
+         defaultValue: DataTypes.UUIDV4,
       },
-   },
-   procedureId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-         model: 'procedures',
-         key: 'id',
+      userId: {
+         type: DataTypes.UUID,
+         allowNull: false,
+         references: {
+            model: 'users',
+            key: 'id',
+         },
       },
-      primaryKey: true,
-   }
-}, {
-   sequelize,
-   modelName: 'userProcedure',
-   tableName: 'user_procedures',
-});
+      procedureId: {
+         type: DataTypes.UUID,
+         allowNull: false,
+         references: {
+            model: 'procedures',
+            key: 'id',
+         },
+      },
+   }, {
+      sequelize,
+      modelName: 'userProcedure',
+      tableName: 'user_procedures',
+   });
+
+export default UserProcedure;

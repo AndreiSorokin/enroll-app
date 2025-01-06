@@ -1,10 +1,8 @@
 import express from 'express';
+import app from './app';
 
-const { PORT } = require('./utils/config');
-const { connectToDatabase } = require('./utils/db');
-
-const app = express();
-app.use(express.json());
+import { PORT } from './utils/config';
+import { connectToDatabase } from './utils/db';
 
 const start = async () => {
    await connectToDatabase();

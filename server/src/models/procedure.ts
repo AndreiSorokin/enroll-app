@@ -1,8 +1,6 @@
-import { Model, DataTypes } from 'sequelize'
+import { sequelize, DataTypes, Model } from '../utils/db';
 
-const { sequelize } = require('../util/db');
-
-class Procedure extends Model {};
+class Procedure extends Model {}
 
 Procedure.init({
    id: {
@@ -16,9 +14,11 @@ Procedure.init({
    name: {
       type: DataTypes.STRING,
       allowNull: false,
-   }
+   },
 }, {
    sequelize,
    modelName: 'Procedure',
    tableName: 'procedures',
 });
+
+export default Procedure;
