@@ -1,20 +1,20 @@
 import { User, Procedure } from '../models';
 
 const getAllUsers = () => {
-   return User.findAll({
-      include: [
-        {
-          model: Procedure,
-          as: 'procedures', // Match the alias used in the association
-        },
-        {
-          model: Procedure,
-          as: 'MasterProcedures', // Match the alias used in the association
-        },
-      ],
+  return User.findAll({
+    include: [
+      {
+        model: Procedure,
+        as: 'EnrolledProcedures',
+      },
+      {
+        model: Procedure,
+        as: 'MasterProcedures',
+      },
+    ],
     });
 }
 
 export default {
-   getAllUsers,
+  getAllUsers,
 }

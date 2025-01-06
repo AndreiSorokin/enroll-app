@@ -2,7 +2,6 @@ import { Sequelize, DataTypes, Model } from 'sequelize';
 import { DATABASE_URL } from './config';
 import { Umzug, SequelizeStorage } from 'umzug';
 
-// Initialize Sequelize instance
 const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
   dialectOptions: {
@@ -13,7 +12,6 @@ const sequelize = new Sequelize(DATABASE_URL, {
   },
 });
 
-// Migration setup
 const migrationConf = {
   migrations: {
     glob: 'src/migrations/*.js',
@@ -23,7 +21,6 @@ const migrationConf = {
   logger: console,
 };
 
-// Running migrations
 const runMigrations = async () => {
   const migrator = new Umzug(migrationConf);
   const migrations = await migrator.up();
@@ -32,7 +29,6 @@ const runMigrations = async () => {
   });
 };
 
-// Connecting to the database
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
@@ -45,12 +41,10 @@ const connectToDatabase = async () => {
   return null;
 };
 
-// Rollback migrations
 const rollbackMigration = async () => {
   await sequelize.authenticate();
   const migrator = new Umzug(migrationConf);
   await migrator.down();
 };
 
-// Export everything for use in other files
 export { sequelize, DataTypes, Model, connectToDatabase, rollbackMigration };

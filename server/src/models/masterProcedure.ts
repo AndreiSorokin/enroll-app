@@ -15,6 +15,7 @@ class MasterProcedure extends Model {}
             model: 'users',
             key: 'id',
          },
+         field: 'master_id',
       },
       procedureId: {
          type: DataTypes.UUID,
@@ -23,11 +24,13 @@ class MasterProcedure extends Model {}
             model: 'procedures',
             key: 'id',
          },
+         field: 'procedure_id',
       },
    }, {
       sequelize,
       modelName: 'MasterProcedure',
       tableName: 'master_procedures',
+      timestamps: false,
    });
 
 export default MasterProcedure;

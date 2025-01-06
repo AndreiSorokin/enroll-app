@@ -15,6 +15,7 @@ class UserProcedure extends Model {}
             model: 'users',
             key: 'id',
          },
+         field: 'user_id',
       },
       procedureId: {
          type: DataTypes.UUID,
@@ -23,11 +24,13 @@ class UserProcedure extends Model {}
             model: 'procedures',
             key: 'id',
          },
+         field: 'procedure_id',
       },
    }, {
       sequelize,
       modelName: 'userProcedure',
       tableName: 'user_procedures',
+      timestamps: false,
    });
 
 export default UserProcedure;
