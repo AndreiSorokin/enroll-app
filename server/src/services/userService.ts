@@ -12,8 +12,8 @@ interface CreateUserInput {
   active?: boolean;
 }
 
-const getAllUsers = () => {
-  return User.findAll({
+const getAllUsers = async () => {
+  return await User.findAll({
     include: [
       {
         model: Procedure,
@@ -26,6 +26,36 @@ const getAllUsers = () => {
     ],
     });
 };
+
+const getSingleUser = async (id: string, requesterRole: 'user' | 'admin' | 'master') => {
+  try {
+    const user = await User.findByPk(id, {
+      include: [
+        {
+          model: Procedure,
+          as: 'EnrolledProcedures',
+        },
+        // Conditionally include the 'MasterProcedures' only for 'master' role
+        ...(requesterRole === 'master' || requesterRole === 'admin'
+          ? [
+              {
+                model: Procedure,
+                as: 'MasterProcedures',
+              }
+            ]
+          : []),
+      ],
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user; // Return the user data with the appropriate fields based on role
+  } catch (error) {
+    throw new Error(`Error fetching user: ${error}`);
+  }
+}
 
 const createUser = async(user: CreateUserInput): Promise<string | object> => {
   const { name, email, password, role ='user', active = true } = user;
@@ -58,7 +88,15 @@ const createUser = async(user: CreateUserInput): Promise<string | object> => {
   return newUser;
 }
 
+const deleteUser = async (id: string) => {
+  await User.findOne({
+    where: { id },
+  })
+}
+
 export default {
   getAllUsers,
-  createUser
+  getSingleUser,
+  createUser,
+  deleteUser
 }
