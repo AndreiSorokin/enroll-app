@@ -21,6 +21,7 @@
     "migration:down": "node -r ts-node/register src/utils/rollback.ts"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",

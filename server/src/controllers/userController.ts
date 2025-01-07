@@ -9,4 +9,9 @@ export async function getAllUsers(req: Request, res: Response, next: NextFunctio
       return;
    }
    res.status(200).json(users);
+};
+
+export async function createUser(req: Request, res: Response, next: NextFunction) {
+   const user = await userService.createUser(req.body);
+   res.status(201).json(user);
 }

@@ -25,7 +25,6 @@ class User extends Model {}
          allowNull: false,
          validate: {
             min: 8,
-            isAlphanumeric: true,
          },
       },
       role: {

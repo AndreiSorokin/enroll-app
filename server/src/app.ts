@@ -1,12 +1,7 @@
 import express from 'express';
 
 import userRouter from './routers/userRouter';
-import { User, Procedure } from './models';
-// console.log('User.associations: ', User.associations);
-// console.log('Procedure.associations ', Procedure.associations);
-
-import { sequelize } from './utils/db';
-console.log(sequelize)
+import apiErrorhandler from './middlewares/errorHandler';
 
 const app = express();
 
@@ -14,5 +9,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/v1/users', userRouter);
+
+app.use(apiErrorhandler)
 
 export default app;
