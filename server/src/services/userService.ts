@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import validator from 'validator';
+import { validate as isUuid } from 'uuid';
 
 import { User, Procedure } from '../models';
-import { ApiError } from "../errors/ApiError";
+import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
 
 interface CreateUserInput {
   name: string;
@@ -10,6 +11,29 @@ interface CreateUserInput {
   password: string;
   role?: 'user' | 'admin' | 'master';
   active?: boolean;
+};
+
+//reset password, ban users*
+
+const getUserByEmail = async (email: string) => {
+  try {
+    if (!email) {
+      throw new BadRequestError('Email is required');
+    }
+  
+    const user = await User.findOne({ 
+      where: 
+      { email },
+      attributes: ['id', 'name', 'email', 'password', 'role', 'active']
+    });
+  
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    return user;
+  } catch (error) {
+    throw new InternalServerError('Database query failed');
+  }
 }
 
 const getAllUsers = async () => {
@@ -27,35 +51,37 @@ const getAllUsers = async () => {
     });
 };
 
-const getSingleUser = async (id: string, requesterRole: 'user' | 'admin' | 'master') => {
+const getSingleUser = async (id: string) => {
   try {
-    const user = await User.findByPk(id, {
+
+    if (!validator.isUUID(id)) {
+      throw new BadRequestError('Invalid user ID format');
+    }
+
+    const user = await User.findOne({
+      where: { id },
       include: [
         {
           model: Procedure,
           as: 'EnrolledProcedures',
         },
-        // Conditionally include the 'MasterProcedures' only for 'master' role
-        ...(requesterRole === 'master' || requesterRole === 'admin'
-          ? [
-              {
-                model: Procedure,
-                as: 'MasterProcedures',
-              }
-            ]
-          : []),
+        {
+          model: Procedure,
+          as: 'MasterProcedures',
+        },
       ],
     });
 
     if (!user) {
-      throw new Error("User not found");
+      throw new NotFoundError('User not found');
     }
 
-    return user; // Return the user data with the appropriate fields based on role
+    return user;
   } catch (error) {
-    throw new Error(`Error fetching user: ${error}`);
+    console.error('Error fetching user:', error);
+    throw error;
   }
-}
+};
 
 const createUser = async(user: CreateUserInput): Promise<string | object> => {
   const { name, email, password, role ='user', active = true } = user;
@@ -86,17 +112,46 @@ const createUser = async(user: CreateUserInput): Promise<string | object> => {
   });
 
   return newUser;
+};
+
+const updateUser = async (id: string, updates: User) => {
+  try {
+    if (!isUuid(id)) {
+      throw new BadRequestError('Invalid user ID format');
+    }
+  
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+  
+    return await user.update(updates);
+  } catch (error) {
+    throw new InternalServerError('Database query failed');
+  }
 }
 
 const deleteUser = async (id: string) => {
-  await User.findOne({
+
+  if (!isUuid(id)) {
+    throw new BadRequestError('Invalid user ID format');
+  }
+
+  const user = await User.findOne({ where: { id } });
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  await User.destroy({
     where: { id },
-  })
-}
+  });
+};
 
 export default {
   getAllUsers,
   getSingleUser,
   createUser,
-  deleteUser
+  deleteUser,
+  updateUser,
+  getUserByEmail
 }
