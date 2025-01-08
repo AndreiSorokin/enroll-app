@@ -1,19 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import { ForbiddenError, UnauthorizedError } from "../errors/ApiError";
 
-export const authOwnershipMiddleware = (req: Request, res: Response, next: NextFunction) => {
+interface AuthenticatedRequest extends Request {
+  user?: { id: string };
+}
+
+export const authOwnershipMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    // if (!req.user || !req.user.id) {
-    //   throw new UnauthorizedError('User information not available');
-    // }
+    const request = req as AuthenticatedRequest;
 
-    const { id } = req.params;
+    if (!request.user || !request.user.id) {
+      throw new UnauthorizedError("User information not available");
+    }
 
-    // if (req.user.id !== id) {
-    //   throw new ForbiddenError('You are not authorized to do this');
-    // }
+    const { id: requestedUserId } = req.params;
 
-  next();
+    if (request.user.id !== requestedUserId) {
+      throw new ForbiddenError("You are not authorized to perform this action");
+    }
+
+    next();
   } catch (error) {
     next(error);
   }
