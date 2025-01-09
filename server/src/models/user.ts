@@ -40,6 +40,16 @@ class User extends Model {}
          defaultValue: true,
          allowNull: false,
       },
+      resetToken: {
+         type: DataTypes.STRING,
+         allowNull: true,
+         defaultValue: null,
+      },
+      resetTokenExpiresAt: {
+         type: DataTypes.DATE,
+         allowNull: true,
+         defaultValue: null,
+      },
    }, {
       sequelize,
       modelName: 'User',

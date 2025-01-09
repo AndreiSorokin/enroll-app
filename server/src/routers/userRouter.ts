@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getAllUsers, createUser, getSingleUser, deleteUser, updateUser, userLogin } from "../controllers/userController";
+import { getAllUsers, createUser, getSingleUser, deleteUser, updateUser, userLogin, forgotPassword } from "../controllers/userController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { authOwnershipMiddleware } from "../middlewares/authOwnershipMiddleware";
 
@@ -12,6 +12,7 @@ router.post('/', createUser);
 router.put('/:id', authMiddleware, authOwnershipMiddleware, updateUser);
 router.delete('/:id', deleteUser);
 
-router.post('/login', userLogin)
+router.post('/login', userLogin);
+router.post('/reset-password', forgotPassword);
 
 export default router;

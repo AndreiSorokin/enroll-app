@@ -5,4 +5,6 @@ export type User = {
    password: string;
    role: string;
    active: boolean;
+   resetToken?: string | null;
+   resetTokenExpiresAt?: Date | null;
 };

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import validator from 'validator';
 import { validate as isUuid } from 'uuid';
+import nodemailer from "nodemailer";
 
 import { User, Procedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
@@ -13,7 +14,32 @@ interface CreateUserInput {
   active?: boolean;
 };
 
-//reset password, ban users*
+//ban users*
+
+const sendVerificationMail = async(email: string, verificationLink: string) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.MAILER_USER,
+      pass: process.env.MAILER_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  const mailOptions = {
+    from: process.env.MAILER_USER,
+    to: email,
+    subject: "Email Verification",
+    text: `Please verify your email by clicking this link: ${verificationLink}`,
+  };
+
+  return await transporter.sendMail(mailOptions);
+}
 
 const getUserByEmail = async (email: string) => {
   try {
@@ -153,5 +179,6 @@ export default {
   createUser,
   deleteUser,
   updateUser,
-  getUserByEmail
+  getUserByEmail,
+  sendVerificationMail
 }
