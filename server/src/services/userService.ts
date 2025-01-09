@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 import { User, Procedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
 
-interface CreateUserInput {
+interface ICreateUserInput {
   name: string;
   email: string;
   password: string;
@@ -14,7 +14,7 @@ interface CreateUserInput {
   active?: boolean;
 };
 
-//ban users*
+//ban users*, add/remove master procedure, add/remove usesr procedure
 
 const sendVerificationMail = async(email: string, verificationLink: string) => {
   const transporter = nodemailer.createTransport({
@@ -79,7 +79,6 @@ const getAllUsers = async () => {
 
 const getSingleUser = async (id: string) => {
   try {
-
     if (!validator.isUUID(id)) {
       throw new BadRequestError('Invalid user ID format');
     }
@@ -109,7 +108,7 @@ const getSingleUser = async (id: string) => {
   }
 };
 
-const createUser = async(user: CreateUserInput): Promise<string | object> => {
+const createUser = async(user: ICreateUserInput): Promise<string | object> => {
   const { name, email, password, role ='user', active = true } = user;
 
   if (!['user', 'admin', 'master'].includes(role)) {
