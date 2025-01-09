@@ -50,9 +50,9 @@ const getUserByEmail = async (email: string) => {
     const user = await User.findOne({ 
       where: 
       { email },
-      attributes: ['id', 'name', 'email', 'password', 'role', 'active']
+      attributes: ['id', 'name', 'email', 'password', 'role', 'active', 'resetToken', 'resetTokenExpiresAt']
     });
-  
+
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -134,7 +134,9 @@ const createUser = async(user: CreateUserInput): Promise<string | object> => {
     password:
     hashedPassword,
     role,
-    active
+    active,
+    resetToken: null,
+    resetTokenExpiresAt: null,
   });
 
   return newUser;

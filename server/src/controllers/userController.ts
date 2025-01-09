@@ -28,16 +28,13 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
       userData.resetToken = token;
       userData.resetTokenExpiresAt = new Date(Date.now() + 3600000);
       await userData.save();
-      response
-      .status(200)
-      .json({ message: "Verification email sent successfully." });
+      res.status(200).json({ message: "Verification email sent successfully." });
    } catch (error) {
       next(error);
    }
 };
 
 export async function userLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
-   console.log('JWT_SECRET1:', process.env.JWT_SECRET);
    try {
       const { email, password } = req.body;
       const userData = await userService.getUserByEmail(email) as Partial<User>;
@@ -115,6 +112,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
       const user = await userService.createUser(req.body);
       res.status(201).json(user);
    } catch (error) {
+      console.log('error: ',error);
       next(error);
    }
 }

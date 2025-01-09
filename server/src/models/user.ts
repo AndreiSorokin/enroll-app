@@ -1,6 +1,37 @@
 import { sequelize, DataTypes, Model } from '../utils/db';
 
-class User extends Model {}
+interface UserAttributes {
+   id: string;
+   name: string;
+   email: string;
+   password: string;
+   role: 'user' | 'admin' | 'master';
+   active: boolean;
+   resetToken?: string | null;
+   resetTokenExpiresAt?: Date | null;
+}
+
+// Define the interface for the creation of a User (excluding optional fields like id)
+interface UserCreationAttributes {
+   name: string;
+   email: string;
+   password: string;
+   role: 'user' | 'admin' | 'master';
+   active: boolean;
+   resetToken?: string | null;
+   resetTokenExpiresAt?: Date | null;
+}
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+   public id!: string;
+   public name!: string;
+   public email!: string;
+   public password!: string;
+   public role!: 'user' | 'admin' | 'master';
+   public active!: boolean;
+   public resetToken!: string | null;
+   public resetTokenExpiresAt!: Date | null;
+}
 
    User.init({
       id: {
@@ -44,11 +75,13 @@ class User extends Model {}
          type: DataTypes.STRING,
          allowNull: true,
          defaultValue: null,
+         field: 'reset_token'
       },
       resetTokenExpiresAt: {
          type: DataTypes.DATE,
          allowNull: true,
          defaultValue: null,
+         field: 'reset_token_expires_at'
       },
    }, {
       sequelize,
