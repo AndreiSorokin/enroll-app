@@ -2,6 +2,29 @@ import { NextFunction, Request, response, Response } from "express";
 
 import procedureService from '../services/procedureService';
 
+
+export async function deleteProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const id = req.params.id;
+      await procedureService.deleteProcedure(id);
+
+      res.status(204).json({ message: "Procedure has been deleted successfully" });
+   } catch (error) {
+      next(error);
+   }
+}
+export async function modifyProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const id = req.params.id;
+      const updates = req.body;
+
+      const modifiedProcedure = await procedureService.modifyProcedure(id, updates);
+      res.status(200).json(modifiedProcedure);
+   } catch (error) {
+      next(error);
+   }
+}
+
 export async function createProcedure (req: Request, res: Response, next: NextFunction) {
    try {
       const procedure = await procedureService.createProcedure(req.body);

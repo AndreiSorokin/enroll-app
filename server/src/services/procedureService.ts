@@ -8,6 +8,46 @@ interface IProcedure {
    name: string;
 }
 
+const deleteProcedure = async(id: string) => {
+   try {
+      if (!validator.isUUID(id)) {
+         throw new BadRequestError('Invalid procedure ID format');
+      }
+
+      const procedure = await Procedure.findOne({ where: { id } });
+
+      if (!procedure) {
+         throw new NotFoundError("Procedure not found");
+      }
+
+      await Procedure.destroy({
+         where: { id },
+      });
+   } catch (error) {
+      throw new NotFoundError("Procedure not found");
+   }
+}
+
+const modifyProcedure = async(id:string, updates: Procedure) => {
+   try {
+      if (!validator.isUUID(id)) {
+         throw new BadRequestError('Invalid procedure ID format');
+      }
+   
+      const procedure = await Procedure.findByPk(id);
+   
+      if (!procedure) {
+         throw new NotFoundError('Procedure not found');
+      }
+
+      return procedure.update(updates);
+   } catch (error) {
+      throw new NotFoundError("Procedure not found")
+   }
+
+
+}
+
 const createProcedure = async(procedure: IProcedure) => {
    const { price, name } = procedure;
 
@@ -39,7 +79,7 @@ const getAllProcedures = async() => {
 const getSingleProcedure = async(id: string) => {
    try {
       if (!validator.isUUID(id)) {
-         throw new BadRequestError('Invalid user ID format');
+         throw new BadRequestError('Invalid procedure ID format');
       }
 
       const procedure = await Procedure.findOne({
@@ -62,7 +102,6 @@ const getSingleProcedure = async(id: string) => {
 
       return procedure;
    } catch (error) {
-      console.log('procedure service: ', error)
       throw new NotFoundError('Procedure  not found');
    }
 }
@@ -70,5 +109,7 @@ const getSingleProcedure = async(id: string) => {
 export default {
    getAllProcedures,
    getSingleProcedure,
-   createProcedure
+   createProcedure,
+   modifyProcedure,
+   deleteProcedure
 }
