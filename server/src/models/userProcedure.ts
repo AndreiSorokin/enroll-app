@@ -26,6 +26,15 @@ class UserProcedure extends Model {}
          },
          field: 'procedure_id',
       },
+      masterId: {
+         type: DataTypes.UUID,
+         allowNull: false,
+         references: {
+            model: 'users',
+            key: 'id',
+         },
+         field: 'master_id',
+      },
    }, {
       sequelize,
       modelName: 'userProcedure',

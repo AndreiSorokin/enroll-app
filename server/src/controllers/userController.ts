@@ -62,11 +62,6 @@ export async function addUserProcedure(req: Request, res: Response, next: NextFu
    try {
       const { userId, procedureId, masterId } = req.body;
 
-      console.log(req.body)
-      console.log(procedureId)
-      console.log(userId)
-      console.log(masterId)
-
       if (!userId || !procedureId || !masterId) {
          res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required' });
          return;

@@ -173,6 +173,7 @@ const addUserProcedure = async (userId: string, procedureId: string, masterId: s
       masterId
     });
   } catch (error) {
+  console.log('error: ', error)
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
