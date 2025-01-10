@@ -9,15 +9,15 @@ import { BadRequestError } from "../errors/ApiError";
 
 export async function deleteMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      
-   } catch (error) {
-      next(error);
-   }
-};
+      const { masterId, procedureId } = req.body;
 
-export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
-   try {
-      
+      if (!masterId || !procedureId) {
+         res.status(400).json({ error: 'Master ID and Procedure ID are required' });
+         return;
+      }
+
+      await userService.deleteMasterProcedure(masterId, procedureId);
+      res.status(200).json({ message: 'Enrollment cancelled' });
    } catch (error) {
       next(error);
    }
@@ -34,6 +34,22 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
 
       await userService.deleteUserProcedure(userId, procedureId);
       res.status(200).json({ message: 'Enrollment cancelled' });
+   } catch (error) {
+      next(error);
+   }
+};
+
+export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { masterId, procedureId } = req.body;
+
+      if (!masterId || !procedureId) {
+         res.status(400).json({ error: 'User ID and Procedure ID are required' });
+         return;
+      }
+
+      await userService.addMasterProcedure(masterId, procedureId);
+      res.status(200).json({ message: 'Procedure added listed' });
    } catch (error) {
       next(error);
    }

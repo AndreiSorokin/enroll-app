@@ -30,8 +30,8 @@ router.delete('/:id', deleteUser);
 router.post('/login', userLogin);
 router.post('/reset-password', forgotPassword);
 
-router.post('/:id/user-procedures', addUserProcedure);//
-router.delete('/:id/user-procedures', deleteUserProcedure);//
+router.post('/:id/user-procedures', addUserProcedure);
+router.delete('/:id/user-procedures', deleteUserProcedure);
 
 router.post('/:id/master-procedures', addMasterProcedure);//
 router.delete('/:id/master-procedures', deleteMasterProcedure);//

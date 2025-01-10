@@ -3,7 +3,7 @@ import validator from 'validator';
 import { validate as isUuid } from 'uuid';
 import nodemailer from "nodemailer";
 
-import { User, Procedure, UserProcedure } from '../models';
+import { User, Procedure, UserProcedure, MasterProcedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
 
 interface ICreateUserInput {
@@ -14,19 +14,31 @@ interface ICreateUserInput {
   active?: boolean;
 };
 
-const deleteMasterProcedure = async () => {
+const deleteMasterProcedure = async (masterId: string, procedureId: string) => {
   try {
-    
-  } catch (error) {
-    if (error instanceof BadRequestError || error instanceof NotFoundError) {
-      throw error;
+    if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
+      throw new BadRequestError('Invalid format of User ID or Procedure ID');
     }
-  }
-};
 
-const addMasterProcedure = async () => {
-  try {
-    
+    const master = await User.findByPk(masterId);
+    if (!master) {
+      throw new NotFoundError('Master not found');
+    }
+
+    const procedure = await Procedure.findByPk(procedureId);
+    if (!procedure) {
+      throw new NotFoundError('Procedure not found');
+    }
+
+    const userProcedure = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (!userProcedure) {
+      throw new NotFoundError('Procedure not found');
+    }
+
+    await userProcedure.destroy();
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
@@ -59,6 +71,43 @@ const deleteUserProcedure = async (userId: string, procedureId: string) => {
     }
 
     await userProcedure.destroy();
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
+//TODO: recreate logic for masters, should be able to create their own procedures
+
+const addMasterProcedure = async (masterId: string, procedureId: string) => {
+  try {
+    if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
+      throw new BadRequestError('Invalid format of User ID or Procedure ID');
+    }
+
+    const master = await User.findByPk(masterId);
+    if (!master) {
+      throw new NotFoundError('Master not found');
+    }
+
+    const procedure = await Procedure.findByPk(procedureId);
+    if (!procedure) {
+      throw new NotFoundError('Procedure not found');
+    }
+
+    const existingEntry = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (existingEntry) {
+      throw new BadRequestError('User already listed this procedure');
+    }
+
+    return await UserProcedure.create({
+      masterId,
+      procedureId,
+    });
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
