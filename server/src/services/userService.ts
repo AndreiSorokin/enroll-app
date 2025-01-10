@@ -91,6 +91,10 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       throw new NotFoundError('Master not found');
     }
 
+    if (master.role !== 'master') {
+      throw new BadRequestError('Only masters can add master procedures');
+    }
+
     console.log('master: ', master)
     console.log('name: ', procedureName)
 

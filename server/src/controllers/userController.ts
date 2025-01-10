@@ -17,7 +17,7 @@ export async function deleteMasterProcedure(req: Request, res: Response, next: N
       }
 
       await userService.deleteMasterProcedure(masterId, procedureId);
-      res.status(200).json({ message: 'Enrollment cancelled' });
+      res.status(200).json({ message: 'Procedure removed' });
    } catch (error) {
       next(error);
    }
@@ -52,7 +52,7 @@ export async function addMasterProcedure(req: Request, res: Response, next: Next
       }
 
       await userService.addMasterProcedure(masterId, procedureName, price);
-      res.status(200).json({ message: 'Procedure added listed' });
+      res.status(200).json({ message: 'Procedure listed' });
    } catch (error) {
       next(error);
    }
