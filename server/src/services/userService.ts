@@ -46,9 +46,9 @@ const deleteMasterProcedure = async (masterId: string, procedureId: string) => {
   }
 };
 
-const deleteUserProcedure = async (userId: string, procedureId: string) => {
+const deleteUserProcedure = async (userId: string, procedureId: string, masterId: string) => {
   try {
-    if (!validator.isUUID(userId) || !validator.isUUID(procedureId)) {
+    if (!validator.isUUID(userId) || !validator.isUUID(procedureId) || !validator.isUUID(masterId)) {
       throw new BadRequestError('Invalid format of User ID or Procedure ID');
     }
 
@@ -60,6 +60,19 @@ const deleteUserProcedure = async (userId: string, procedureId: string) => {
     const procedure = await Procedure.findByPk(procedureId);
     if (!procedure) {
       throw new NotFoundError('Procedure not found');
+    }
+
+    const master = await User.findByPk(masterId);
+    if (!master || master.role !== 'master') {
+      throw new NotFoundError('Master not found or the provided ID is not a master');
+    }
+
+    const masterProcedure = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (!masterProcedure) {
+      throw new NotFoundError('The specified master cannot perform this procedure');
     }
 
     const userProcedure = await UserProcedure.findOne({
@@ -78,8 +91,6 @@ const deleteUserProcedure = async (userId: string, procedureId: string) => {
   }
 };
 
-//TODO: recreate logic for masters, should be able to create their own procedures
-
 const addMasterProcedure = async (masterId: string, procedureName: string, price: number) => {
   try {
     if (!validator.isUUID(masterId) || !procedureName || price <= 0) {
@@ -94,9 +105,6 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
     if (master.role !== 'master') {
       throw new BadRequestError('Only masters can add master procedures');
     }
-
-    console.log('master: ', master)
-    console.log('name: ', procedureName)
 
     let procedure = await Procedure.findOne({ where: { name: procedureName } });
     if (!procedure) {
@@ -122,9 +130,9 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
   }
 };
 
-const addUserProcedure = async (userId: string, procedureId: string) => {
+const addUserProcedure = async (userId: string, procedureId: string, masterId: string) => {
   try {
-    if (!validator.isUUID(userId) || !validator.isUUID(procedureId)) {
+    if (!validator.isUUID(userId) || !validator.isUUID(procedureId) || !validator.isUUID(masterId)) {
       throw new BadRequestError('Invalid format of User ID or Procedure ID');
     }
 
@@ -138,8 +146,21 @@ const addUserProcedure = async (userId: string, procedureId: string) => {
       throw new NotFoundError('Procedure not found');
     }
 
+    const master = await User.findByPk(masterId);
+    if (!master || master.role !== 'master') {
+      throw new NotFoundError('Master not found or the provided ID is not a master');
+    }
+
+    const masterProcedure = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (!masterProcedure) {
+      throw new NotFoundError('The specified master cannot perform this procedure');
+    }
+
     const existingEntry = await UserProcedure.findOne({
-      where: { userId, procedureId },
+      where: { userId, procedureId, masterId },
     });
 
     if (existingEntry) {
@@ -149,6 +170,7 @@ const addUserProcedure = async (userId: string, procedureId: string) => {
     return await UserProcedure.create({
       userId,
       procedureId,
+      masterId
     });
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {

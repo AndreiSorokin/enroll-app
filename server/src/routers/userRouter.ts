@@ -19,7 +19,7 @@ import {
 
 const router = express.Router();
 
-//TODO: ban users*, add/remove master procedure, apply middleware to master procedure, add pictures to users
+//TODO: ban users*, add pictures to users
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
@@ -30,10 +30,10 @@ router.delete('/:id', deleteUser);
 router.post('/login', userLogin);
 router.post('/reset-password', forgotPassword);
 
-router.post('/:id/user-procedures', addUserProcedure);
-router.delete('/:id/user-procedures', deleteUserProcedure);
+router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, addUserProcedure);
+router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, deleteUserProcedure);
 
-router.post('/:id/master-procedures', addMasterProcedure);//
-router.delete('/:id/master-procedures', deleteMasterProcedure);//
+router.post('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, addMasterProcedure);
+router.delete('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, deleteMasterProcedure);
 
 export default router;

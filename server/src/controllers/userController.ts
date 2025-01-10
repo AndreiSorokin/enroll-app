@@ -25,14 +25,14 @@ export async function deleteMasterProcedure(req: Request, res: Response, next: N
 
 export async function deleteUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { userId, procedureId } = req.body;
+      const { userId, procedureId, masterId } = req.body;
 
-      if (!userId || !procedureId) {
-         res.status(400).json({ error: 'User ID and Procedure ID are required' });
+      if (!userId || !procedureId || !masterId) {
+         res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required' });
          return;
       }
 
-      await userService.deleteUserProcedure(userId, procedureId);
+      await userService.deleteUserProcedure(userId, procedureId, masterId);
       res.status(200).json({ message: 'Enrollment cancelled' });
    } catch (error) {
       next(error);
@@ -41,13 +41,13 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
 
 export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { masterId: masterId, procedureName, price } = req.body;
+      const { masterId, procedureName, price } = req.body;
       console.log('masterId: ', masterId)
       console.log('procedureName: ', procedureName)
       console.log('price: ', price)
 
       if (!masterId || !procedureName || price === undefined) {
-         res.status(400).json({ error: 'User ID and procedure are required' });
+         res.status(400).json({ error: 'Master ID, procedure name, and price are required' });
          return;
       }
 
@@ -60,14 +60,19 @@ export async function addMasterProcedure(req: Request, res: Response, next: Next
 
 export async function addUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { userId, procedureId } = req.body;
+      const { userId, procedureId, masterId } = req.body;
 
-      if (!userId || !procedureId) {
-         res.status(400).json({ error: 'User ID and Procedure ID are required' });
+      console.log(req.body)
+      console.log(procedureId)
+      console.log(userId)
+      console.log(masterId)
+
+      if (!userId || !procedureId || !masterId) {
+         res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required' });
          return;
       }
 
-      await userService.addUserProcedure(userId, procedureId);
+      await userService.addUserProcedure(userId, procedureId, masterId);
       res.status(200).json({ message: 'Procedure added successfully' });
    } catch (error) {
       next(error);
