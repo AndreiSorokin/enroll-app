@@ -25,7 +25,15 @@ export async function addMasterProcedure(req: Request, res: Response, next: Next
 
 export async function deleteUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      
+      const { userId, procedureId } = req.body;
+
+      if (!userId || !procedureId) {
+         res.status(400).json({ error: 'User ID and Procedure ID are required' });
+         return;
+      }
+
+      await userService.deleteUserProcedure(userId, procedureId);
+      res.status(200).json({ message: 'Enrollment cancelled' });
    } catch (error) {
       next(error);
    }

@@ -34,9 +34,31 @@ const addMasterProcedure = async () => {
   }
 };
 
-const deleteUserProcedure = async () => {
+const deleteUserProcedure = async (userId: string, procedureId: string) => {
   try {
-    
+    if (!validator.isUUID(userId) || !validator.isUUID(procedureId)) {
+      throw new BadRequestError('Invalid format of User ID or Procedure ID');
+    }
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const procedure = await Procedure.findByPk(procedureId);
+    if (!procedure) {
+      throw new NotFoundError('Procedure not found');
+    }
+
+    const userProcedure = await UserProcedure.findOne({
+      where: { userId, procedureId },
+    });
+
+    if (!userProcedure) {
+      throw new NotFoundError('Enrollment not found');
+    }
+
+    await userProcedure.destroy();
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
