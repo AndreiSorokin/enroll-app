@@ -80,9 +80,9 @@ const deleteUserProcedure = async (userId: string, procedureId: string) => {
 
 //TODO: recreate logic for masters, should be able to create their own procedures
 
-const addMasterProcedure = async (masterId: string, procedureId: string) => {
+const addMasterProcedure = async (masterId: string, procedureName: string, price: number) => {
   try {
-    if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
+    if (!validator.isUUID(masterId) || !procedureName || price <= 0) {
       throw new BadRequestError('Invalid format of User ID or Procedure ID');
     }
 
@@ -91,22 +91,25 @@ const addMasterProcedure = async (masterId: string, procedureId: string) => {
       throw new NotFoundError('Master not found');
     }
 
-    const procedure = await Procedure.findByPk(procedureId);
+    console.log('master: ', master)
+    console.log('name: ', procedureName)
+
+    let procedure = await Procedure.findOne({ where: { name: procedureName } });
     if (!procedure) {
-      throw new NotFoundError('Procedure not found');
+      procedure = await Procedure.create({ name: procedureName, price });
     }
 
     const existingEntry = await MasterProcedure.findOne({
-      where: { masterId, procedureId },
+      where: { masterId, procedureId: procedure.id },
     });
 
     if (existingEntry) {
-      throw new BadRequestError('User already listed this procedure');
+      throw new BadRequestError('Master already listed this procedure');
     }
 
-    return await UserProcedure.create({
+    return await MasterProcedure.create({
       masterId,
-      procedureId,
+      procedureId: procedure.id,
     });
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {

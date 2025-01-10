@@ -19,7 +19,7 @@ import {
 
 const router = express.Router();
 
-//ban users*, add/remove master procedure, add/remove usesr procedure, add pictures to users
+//TODO: ban users*, add/remove master procedure, apply middleware to master procedure, add pictures to users
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
