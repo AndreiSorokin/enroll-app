@@ -3,7 +3,7 @@ import validator from 'validator';
 import { validate as isUuid } from 'uuid';
 import nodemailer from "nodemailer";
 
-import { User, Procedure } from '../models';
+import { User, Procedure, UserProcedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
 
 interface ICreateUserInput {
@@ -14,7 +14,70 @@ interface ICreateUserInput {
   active?: boolean;
 };
 
-//ban users*, add/remove master procedure, add/remove usesr procedure
+const deleteMasterProcedure = async () => {
+  try {
+    
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
+const addMasterProcedure = async () => {
+  try {
+    
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
+const deleteUserProcedure = async () => {
+  try {
+    
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
+const addUserProcedure = async (userId: string, procedureId: string) => {
+  try {
+    if (!validator.isUUID(userId) || !validator.isUUID(procedureId)) {
+      throw new BadRequestError('Invalid format of User ID or Procedure ID');
+    }
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const procedure = await Procedure.findByPk(procedureId);
+    if (!procedure) {
+      throw new NotFoundError('Procedure not found');
+    }
+
+    const existingEntry = await UserProcedure.findOne({
+      where: { userId, procedureId },
+    });
+
+    if (existingEntry) {
+      throw new BadRequestError('User already enrolled in this procedure');
+    }
+
+    return await UserProcedure.create({
+      userId,
+      procedureId,
+    });
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
 
 const sendVerificationMail = async(email: string, verificationLink: string) => {
   const transporter = nodemailer.createTransport({
@@ -39,7 +102,7 @@ const sendVerificationMail = async(email: string, verificationLink: string) => {
   };
 
   return await transporter.sendMail(mailOptions);
-}
+};
 
 const getUserByEmail = async (email: string) => {
   try {
@@ -58,23 +121,31 @@ const getUserByEmail = async (email: string) => {
     }
     return user;
   } catch (error) {
-    throw new InternalServerError('Database query failed');
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
   }
-}
+};
 
 const getAllUsers = async () => {
-  return await User.findAll({
-    include: [
-      {
-        model: Procedure,
-        as: 'EnrolledProcedures',
-      },
-      {
-        model: Procedure,
-        as: 'MasterProcedures',
-      },
-    ],
-    });
+  try {
+    return await User.findAll({
+        include: [
+          {
+            model: Procedure,
+            as: 'EnrolledProcedures',
+          },
+          {
+            model: Procedure,
+            as: 'MasterProcedures',
+          },
+        ],
+      });
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
 };
 
 const getSingleUser = async (id: string) => {
@@ -103,42 +174,49 @@ const getSingleUser = async (id: string) => {
 
     return user;
   } catch (error) {
-    console.error('Error fetching user:', error);
-    throw error;
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
   }
 };
 
-const createUser = async(user: ICreateUserInput): Promise<string | object> => {
-  const { name, email, password, role ='user', active = true } = user;
+const createUser = async(user: ICreateUserInput) => {
+  try {
+      const { name, email, password, role ='user', active = true } = user;
 
-  if (!['user', 'admin', 'master'].includes(role)) {
-    throw new ApiError(400, `Invalid role: ${role}`);
+    if (!['user', 'admin', 'master'].includes(role)) {
+      throw new ApiError(400, `Invalid role: ${role}`);
+    }
+
+    const isEmailTaken = await User.findOne({ where: { email } });
+    if (isEmailTaken) {
+      return 'A user with this email already exists';
+    }
+
+    if (!validator.isEmail(email)) {
+      throw new ApiError(400, 'Invalid email format');
+    }
+
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRound);
+
+    const newUser = await User.create({
+      email,
+      name,
+      password:
+      hashedPassword,
+      role,
+      active,
+      resetToken: null,
+      resetTokenExpiresAt: null,
+    });
+
+    return newUser;
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    } 
   }
-
-  const isEmailTaken = await User.findOne({ where: { email } });
-  if (isEmailTaken) {
-    return 'A user with this email already exists';
-  }
-
-  if (!validator.isEmail(email)) {
-    throw new ApiError(400, 'Invalid email format');
-  }
-
-  const saltRound = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRound);
-
-  const newUser = await User.create({
-    email,
-    name,
-    password:
-    hashedPassword,
-    role,
-    active,
-    resetToken: null,
-    resetTokenExpiresAt: null,
-  });
-
-  return newUser;
 };
 
 const updateUser = async (id: string, updates: User) => {
@@ -154,24 +232,32 @@ const updateUser = async (id: string, updates: User) => {
   
     return await user.update(updates);
   } catch (error) {
-    throw new InternalServerError('Database query failed');
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
   }
-}
+};
 
 const deleteUser = async (id: string) => {
 
-  if (!isUuid(id)) {
-    throw new BadRequestError('Invalid user ID format');
+  try {
+    if (!isUuid(id)) {
+      throw new BadRequestError('Invalid user ID format');
+    }
+  
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+  
+    await User.destroy({
+      where: { id },
+    });
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
   }
-
-  const user = await User.findOne({ where: { id } });
-  if (!user) {
-    throw new NotFoundError('User not found');
-  }
-
-  await User.destroy({
-    where: { id },
-  });
 };
 
 export default {
@@ -181,5 +267,9 @@ export default {
   deleteUser,
   updateUser,
   getUserByEmail,
-  sendVerificationMail
+  sendVerificationMail,
+  addUserProcedure,
+  deleteUserProcedure,
+  addMasterProcedure,
+  deleteMasterProcedure,
 }

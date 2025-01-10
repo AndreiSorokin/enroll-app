@@ -4,6 +4,8 @@ import { getAllProcedures, getSingleProcedure, createProcedure, modifyProcedure,
 
 const router = express.Router();
 
+// add pictures to procedures
+
 router.get('/', getAllProcedures);
 router.get('/:id', getSingleProcedure);
 router.post('/', createProcedure);

@@ -1,4 +1,4 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, response, Response, RequestHandler } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
@@ -6,6 +6,46 @@ import { v4 as uuid } from "uuid";
 import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
+
+export async function deleteMasterProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      
+   } catch (error) {
+      next(error);
+   }
+};
+
+export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      
+   } catch (error) {
+      next(error);
+   }
+};
+
+export async function deleteUserProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      
+   } catch (error) {
+      next(error);
+   }
+};
+
+export async function addUserProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { userId, procedureId } = req.body;
+
+      if (!userId || !procedureId) {
+         res.status(400).json({ error: 'User ID and Procedure ID are required' });
+         return;
+      }
+
+      await userService.addUserProcedure(userId, procedureId);
+      res.status(200).json({ message: 'Procedure added successfully' });
+   } catch (error) {
+      next(error);
+   }
+};
 
 export async function forgotPassword(req: Request, res: Response, next: NextFunction) {
    try {
@@ -88,7 +128,7 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
 export async function getAllUsers(req: Request, res: Response, next: NextFunction) {
    try {
       const users = await userService.getAllUsers();
-      if(users.length === 0) {
+      if(!users || users.length === 0) {
          res.status(404).json({ message: "No users found" })
          return;
       }
@@ -105,7 +145,7 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function createUser(req: Request, res: Response, next: NextFunction) {
    try {
@@ -115,7 +155,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
       console.log('error: ',error);
       next(error);
    }
-}
+};
 
 export async function updateUser (req: Request, res: Response, next: NextFunction) {
    try {
@@ -127,7 +167,7 @@ export async function updateUser (req: Request, res: Response, next: NextFunctio
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
    try {
@@ -136,4 +176,4 @@ export async function deleteUser(req: Request, res: Response, next: NextFunction
    } catch (error) {
       next(error);
    }
-}
+};
