@@ -1,4 +1,5 @@
 import express from "express";
+import multer from 'multer';
 
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { authOwnershipMiddleware } from "../middlewares/authOwnershipMiddleware";
@@ -19,11 +20,14 @@ import {
 
 const router = express.Router();
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 //TODO: ban users*, add pictures to users
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
-router.post('/', createUser);
+router.post('/registration', upload.single('image'), createUser);
 router.put('/:id', authMiddleware, authOwnershipMiddleware, updateUser);
 router.delete('/:id', deleteUser);
 

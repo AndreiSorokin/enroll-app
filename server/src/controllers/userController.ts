@@ -176,10 +176,11 @@ export async function getSingleUser(req: Request, res: Response, next: NextFunct
 
 export async function createUser(req: Request, res: Response, next: NextFunction) {
    try {
-      const user = await userService.createUser(req.body);
+      const fileBuffer = req.file ? req.file.buffer : undefined;
+      const user = await userService.createUser(req.body, fileBuffer);
+      console.log("REQ BODY: ", req.body)
       res.status(201).json(user);
    } catch (error) {
-      console.log('error: ',error);
       next(error);
    }
 };

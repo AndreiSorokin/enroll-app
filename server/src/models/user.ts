@@ -9,6 +9,7 @@ interface UserAttributes {
    active: boolean;
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
+   image?: string | null;
 }
 
 // Define the interface for the creation of a User (excluding optional fields like id)
@@ -20,6 +21,7 @@ interface UserCreationAttributes {
    active: boolean;
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
+   image?: string | null;
 }
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -31,6 +33,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
    public active!: boolean;
    public resetToken!: string | null;
    public resetTokenExpiresAt!: Date | null;
+   public image!: string | null;
 }
 
    User.init({
@@ -82,6 +85,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
          allowNull: true,
          defaultValue: null,
          field: 'reset_token_expires_at'
+      },
+      image: {
+         type: DataTypes.STRING,
+         allowNull: true,
+         defaultValue: null,
       },
    }, {
       sequelize,

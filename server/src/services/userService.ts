@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 
 import { User, Procedure, UserProcedure, MasterProcedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
+import { uploadImageToCloudinary } from "./uploads"
 
 interface ICreateUserInput {
   name: string;
@@ -12,6 +13,7 @@ interface ICreateUserInput {
   password: string;
   role?: 'user' | 'admin' | 'master';
   active?: boolean;
+  image?: string;
 };
 
 const deleteMasterProcedure = async (masterId: string, procedureId: string) => {
@@ -281,9 +283,9 @@ const getSingleUser = async (id: string) => {
   }
 };
 
-const createUser = async(user: ICreateUserInput) => {
+const createUser = async(user: ICreateUserInput, fileBuffer?: Buffer) => {
   try {
-      const { name, email, password, role ='user', active = true } = user;
+      const { name, email, password, role ='user', active = true, image } = user;
 
     if (!['user', 'admin', 'master'].includes(role)) {
       throw new ApiError(400, `Invalid role: ${role}`);
@@ -301,6 +303,11 @@ const createUser = async(user: ICreateUserInput) => {
     const saltRound = 10;
     const hashedPassword = await bcrypt.hash(password, saltRound);
 
+    let imageUrl = null;
+    if (fileBuffer) {
+      imageUrl = await uploadImageToCloudinary(fileBuffer, email);
+    }
+
     const newUser = await User.create({
       email,
       name,
@@ -308,6 +315,7 @@ const createUser = async(user: ICreateUserInput) => {
       hashedPassword,
       role,
       active,
+      image: imageUrl,
       resetToken: null,
       resetTokenExpiresAt: null,
     });
