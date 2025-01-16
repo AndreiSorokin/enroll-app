@@ -26,7 +26,8 @@ Procedure.init({
    name: {
       type: DataTypes.STRING,
       allowNull: false,
-   },
+      unique: true,
+   }
 }, {
    sequelize,
    modelName: 'Procedure',

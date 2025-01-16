@@ -54,6 +54,7 @@ export async function addMasterProcedure(req: Request, res: Response, next: Next
       await userService.addMasterProcedure(masterId, procedureName, price);
       res.status(200).json({ message: 'Procedure listed' });
    } catch (error) {
+      console.log(error);
       next(error);
    }
 };
@@ -70,6 +71,7 @@ export async function addUserProcedure(req: Request, res: Response, next: NextFu
       await userService.addUserProcedure(userId, procedureId, masterId);
       res.status(200).json({ message: 'Procedure added successfully' });
    } catch (error) {
+      console.log(error);
       next(error);
    }
 };

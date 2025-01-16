@@ -8,7 +8,7 @@ module.exports = {
          defaultValue: null,
       });
    },
-   down: async (queryInterface) => {
+   down: async ({ context: queryInterface }) => {
       await queryInterface.removeColumn('users', 'image');
    },
 };

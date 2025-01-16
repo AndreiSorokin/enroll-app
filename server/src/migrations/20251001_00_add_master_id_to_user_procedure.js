@@ -11,7 +11,7 @@ module.exports = {
          },
       });
    },
-   down: async (queryInterface) => {
+   down: async ({ context: queryInterface }) => {
       await queryInterface.removeColumn('user_procedures', 'master_id');
    },
 };

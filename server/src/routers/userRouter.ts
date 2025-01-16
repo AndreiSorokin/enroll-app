@@ -23,7 +23,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: ban users*, add pictures to users
+//TODO: ban users*, fix master procedures
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
