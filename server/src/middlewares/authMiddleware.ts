@@ -20,7 +20,8 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
       return;
     }
 
-    req.user = decoded as { id: string };
+    req.user = decoded as { id: string; role?: string };
+    console.log('Decoded Token:', decoded);
     next();
   });
 };

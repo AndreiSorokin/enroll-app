@@ -17,6 +17,7 @@ import {
    deleteMasterProcedure,
    updateMasterProcedure
 } from "../controllers/userController";
+import adminCheck from "../middlewares/adminCheck";
 
 
 const router = express.Router();
@@ -24,13 +25,13 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: ban users*
+//TODO: ban users*, google login
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
 router.post('/registration', upload.single('image'), createUser);
 router.put('/:id', authMiddleware, authOwnershipMiddleware, updateUser);
-router.delete('/:id', deleteUser);
+router.delete('/:id', authMiddleware, adminCheck, deleteUser);
 
 router.post('/login', userLogin);
 router.post('/reset-password', forgotPassword);

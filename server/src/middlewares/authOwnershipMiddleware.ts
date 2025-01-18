@@ -16,8 +16,6 @@ export const authOwnershipMiddleware = (req: Request, res: Response, next: NextF
     const { id: requestedUserId } = req.params;
 
     if (request.user.id !== requestedUserId) {
-      console.log("request.user.id: ", request.user.id)
-      console.log('requestedUserId: ', requestedUserId)
       throw new ForbiddenError("You are not authorized to perform this action");
     }
 
