@@ -28,41 +28,6 @@ const deleteProcedure = async(id: string) => {
    }
 }
 
-const modifyProcedure = async(id:string, updates: Procedure) => {
-   try {
-      if (!validator.isUUID(id)) {
-         throw new BadRequestError('Invalid procedure ID format');
-      }
-   
-      const procedure = await Procedure.findByPk(id);
-   
-      if (!procedure) {
-         throw new NotFoundError('Procedure not found');
-      }
-
-      return procedure.update(updates);
-   } catch (error) {
-      throw new NotFoundError("Procedure not found")
-   }
-
-
-}
-
-const createProcedure = async(procedure: IProcedure) => {
-   const { price, name } = procedure;
-
-   if (!price || price <= 0) {
-      throw new BadRequestError('Invalid procedure price');
-   }
-
-   if (!name) {
-      throw new BadRequestError('Name is required');
-   }
-
-   const newProcedure = await Procedure.create({ price, name });
-   return newProcedure;
-}
-
 const getAllProcedures = async() => {
    try {
       const allProcedures = await Procedure.findAll();
@@ -109,7 +74,5 @@ const getSingleProcedure = async(id: string) => {
 export default {
    getAllProcedures,
    getSingleProcedure,
-   createProcedure,
-   modifyProcedure,
    deleteProcedure
 }

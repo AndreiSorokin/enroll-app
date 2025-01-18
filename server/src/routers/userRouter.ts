@@ -15,6 +15,7 @@ import {
    deleteUserProcedure,
    addMasterProcedure,
    deleteMasterProcedure,
+   updateMasterProcedure
 } from "../controllers/userController";
 
 
@@ -23,7 +24,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: ban users*, fix master procedures
+//TODO: ban users*
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
@@ -39,5 +40,6 @@ router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, d
 
 router.post('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, addMasterProcedure);
 router.delete('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, deleteMasterProcedure);
+router.put('/:id/master-procedures/:procedureId', updateMasterProcedure);
 
 export default router;

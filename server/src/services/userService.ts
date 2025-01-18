@@ -16,6 +16,38 @@ interface ICreateUserInput {
   image?: string;
 };
 
+const updateMasterProcedure = async (masterId: string, procedureId: string, price: number) => {
+  try {
+    if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
+      throw new BadRequestError('Invalid format of User ID or Procedure ID');
+    };
+
+    const master = await User.findByPk(masterId);
+    if (!master) {
+      throw new NotFoundError('Master not found');
+    };
+
+    const procedure = await Procedure.findByPk(procedureId);
+    if (!procedure) {
+      throw new NotFoundError('Procedure not found');
+    };
+
+    const masterProcedure = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (!masterProcedure) {
+      throw new NotFoundError('Master Procedure not found');
+    };
+
+    return await masterProcedure.update({ price });
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+}
+
 const deleteMasterProcedure = async (masterId: string, procedureId: string) => {
   try {
     if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
@@ -382,4 +414,5 @@ export default {
   deleteUserProcedure,
   addMasterProcedure,
   deleteMasterProcedure,
+  updateMasterProcedure
 }

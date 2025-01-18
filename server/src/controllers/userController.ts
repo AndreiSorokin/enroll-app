@@ -7,6 +7,22 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+export async function updateMasterProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { masterId, procedureId, price } = req.body;
+
+      if (!masterId || !procedureId || price === undefined || price < 0) {
+         res.status(400).json({ error: 'Master ID and Procedure ID are required' });
+         return;
+      }
+
+      const updatedProcedure = await userService.updateMasterProcedure(masterId, procedureId, price);
+      res.status(200).json(updatedProcedure);
+   } catch (error) {
+      next(error);
+   }
+}
+
 export async function deleteMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { masterId, procedureId } = req.body;
@@ -42,9 +58,6 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
 export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { masterId, procedureName, price } = req.body;
-      console.log('masterId: ', masterId)
-      console.log('procedureName: ', procedureName)
-      console.log('price: ', price)
 
       if (!masterId || !procedureName || price === undefined) {
          res.status(400).json({ error: 'Master ID, procedure name, and price are required' });
