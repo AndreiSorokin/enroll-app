@@ -7,6 +7,32 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+export async function googleLogin(req: Request, res: Response, next: NextFunction) {
+   try {
+      const user = req.user as User;
+
+      const token = jwt.sign({
+         id: user.id,
+         email: user.email,
+         name: user.name,
+         active: user.active,
+         role: user.role
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1h' });
+
+      const refreshToken = jwt.sign({
+         id: user.id,
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: '7d' });
+
+      res.status(200).json({ message: 'Google login successful', token, refreshToken });
+   } catch (error) {
+      next(error);
+   }
+}
+
 export async function updateUserStatus(req: Request, res: Response, next: NextFunction) {
    try {
       const { userId, active } = req.body;
@@ -161,9 +187,7 @@ export async function userLogin(req: Request, res: Response, next: NextFunction)
    );
 
       const refreshToken = jwt.sign({
-         email: userData.email,
-         role: userData.role,
-         active: userData.active
+         id: userData.id,
       },
       process.env.JWT_SECRET!,
       { expiresIn: '7d' }

@@ -1,5 +1,6 @@
 import express from "express";
 import multer from 'multer';
+import passport from "passport";
 
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { authOwnershipMiddleware } from "../middlewares/authOwnershipMiddleware";
@@ -16,7 +17,8 @@ import {
    addMasterProcedure,
    deleteMasterProcedure,
    updateMasterProcedure,
-   updateUserStatus
+   updateUserStatus,
+   googleLogin
 } from "../controllers/userController";
 import adminCheck from "../middlewares/adminCheck";
 import userStatusCheck from "../middlewares/userStatusCheck";
@@ -27,7 +29,12 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: ban users*, google login
+//TODO: google login, reset password
+
+router.post('/auth/google', 
+   passport.authenticate('google-id-token', { session: false }),
+   googleLogin
+);
 
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)

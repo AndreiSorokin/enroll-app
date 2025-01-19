@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from "passport";
 
 import userRouter from './routers/userRouter';
 import procedureRouter from './routers/procedureRouter';
@@ -13,6 +14,9 @@ const app = express();
 
 
 app.use(express.json());
+app.use(passport.initialize());
+// passport.use(jwtStrategy);
+// passport.use(googleAuthStrategy);
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/procedures', procedureRouter);

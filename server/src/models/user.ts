@@ -10,6 +10,7 @@ interface UserAttributes {
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
    image?: string | null;
+   googleId?: string | null;
 }
 
 interface UserCreationAttributes {
@@ -21,6 +22,7 @@ interface UserCreationAttributes {
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
    image?: string | null;
+   googleId?: string | null;
 }
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -33,6 +35,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
    public resetToken!: string | null;
    public resetTokenExpiresAt!: Date | null;
    public image!: string | null;
+   public googleId!: string | null;
 }
 
    User.init({
@@ -90,6 +93,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
          allowNull: true,
          defaultValue: null,
       },
+      googleId: {
+         type: DataTypes.STRING,
+         allowNull: true,
+         defaultValue: null,
+      }
    }, {
       sequelize,
       modelName: 'User',
