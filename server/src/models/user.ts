@@ -12,7 +12,6 @@ interface UserAttributes {
    image?: string | null;
 }
 
-// Define the interface for the creation of a User (excluding optional fields like id)
 interface UserCreationAttributes {
    name: string;
    email: string;

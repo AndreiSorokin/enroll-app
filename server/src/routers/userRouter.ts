@@ -15,9 +15,11 @@ import {
    deleteUserProcedure,
    addMasterProcedure,
    deleteMasterProcedure,
-   updateMasterProcedure
+   updateMasterProcedure,
+   updateUserStatus
 } from "../controllers/userController";
 import adminCheck from "../middlewares/adminCheck";
+import userStatusCheck from "../middlewares/userStatusCheck";
 
 
 const router = express.Router();
@@ -30,17 +32,19 @@ const upload = multer({ storage: storage });
 router.get('/', getAllUsers);
 router.get('/:id', getSingleUser)
 router.post('/registration', upload.single('image'), createUser);
-router.put('/:id', authMiddleware, authOwnershipMiddleware, updateUser);
+router.put('/:id', authMiddleware, authOwnershipMiddleware, userStatusCheck, updateUser);
 router.delete('/:id', authMiddleware, adminCheck, deleteUser);
 
 router.post('/login', userLogin);
 router.post('/reset-password', forgotPassword);
 
-router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, addUserProcedure);
-router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, deleteUserProcedure);
+router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addUserProcedure);
+router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteUserProcedure);
 
-router.post('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, addMasterProcedure);
-router.delete('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, deleteMasterProcedure);
+router.post('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addMasterProcedure);
+router.delete('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteMasterProcedure);
 router.put('/:id/master-procedures/:procedureId', updateMasterProcedure);
+
+router.post('/:id/update-user-status', authMiddleware, adminCheck, updateUserStatus);
 
 export default router;

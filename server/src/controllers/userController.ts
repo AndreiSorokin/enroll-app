@@ -7,6 +7,21 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+export async function updateUserStatus(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { userId, active } = req.body;
+
+      if (typeof userId !== 'string' || typeof active !== 'boolean') {
+         throw new BadRequestError('Invalid input: userId must be a string and active must be a boolean');
+      };
+
+      const updatedUser = await userService.updateUserStatus(userId, active);
+      res.status(200).json({ message: 'User status updated', user: updatedUser });
+   } catch (error) {
+      next(error);
+   }
+}
+
 export async function updateMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { masterId, procedureId, price } = req.body;

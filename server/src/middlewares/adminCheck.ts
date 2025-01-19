@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../models";
 import { ForbiddenError, NotFoundError } from "../errors/ApiError";
 
 const adminCheck= (req: Request, res: Response, next: NextFunction): void => {

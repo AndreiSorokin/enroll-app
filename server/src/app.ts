@@ -7,6 +7,7 @@ import apiErrorhandler from './middlewares/errorHandler';
 import { authMiddleware } from './middlewares/authMiddleware';
 import { authOwnershipMiddleware } from './middlewares/authOwnershipMiddleware';
 import adminCheck from './middlewares/adminCheck';
+import userStatusCheck from './middlewares/userStatusCheck';
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(authMiddleware);
 app.use(authOwnershipMiddleware);
 app.use(adminCheck);
 app.use(apiErrorhandler);
+app.use(userStatusCheck);
 
 export default app;

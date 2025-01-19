@@ -16,6 +16,25 @@ interface ICreateUserInput {
   image?: string;
 };
 
+const updateUserStatus = async(userId: string, active: boolean) => {
+  try {
+    const user = await User.findOne({
+      where: { id: userId },
+    });
+
+    if(!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    await user.update({ active });
+    return user;
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
 const updateMasterProcedure = async (masterId: string, procedureId: string, price: number) => {
   try {
     if (!validator.isUUID(masterId) || !validator.isUUID(procedureId)) {
@@ -414,5 +433,6 @@ export default {
   deleteUserProcedure,
   addMasterProcedure,
   deleteMasterProcedure,
-  updateMasterProcedure
+  updateMasterProcedure,
+  updateUserStatus
 }

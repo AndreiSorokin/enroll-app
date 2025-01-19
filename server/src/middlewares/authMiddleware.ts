@@ -21,7 +21,6 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
     }
 
     req.user = decoded as { id: string; role?: string };
-    console.log('Decoded Token:', decoded);
     next();
   });
 };
