@@ -12,6 +12,8 @@ import {
    updateUser,
    userLogin,
    forgotPassword,
+   resetPassword,
+   changePassword,
    addUserProcedure,
    deleteUserProcedure,
    addMasterProcedure,
@@ -29,7 +31,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: google login, reset password
+//TODO: reset password
 
 router.post('/auth/google', 
    passport.authenticate('google-id-token', { session: false }),
@@ -43,7 +45,9 @@ router.put('/:id', authMiddleware, authOwnershipMiddleware, userStatusCheck, upd
 router.delete('/:id', authMiddleware, adminCheck, deleteUser);
 
 router.post('/login', userLogin);
-router.post('/reset-password', forgotPassword);
+router.post('/forgor-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+router.put('/:id/change-passwprd', changePassword);
 
 router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addUserProcedure);
 router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteUserProcedure);

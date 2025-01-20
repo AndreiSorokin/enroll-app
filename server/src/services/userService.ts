@@ -65,7 +65,7 @@ const updateMasterProcedure = async (masterId: string, procedureId: string, pric
       throw error;
     }
   }
-}
+};
 
 const deleteMasterProcedure = async (masterId: string, procedureId: string) => {
   try {
@@ -282,6 +282,47 @@ const getUserByEmail = async (email: string) => {
   }
 };
 
+const getUserByResetToken = async(resetToken: string) => {
+  try {
+    if (!resetToken) {
+      throw new BadRequestError(`Please provide resetToken`);
+    }
+
+    const user = await User.findOne({
+      where: { resetToken }
+    })
+
+    if (!user) {
+      throw new NotFoundError(`No user found with resetToken ${resetToken}`);
+    }
+
+    if (user.resetTokenExpiresAt && user.resetTokenExpiresAt <= new Date()) {
+      throw new BadRequestError('Reset token has expired');
+    }
+
+    return user;
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
+const updatePassword = async(user: User, newPassword: string) => {
+  try {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetToken = null;
+    user.resetTokenExpiresAt = null;
+
+    await user.save();
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
 const getAllUsers = async () => {
   try {
     return await User.findAll({
@@ -434,5 +475,7 @@ export default {
   addMasterProcedure,
   deleteMasterProcedure,
   updateMasterProcedure,
-  updateUserStatus
+  updateUserStatus,
+  getUserByResetToken,
+  updatePassword
 }

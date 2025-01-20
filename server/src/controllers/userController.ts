@@ -145,7 +145,7 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
          throw new BadRequestError('Invalid email format');
       }
 
-      const verificationLink = `http://localhost:3009/api/v1/users/reset-password?token=${token}`;
+      const verificationLink = `http://localhost:5173/api/v1/users/reset-password?token=${token}`;
       await userService.sendVerificationMail(email, verificationLink);
 
       userData.resetToken = token;
@@ -156,6 +156,41 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
       next(error);
    }
 };
+
+export async function resetPassword(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { newPassword } = req.body;
+      const token = req.query.token as string;
+
+      if (!newPassword || newPassword.length < 8) {
+         throw new BadRequestError('New password must be at least 8 characters long.');
+      }
+
+      if (!token) {
+         throw new BadRequestError('Token is required');
+      }
+
+      const user = await userService.getUserByResetToken(token);
+      
+      if (!user) {
+         throw new BadRequestError('Invalid or expired reset token');
+      }
+
+      const newUserData = await userService.updatePassword(user, newPassword);
+
+      res.status(200).json({ newUserData, message: "Password reset successfully." });   
+   } catch (error) {
+      next(error);
+   }
+};
+
+export async function changePassword(req: Request, res: Response, next: NextFunction) {
+   try {
+      
+   } catch (error) {
+      
+   }
+}
 
 export async function userLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
    try {
