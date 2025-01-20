@@ -186,11 +186,33 @@ export async function resetPassword(req: Request, res: Response, next: NextFunct
 
 export async function changePassword(req: Request, res: Response, next: NextFunction) {
    try {
-      
+      const { oldPassword, newPassword } = req.body;
+
+      if (!oldPassword || !newPassword) {
+         throw new BadRequestError(
+            "Please provide both old password and new password!"
+         );
+      }
+
+      const user = await userService.getSingleUser(req.params.id);
+
+      if (!user) {
+         throw new BadRequestError("User not found");
+      }
+
+      const hashedPassword = user.password;
+      const isPasswordCorrect = await bcrypt.compare(oldPassword, hashedPassword);
+
+      if (!isPasswordCorrect) {
+         throw new BadRequestError('Old password is incorrect');
+      }
+
+      const updatedUser = await userService.updatePassword(user, newPassword);
+      res.status(201).send(updatedUser);
    } catch (error) {
-      
+      next(error);
    }
-}
+};
 
 export async function userLogin(req: Request, res: Response, next: NextFunction): Promise<void> {
    try {

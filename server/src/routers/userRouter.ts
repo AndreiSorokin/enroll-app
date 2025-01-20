@@ -47,7 +47,7 @@ router.delete('/:id', authMiddleware, adminCheck, deleteUser);
 router.post('/login', userLogin);
 router.post('/forgor-password', forgotPassword);
 router.post('/reset-password', resetPassword);
-router.put('/:id/change-passwprd', changePassword);
+router.put('/:id/update-password', changePassword);
 
 router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addUserProcedure);
 router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteUserProcedure);
