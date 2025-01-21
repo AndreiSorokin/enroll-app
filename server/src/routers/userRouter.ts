@@ -31,15 +31,13 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//TODO: reset password
-
 router.post('/auth/google', 
    passport.authenticate('google-id-token', { session: false }),
    googleLogin
 );
 
 router.get('/', getAllUsers);
-router.get('/:id', getSingleUser)
+router.get('/:id', getSingleUser);
 router.post('/registration', upload.single('image'), createUser);
 router.put('/:id', authMiddleware, authOwnershipMiddleware, userStatusCheck, updateUser);
 router.delete('/:id', authMiddleware, adminCheck, deleteUser);
