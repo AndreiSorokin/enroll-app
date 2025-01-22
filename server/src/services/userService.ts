@@ -159,18 +159,7 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       throw new BadRequestError('Only masters can add master procedures');
     }
 
-    const [procedure] = await Procedure.findOrCreate({
-      where: { name: procedureName },
-      defaults: { name: procedureName },
-    });
-
-    const existingEntry = await MasterProcedure.findOne({
-      where: { masterId, procedureId: procedure.id },
-    });
-
-    if (existingEntry) {
-      throw new BadRequestError('Master already listed this procedure');
-    }
+    const procedure = await Procedure.create({ name: procedureName });
 
     return await MasterProcedure.create({
       masterId,

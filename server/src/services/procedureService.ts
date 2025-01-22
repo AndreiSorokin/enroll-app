@@ -39,13 +39,6 @@ const getAllProcedures = async () => {
            attributes: [],
          },
        ],
-       attributes: {
-         include: [
-           // Count how many masters offer each procedure
-           [sequelize.fn('COUNT', sequelize.col('masterProcedures.id')), 'masterCount'],
-         ],
-       },
-       group: ['Procedure.id'],
      });
  
      return procedures;
