@@ -161,7 +161,7 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
 
     const [procedure] = await Procedure.findOrCreate({
       where: { name: procedureName },
-      defaults: { name: procedureName, price },
+      defaults: { name: procedureName },
     });
 
     const existingEntry = await MasterProcedure.findOne({

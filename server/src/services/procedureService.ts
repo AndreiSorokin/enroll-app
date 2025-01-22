@@ -1,7 +1,8 @@
 import validator from 'validator';
 
-import { User, Procedure } from '../models';
+import { User, Procedure, MasterProcedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
+import { sequelize } from "../utils/db"
 
 interface IProcedure {
    price: number;
@@ -28,18 +29,31 @@ const deleteProcedure = async(id: string) => {
    }
 }
 
-const getAllProcedures = async() => {
+const getAllProcedures = async () => {
    try {
-      const allProcedures = await Procedure.findAll();
-      if (!allProcedures) {
-         throw new NotFoundError('No procedures found');
-      }
-
-      return allProcedures;
+     const procedures = await Procedure.findAll({
+       include: [
+         {
+           model: MasterProcedure,
+           as: 'masterProcedures',
+           attributes: [],
+         },
+       ],
+       attributes: {
+         include: [
+           // Count how many masters offer each procedure
+           [sequelize.fn('COUNT', sequelize.col('masterProcedures.id')), 'masterCount'],
+         ],
+       },
+       group: ['Procedure.id'],
+     });
+ 
+     return procedures;
    } catch (error) {
-      throw new InternalServerError('Database query failed')
+     throw new Error('Failed to fetch procedures');
    }
-};
+ };
+ 
 
 const getSingleProcedure = async(id: string) => {
    try {

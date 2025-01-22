@@ -7,6 +7,8 @@ import MasterProcedure from './masterProcedure';
 // User and Procedure for enrolled procedures
 User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'userId', as: 'EnrolledProcedures' });
 Procedure.belongsToMany(User, { through: UserProcedure, foreignKey: 'procedureId', as: 'UsersEnrolled' });
+Procedure.hasMany(MasterProcedure, { foreignKey: 'procedureId', as: 'masterProcedures' });//
+MasterProcedure.belongsTo(Procedure, { foreignKey: 'procedureId', as: 'procedure' });//
 
 // User (master) and Procedure for procedures masters can perform
 User.belongsToMany(Procedure, { through: MasterProcedure, foreignKey: 'masterId', as: 'MasterProcedures' });
