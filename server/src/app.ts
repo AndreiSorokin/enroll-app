@@ -11,6 +11,8 @@ import { authOwnershipMiddleware } from './middlewares/authOwnershipMiddleware';
 import adminCheck from './middlewares/adminCheck';
 import userStatusCheck from './middlewares/userStatusCheck';
 import { googleAuthStrategy } from './config/passport';
+import timeSlotRouter from './routers/timeSlotRouter';
+import bookingRouter from './routers/bookingRouter';
 
 const app = express();
 const corsOptions = {
@@ -26,6 +28,8 @@ passport.use(googleAuthStrategy);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/procedures', procedureRouter);
 app.use('/api/v1/uploads', uploadRouter);
+app.use('/api/v1/time-slots', timeSlotRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.use(authMiddleware);
 app.use(authOwnershipMiddleware);

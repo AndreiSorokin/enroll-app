@@ -1,13 +1,7 @@
 import validator from 'validator';
 
 import { User, Procedure, MasterProcedure } from '../models';
-import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
-import { sequelize } from "../utils/db"
-
-interface IProcedure {
-   price: number;
-   name: string;
-}
+import { BadRequestError, NotFoundError } from "../errors/ApiError";
 
 const deleteProcedure = async(id: string) => {
    try {
@@ -31,22 +25,22 @@ const deleteProcedure = async(id: string) => {
 
 const getAllProcedures = async () => {
    try {
-     const procedures = await Procedure.findAll({
-       include: [
-         {
-           model: MasterProcedure,
-           as: 'masterProcedures',
-           attributes: [],
-         },
-       ],
-     });
- 
-     return procedures;
+      const procedures = await Procedure.findAll({
+         include: [
+            {
+               model: MasterProcedure,
+               as: 'masterProcedures',
+               attributes: [],
+            },
+         ],
+      });
+      
+      return procedures;
    } catch (error) {
-     throw new Error('Failed to fetch procedures');
+      throw new Error('Failed to fetch procedures');
    }
- };
- 
+};
+
 
 const getSingleProcedure = async(id: string) => {
    try {
