@@ -1,5 +1,5 @@
 import { BadRequestError, NotFoundError } from "../errors/ApiError";
-import TimeSlot from "../models/timeSlot";
+import { TimeSlot, User } from "../models";
 
 
 const getAllTimeSlots = async() => {
@@ -31,6 +31,13 @@ const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, da
 
 const createTimeSlots = async(masterId: string, procedureId: string, date: Date, startTime: Date, endTime: Date, slotDuration: number) => {
    try {
+      const master = await User.findOne({
+         where: { id: masterId, role: 'master' },
+      });
+      if (!master) {
+         throw new BadRequestError('Invalid master ID or user is not a master');
+      }
+      
       const slots = [];
       let currentTime = new Date(`${date}T${startTime}`);
       const endTimeDate = new Date(`${date}T${endTime}`);
@@ -48,7 +55,7 @@ const createTimeSlots = async(masterId: string, procedureId: string, date: Date,
          currentTime = nextTime;
       }
    
-      await TimeSlot.bulkCreate(slots);
+      await TimeSlot.bulkCreate(slots, { ignoreDuplicates: true });
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
          throw error;

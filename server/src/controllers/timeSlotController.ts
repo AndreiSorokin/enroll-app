@@ -18,11 +18,15 @@ export async function getAllTimeSlots(req: Request, res: Response, next: NextFun
 export async function getAllAvailableTimeSlots(req: Request, res: Response, next: NextFunction) {
    try {
       const { masterId, procedureId, date } = req.query;
+
       if (!masterId || !procedureId || !date) {
          res.status(400).json({ message: "masterId, procedureId, and date are required." });
          return
       }
-      const parsedDate = new Date(date);
+
+      const dateString = typeof date === 'string' ? date : String(date);
+      const parsedDate = new Date(dateString);
+      
       if (isNaN(parsedDate.getTime())) {
          res.status(400).json({ message: "Invalid date format." });
          return
@@ -52,6 +56,7 @@ export async function createTimeSlots(req: Request, res: Response, next: NextFun
          res.status(400).json({ message: "masterId, procedureId, date, startTime, endTime, and slotDuration are required." });
          return
       }
+      
       const parsedDate = new Date(date);
 
       if (isNaN(parsedDate.getTime())) {
@@ -59,16 +64,16 @@ export async function createTimeSlots(req: Request, res: Response, next: NextFun
          return
       }
 
-      const createdTimeSlot = await timeSlotService.createTimeSlots(
+      await timeSlotService.createTimeSlots(
          masterId,
-         procedureId,
-         parsedDate,
-         startTime,
-         endTime,
-         slotDuration,
-      )
+         procedureId, 
+         parsedDate, 
+         startTime, 
+         endTime, 
+         slotDuration
+      );
 
-      res.status(201).json(createdTimeSlot);
+      res.status(201).json({ message: 'Time slots successfully created' });
    } catch (error) {
       next(error);
    }

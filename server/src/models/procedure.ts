@@ -3,6 +3,7 @@ import { sequelize, DataTypes, Model } from '../utils/db';
 interface ProcedureAttributes {
    id: string;
    name: string;
+   duration: number;
 }
 
 interface ProcedureCreationAttributes extends Omit<ProcedureAttributes, 'id'> {}
@@ -10,6 +11,7 @@ interface ProcedureCreationAttributes extends Omit<ProcedureAttributes, 'id'> {}
 class Procedure extends Model<ProcedureAttributes, ProcedureCreationAttributes> implements ProcedureAttributes {
    public id!: string;
    public name!: string;
+   public duration!: number;
 }
 
 Procedure.init({
@@ -21,7 +23,14 @@ Procedure.init({
    name: {
       type: DataTypes.STRING,
       allowNull: false,
-   }
+   },
+   duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+         min: 1,
+      },
+   },
 }, {
    sequelize,
    modelName: 'Procedure',

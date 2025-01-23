@@ -12,17 +12,21 @@ TimeSlot.init({
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-         model: 'Master',
+         model: 'users',
          key: 'id',
       },
+      field: 'master_id',
    },
    procedureId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-         model: 'Procedure',
+         model: 'procedures',
          key: 'id',
       },
+      field: 'procedure_id',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
    },
    date: {
       type: DataTypes.DATEONLY,

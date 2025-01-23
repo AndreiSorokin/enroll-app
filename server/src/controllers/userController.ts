@@ -98,14 +98,14 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
 
 export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { masterId, procedureName, price } = req.body;
+      const { masterId, procedureName, price, duration } = req.body;
 
       if (!masterId || !procedureName || price === undefined) {
          res.status(400).json({ error: 'Master ID, procedure name, and price are required' });
          return;
       }
 
-      await userService.addMasterProcedure(masterId, procedureName, price);
+      await userService.addMasterProcedure(masterId, procedureName, price, duration);
       res.status(200).json({ message: 'Procedure listed' });
    } catch (error) {
       console.log(error);

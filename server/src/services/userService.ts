@@ -144,7 +144,7 @@ const deleteUserProcedure = async (userId: string, procedureId: string, masterId
   }
 };
 
-const addMasterProcedure = async (masterId: string, procedureName: string, price: number) => {
+const addMasterProcedure = async (masterId: string, procedureName: string, price: number, duration: number) => {
   try {
     if (!validator.isUUID(masterId) || !procedureName || price <= 0) {
       throw new BadRequestError('Invalid format of User ID or Procedure ID');
@@ -159,7 +159,7 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       throw new BadRequestError('Only masters can add master procedures');
     }
 
-    const procedure = await Procedure.create({ name: procedureName });
+    const procedure = await Procedure.create({ name: procedureName, duration });
 
     return await MasterProcedure.create({
       masterId,
