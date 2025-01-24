@@ -4,6 +4,7 @@ import UserProcedure from './userProcedure';
 import User from './user';
 import MasterProcedure from './masterProcedure';
 import TimeSlot from './timeSlot';
+import Booking from './booking';
 
 // User and Procedure for enrolled procedures
 User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'userId', as: 'EnrolledProcedures' });
@@ -19,5 +20,11 @@ MasterProcedure.belongsTo(Procedure, { foreignKey: 'procedureId', as: 'procedure
 User.hasMany(TimeSlot, { foreignKey: 'masterId', as: 'timeSlots' });
 TimeSlot.belongsTo(User, { foreignKey: 'masterId', as: 'master' });
 
+User.hasMany(Booking, { foreignKey: 'userId' });
+TimeSlot.hasOne(Booking, { foreignKey: 'timeSlotId' });
+Booking.belongsTo(User, { foreignKey: 'userId' });
+Booking.belongsTo(TimeSlot, { foreignKey: 'timeSlotId' });
 
-export { sequelize, Procedure, UserProcedure, User, MasterProcedure, TimeSlot };
+
+
+export { sequelize, Procedure, UserProcedure, User, MasterProcedure, TimeSlot, Booking };

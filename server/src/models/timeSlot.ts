@@ -1,6 +1,31 @@
 import { sequelize, DataTypes, Model } from '../utils/db';
+import { Optional } from 'sequelize';
 
-class TimeSlot extends Model {}
+interface TimeSlotAttributes {
+   id: string;
+   masterId: string;
+   procedureId: string;
+   date: string;
+   startTime: string;
+   endTime: string;
+   isAvailable: boolean;
+   createdAt?: Date;
+   slotDuration?: number;
+}
+
+interface TimeSlotCreationAttributes extends Optional<TimeSlotAttributes, 'id'> {}
+
+class TimeSlot extends Model<TimeSlotAttributes, TimeSlotCreationAttributes> implements TimeSlotAttributes {
+   public id!: string;
+   public masterId!: string;
+   public procedureId!: string;
+   public date!: string;
+   public startTime!: string;
+   public endTime!: string;
+   public isAvailable!: boolean;
+   public readonly createdAt!: Date;
+   public slotDuration!: number;
+}
 
 TimeSlot.init({
    id: {

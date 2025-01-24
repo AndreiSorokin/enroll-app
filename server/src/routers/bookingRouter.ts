@@ -1,9 +1,12 @@
 import express from "express";
 
+import { getAllBookings, createBooking } from "../controllers/bookingController";
+import { authMiddleware } from "../middlewares/authMiddleware";
+import userStatusCheck from "../middlewares/userStatusCheck";
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
-   res.status(200).json({ message: "Hello, this is the Enroll App API!" });
-});
+router.get('/', getAllBookings);
+router.post('/', authMiddleware, userStatusCheck, createBooking);
 
 export default router;

@@ -25,6 +25,8 @@ Booking.init({
          key: 'id',
       },
       field: 'time_slot_id',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
    },
    status: {
       type: DataTypes.ENUM('pending', 'confirmed', 'canceled'),
@@ -42,6 +44,7 @@ Booking.init({
    sequelize,
    modelName: 'Booking',
    tableName: 'bookings',
+   timestamps: true,
 })
 
 export default Booking;

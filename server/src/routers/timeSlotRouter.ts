@@ -1,7 +1,6 @@
 import express from "express";
 
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { authOwnershipMiddleware } from "../middlewares/authOwnershipMiddleware";
 import userStatusCheck from "../middlewares/userStatusCheck";
 import masterCheck from "../middlewares/masterCheck";
 import {
