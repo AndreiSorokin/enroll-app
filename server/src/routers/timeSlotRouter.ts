@@ -13,7 +13,7 @@ import {
 const router = express.Router();
 
 router.get('/', getAllTimeSlots);
-router.get('/timeslots', getAllAvailableTimeSlots);
-router.post('/', authMiddleware, authOwnershipMiddleware, userStatusCheck, masterCheck, createTimeSlots);
+router.get('/available', getAllAvailableTimeSlots);
+router.post('/', authMiddleware, userStatusCheck, masterCheck, createTimeSlots);
 
 export default router;

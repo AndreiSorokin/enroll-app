@@ -150,6 +150,10 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       throw new BadRequestError('Invalid format of User ID or Procedure ID');
     }
 
+    if(!duration) {
+      throw new BadRequestError('Duration must be provided');
+    }
+
     const master = await User.findByPk(masterId);
     if (!master) {
       throw new NotFoundError('Master not found');

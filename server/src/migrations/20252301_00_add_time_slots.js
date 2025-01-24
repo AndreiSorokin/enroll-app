@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
    up: async ({ context: queryInterface }) => {
-      await queryInterface.createTable('master_procedures', {
+      await queryInterface.createTable('time_slots', {
          id: {
             type: DataTypes.UUID,
             primaryKey: true,

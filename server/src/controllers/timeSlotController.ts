@@ -56,24 +56,34 @@ export async function createTimeSlots(req: Request, res: Response, next: NextFun
          res.status(400).json({ message: "masterId, procedureId, date, startTime, endTime, and slotDuration are required." });
          return
       }
-      
-      const parsedDate = new Date(date);
 
-      if (isNaN(parsedDate.getTime())) {
-         res.status(400).json({ message: "Invalid date format." });
-         return
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!dateRegex.test(date)) {
+         res.status(400).json({ message: "Invalid date format. Use YYYY-MM-DD." });
+         return;
       }
 
-      await timeSlotService.createTimeSlots(
+      const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+      if (!timeRegex.test(startTime) || !timeRegex.test(endTime)) {
+         res.status(400).json({ message: "Invalid time format. Use HH:mm:ss." });
+         return;
+      }
+
+      if (isNaN(slotDuration) || slotDuration <= 0) {
+         res.status(400).json({ message: "slotDuration must be a positive number." });
+         return;
+      }
+
+      const createrTimeSlot = await timeSlotService.createTimeSlots(
          masterId,
          procedureId, 
-         parsedDate, 
+         date, 
          startTime, 
          endTime, 
          slotDuration
       );
 
-      res.status(201).json({ message: 'Time slots successfully created' });
+      res.status(201).json({createrTimeSlot, message: 'Time slots successfully created' });
    } catch (error) {
       next(error);
    }
