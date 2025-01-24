@@ -1,5 +1,4 @@
 import { sequelize, DataTypes, Model } from '../utils/db';
-
 class Booking extends Model {}
 
 Booking.init({
