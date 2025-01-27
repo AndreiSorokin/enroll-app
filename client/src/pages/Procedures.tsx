@@ -20,7 +20,9 @@ const Procedures = () => {
    }
    
    return (
-      <Grid container spacing={3} padding={2}>
+      <Box>
+         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>Our procedures:</Box>
+         <Grid container spacing={3} padding={2}>
          {data.map((procedure: Procedure) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={procedure.id}>
                <Card elevation={1}>
@@ -58,6 +60,7 @@ const Procedures = () => {
             </Grid>
          ))}
       </Grid>
+      </Box>
    )
 }
 

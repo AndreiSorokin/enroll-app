@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User, Procedure } from "../misc/types";
+import { Master, Procedure } from "../misc/types";
 
 export const procedureApi = createApi({
    reducerPath: "procedureApi",
@@ -19,7 +19,7 @@ export const procedureApi = createApi({
       getSingleProcedure: builder.query<Procedure, string>({
          query: (id) => `/procedures/${id}`
       }),
-      getMastersByProcedure: builder.query<User[], string>({
+      getMastersByProcedure: builder.query<Master[], string>({
          query: (id) => `/procedures/${id}/masters`
       })
    })

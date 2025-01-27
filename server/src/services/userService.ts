@@ -163,12 +163,21 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       throw new BadRequestError('Only masters can add master procedures');
     }
 
-    const procedure = await Procedure.create({ name: procedureName, duration });
+    const [procedure, created] = await Procedure.findOrCreate({
+      where: { name: procedureName },
+      defaults: {  name: procedureName, duration },
+    });
+
+    if (!created) {
+      console.log(`Procedure "${procedureName}" already exists`);
+    } else {
+      console.log(`Procedure "${procedureName}" has been created`);
+    }
 
     return await MasterProcedure.create({
       masterId,
       procedureId: procedure.id,
-      price
+      price,
     });
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
