@@ -12,7 +12,7 @@ export async function deleteProcedure(req: Request, res: Response, next: NextFun
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function getAllProcedures(req: Request, res: Response, next: NextFunction) {
    try {
@@ -44,4 +44,14 @@ export async function getSingleProcedure(req: Request, res: Response, next: Next
    } catch (error) {
       next(error);
    }
-}
+};
+export async function getMastersByProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+
+      const masters = await procedureService.getMastersByProcedure(id);
+      res.json(masters);
+   } catch (error) {
+      next(error);
+   }
+};

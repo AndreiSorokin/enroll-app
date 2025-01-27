@@ -12,8 +12,15 @@ export type User = {
 
 export type Procedure = {
    id: string;
-   price: number;
+   duration: number;
    name: string;
    createdAt: Date;
    updatedAt: Date;
+}
+
+export type MasterProcedure = {
+   id: string;
+   procedureId: string;
+   price: number;
+   name: string;
 }

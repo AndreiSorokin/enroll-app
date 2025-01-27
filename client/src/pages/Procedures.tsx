@@ -30,7 +30,7 @@ const Procedures = () => {
                         {procedure.name}
                      </Typography>
                      <Typography variant="body2" color="text.secondary">
-                        {procedure.price + "$"}
+                        Duration: {procedure.duration + " hour(s)"}
                      </Typography>
                   </CardContent>
                   <CardActions>

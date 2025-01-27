@@ -3,8 +3,10 @@ export type { RootState, AppDispatch } from './store';
 
 export { userApi } from '../api/userSlice';
 export { useGetUserByIdQuery } from '../api/userSlice';
+
 export { procedureApi } from '../api/procedureSlice';
 export { 
    useGetAllProceduresQuery,
-   useGetSingleProcedureQuery
+   useGetSingleProcedureQuery,
+   useGetMastersByProcedureQuery
 } from '../api/procedureSlice';

@@ -72,8 +72,46 @@ const getSingleProcedure = async(id: string) => {
    }
 }
 
+const getMastersByProcedure = async(id: string) => {
+   try {
+      const masters = await User.findAll({
+         where: { role: 'master' },
+         include: [
+            {
+               model: MasterProcedure,
+               as: 'masterProcedures',
+               where: { procedureId: id },
+               attributes: ['id', 'masterId', 'procedureId', 'price'],
+            },
+         ],
+         attributes: [
+            'id',
+            'name',
+            'email',
+            'image',
+            'createdAt',
+            'updatedAt',
+         ],
+      });
+
+      console.log("Procedure ID:", id);
+      console.log("Query Result:", masters);    
+
+      if (masters.length === 0) {
+         throw new NotFoundError("No masters found for this procedure");
+      }
+
+      return masters;
+   } catch (error) {
+      if (error instanceof BadRequestError || error instanceof NotFoundError) {
+         throw error;
+      }
+   }
+};
+
 export default {
    getAllProcedures,
    getSingleProcedure,
-   deleteProcedure
+   deleteProcedure,
+   getMastersByProcedure
 }

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useGetSingleProcedureQuery } from '../redux';
+import { useGetMastersByProcedureQuery } from '../redux';
 
 const SingleProcedure = () => {
    const { id } = useParams<{ id:string }>();
-   const { data, error, isLoading } = useGetSingleProcedureQuery(id!);
+   const { data, error, isLoading } = useGetMastersByProcedureQuery(id!);
 
    if(error) {
       return <p>Error fetching procedure</p>;
@@ -17,11 +17,18 @@ const SingleProcedure = () => {
       return <p>No procedure found</p>;
    }
 
-
+console.log(data.map(d => d))
 
    return (
       <div>
-         Name: {data.name}
+         <ul>
+            {data.map((master) => (
+               <div key={master.id}>
+                  <li>{master.name}</li>
+                  <img src={master.image!}></img>
+               </div>
+            ))}
+         </ul>
       </div>
    )
 }

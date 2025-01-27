@@ -16,6 +16,9 @@ Procedure.belongsToMany(User, { through: MasterProcedure, foreignKey: 'procedure
 
 Procedure.hasMany(MasterProcedure, { foreignKey: 'procedureId', as: 'masterProcedures' });
 MasterProcedure.belongsTo(Procedure, { foreignKey: 'procedureId', as: 'procedure' });
+MasterProcedure.belongsTo(User, { as: 'master', foreignKey: 'masterId' });
+User.hasMany(MasterProcedure, { as: 'masterProcedures', foreignKey: 'masterId' });
+
 
 User.hasMany(TimeSlot, { foreignKey: 'masterId', as: 'timeSlots' });
 TimeSlot.belongsTo(User, { foreignKey: 'masterId', as: 'master' });
