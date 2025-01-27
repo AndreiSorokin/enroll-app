@@ -7,6 +7,15 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+export async function getSingleMasterProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+      return await userService.getSingleMasterProcedure(id!)
+   } catch (error) {
+      next(error);
+   }
+}
+
 export async function googleLogin(req: Request, res: Response, next: NextFunction) {
    try {
       const user = req.user as User;

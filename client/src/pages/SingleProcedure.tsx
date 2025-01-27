@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetMastersByProcedureQuery } from '../redux';
 import { Box, Button } from "@mui/material";
 
@@ -26,13 +26,11 @@ console.log(data.map(d => d))
          <ul>
             {data.map((master) => (
                <div key={master.id}>
-                  <li>{master.name}</li>
-                  <li>{master.masterProcedures[0].price}$</li>
+                  <li>Master: {master.name}</li>
+                  <li>Price: {master.masterProcedures[0].price}$</li>
                   <img style={{width:50, height:50}} src={master.image!}></img>
                   <Button
                         size="small"
-                        component={Link}
-                        to={`/bookings`}
                         variant="outlined"
                         sx={{
                            color: 'white', border: '2px solid #000', 

@@ -10,3 +10,9 @@ export {
    useGetSingleProcedureQuery,
    useGetMastersByProcedureQuery
 } from '../api/procedureSlice';
+
+export { bookingApi } from '../api/bookingSlice';
+export { useCreateBookingQuery } from '../api/bookingSlice'
+
+export { timeSlotApi } from '../api/timeSlotSlice';
+export { useGetAllTimeSlotsQuery } from '../api/timeSlotSlice';

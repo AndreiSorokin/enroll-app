@@ -16,6 +16,16 @@ interface ICreateUserInput {
   image?: string;
 };
 
+const getSingleMasterProcedure = async (id: string) => {
+  try {
+    const user = await User.findByPk(id);
+  } catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+}
+
 const updateUserStatus = async(userId: string, active: boolean) => {
   try {
     const user = await User.findOne({
@@ -478,5 +488,6 @@ export default {
   updateMasterProcedure,
   updateUserStatus,
   getUserByResetToken,
-  updatePassword
+  updatePassword,
+  getSingleMasterProcedure
 }
