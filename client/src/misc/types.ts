@@ -1,13 +1,28 @@
+export enum Role {
+   ADMIN = 'admin',
+   USER = 'user',
+   MASTER = 'master',
+}
+
 export type User = {
    id: string;
    name: string;
    email: string;
    password: string;
-   role: string;
+   role: Role;
    active: boolean;
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
    image?: string | null;
+}
+export type UserDataResponse = {
+   [K in 'id' | 'name' | 'email' | 'role' | 'active']: User[K];
+}
+
+export type LoginResponse = {
+   token: string;
+   refreshToken: string;
+   userData: UserDataResponse
 }
 
 export type Master = {

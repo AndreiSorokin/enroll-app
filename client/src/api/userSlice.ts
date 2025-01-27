@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "../misc/types";
+import { LoginResponse, User } from "../misc/types";
 
 
 export const userApi = createApi({
@@ -18,9 +18,25 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      login: builder.mutation<LoginResponse, { email: string, password: string }>({
+         query: (credentials) => ({
+            url: 'users/login',
+            method: 'POST',
+            body: credentials
+         })
+      }),
+      onQueryStarted: async (_, { queryFulfilled }) => {
+         try {
+            const { data } = await queryFulfilled;
+            localStorage.setItem('token', data.token);
+         } catch (error) {
+            console.error('Login failed:', error);
+         }
+      }
    })
 });
 
 export const {
    useGetUserByIdQuery,
+   useLoginMutation
 } = userApi;

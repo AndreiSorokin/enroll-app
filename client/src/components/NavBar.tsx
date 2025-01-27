@@ -53,7 +53,7 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      <ListItem button>
-                        <Button component={Link} to="/login" color="inherit" onClick={handleDrawerToggle}>
+                        <Button component={Link} to="/auth/login" color="inherit" onClick={handleDrawerToggle}>
                            Log in
                         </Button>
                      </ListItem>
