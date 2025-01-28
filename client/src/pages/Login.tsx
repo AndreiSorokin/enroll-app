@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { z } from 'zod';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import { useLoginMutation } from '../redux/index';
@@ -14,20 +16,16 @@ export const loginSchema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login] = useLoginMutation();
 
-  const handleLogin = async(e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleLogin = async() => {
     try {
-      const credentials = { email, password };
+      const credentials = { email: values.email, password: values.password };
       await login(credentials).unwrap();
 
       navigate("/procedures");
     } catch (error) {
-      console.error('Error during login:', error);
+      toast.error(error.message || 'Wrong email or password!');
     }
   }
 
@@ -39,6 +37,7 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      <ToastContainer/>
       <CssBaseline />
       <Box
         sx={{
