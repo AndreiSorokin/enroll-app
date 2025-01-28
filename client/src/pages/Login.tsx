@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import { z } from 'zod';
 
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import { useLoginMutation } from '../redux/index';
+import useInput from '../hooks/UseInput';
+
+export const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
+});
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,102 +31,77 @@ const Login = () => {
     }
   }
 
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useInput(
+    loginSchema,
+    { email: '', password: '' },
+    handleLogin
+  );
+
   return (
-      <div>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.email && Boolean(errors.email)}
+            helperText={touched.email && errors.email}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.password && Boolean(errors.password)}
+            helperText={touched.password && errors.password}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
             sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              color: '#E9E9E9',
+              border: '2px solid #5F2E2E',
+              fontSize: '15px',
+              padding: { xs: '5px 10px', sm: '8px 15px' },
+              backgroundColor: '#5F2E2E',
+              '&:hover': {
+                borderColor: '#5F2E2E',
+                transition: '0.5s ease',
+              },
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-              />
-              <Button type="submit" fullWidth variant="contained"
-              sx={{ 
-                color: '#E9E9E9', border: '2px solid #5F2E2E', 
-                fontSize: '15px', 
-                padding: { xs: '5px 10px', sm: '8px 15px',
-                '@media (max-width: 768px)': {
-                  maxWidth: '90%',
-                },
-                },
-                backgroundColor: '#5F2E2E',
-                '&:hover': {
-                  borderColor: '#5F2E2E',
-                  transition: '0.5s ease'
-                }
-              }}
-              >
-                Sign In
-              </Button>
-              {/* <Button onClick={() => setOpenForgotPassword(true)} sx={{color: "#E9E9E9", textDecoration: "underline"}}>
-                Forgot Password?
-              </Button> */}
-                {/* <Dialog open={openForgotPassword} onClose={() => setOpenForgotPassword(false)}>
-                <DialogTitle>Forgot Password</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="forgotEmail"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    value={forgotEmailInput.value}
-                    onChange={forgotEmailInput.onChange}
-                  />
-                </DialogContent>
-                <DialogActions sx={{backgroundColor: theme === 'bright' ? '#9C9C9C' : '#353535'}}>
-                  <Button onClick={() => setOpenForgotPassword(false)} sx={{color: theme === 'bright' ? 'black' : '#E9E9E9'}}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleForgotPassword}
-                  >
-                    Send Email
-                  </Button>
-                </DialogActions>
-              </Dialog> */}
-              <Grid container>
-                <Grid item>
-                  <Link to="/auth/signup" style={{color: "#E9E9E9", textDecoration: "underline", fontSize: '18px'}}>Don't have an account? Sign Up</Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
-      </div>
-    );
+            Sign In
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+  );
 }
 
 export default Login

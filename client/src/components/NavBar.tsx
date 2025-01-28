@@ -73,7 +73,7 @@ const Navbar = () => {
                   </Button>
                </ListItem>
                <ListItem sx={{ margin: '0 10px' }}>
-                  <Button component={Link} to="/login" color="inherit">
+                  <Button component={Link} to="/auth/login" color="inherit">
                      Login
                   </Button>
                </ListItem>
