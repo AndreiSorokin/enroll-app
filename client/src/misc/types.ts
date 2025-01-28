@@ -25,6 +25,11 @@ export type LoginResponse = {
    userData: UserDataResponse
 }
 
+export type UserState = {
+   isLoggedIn: boolean;
+   userData: null | LoginResponse;
+}
+
 export type Master = {
    id: string;
    name: string;

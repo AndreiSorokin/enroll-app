@@ -2,10 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { z } from 'zod';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { useDispatch } from "react-redux";
 
 import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
 import { useLoginMutation } from '../redux/index';
 import useInput from '../hooks/UseInput';
+import { setUser } from "../redux/userSlice";
+
 
 export const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -13,6 +16,7 @@ export const loginSchema = z.object({
 });
 
 const Login = () => {
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login] = useLoginMutation();
 
@@ -21,6 +25,7 @@ const Login = () => {
       const credentials = { email: values.email, password: values.password };
       await login(credentials).unwrap();
       toast.success('Login successful!');
+      // dispatch(setUser(result.user));
       navigate("/procedures");
     } catch (error) {
       toast.error(error.message || 'Wrong email or password!');

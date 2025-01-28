@@ -1,21 +1,21 @@
 export { default as store } from './store';
 export type { RootState, AppDispatch } from './store';
 
-export { userApi } from '../api/userSlice';
+export { userApi } from '../api/userApi';
 export { 
    useGetUserByIdQuery,
    useLoginMutation
-   } from '../api/userSlice';
+   } from '../api/userApi';
 
-export { procedureApi } from '../api/procedureSlice';
+export { procedureApi } from '../api/procedureApi';
 export { 
    useGetAllProceduresQuery,
    useGetSingleProcedureQuery,
    useGetMastersByProcedureQuery
-} from '../api/procedureSlice';
+} from '../api/procedureApi';
 
-export { bookingApi } from '../api/bookingSlice';
-export { useCreateBookingQuery } from '../api/bookingSlice'
+export { bookingApi } from '../api/bookingApi';
+export { useCreateBookingQuery } from '../api/bookingApi'
 
-export { timeSlotApi } from '../api/timeSlotSlice';
-export { useGetAllTimeSlotsQuery } from '../api/timeSlotSlice';
+export { timeSlotApi } from '../api/timeSlotApi';
+export { useGetAllTimeSlotsQuery } from '../api/timeSlotApi';

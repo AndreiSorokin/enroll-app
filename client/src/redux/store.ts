@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { userApi } from "../api/userSlice";
-import { procedureApi } from "../api/procedureSlice";
-import { bookingApi } from '../api/bookingSlice';
-import { timeSlotApi } from '../api/timeSlotSlice';
+import { userApi } from "../api/userApi";
+import { procedureApi } from "../api/procedureApi";
+import { bookingApi } from '../api/bookingApi';
+import { timeSlotApi } from '../api/timeSlotApi';
+import userReducer from "./userSlice";
 
 
 const store = configureStore({
@@ -11,6 +12,7 @@ const store = configureStore({
       [procedureApi.reducerPath]: procedureApi.reducer,
       [bookingApi.reducerPath]: bookingApi.reducer,
       [timeSlotApi.reducerPath]: timeSlotApi.reducer,
+      user: userReducer, 
    },
    middleware: (getDefaultMiddleware) => 
       getDefaultMiddleware().concat(

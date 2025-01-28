@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
    AppBar,
    Toolbar,
@@ -16,18 +16,29 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import parseJwt from '../helpers/decode';
 
+import { useDispatch } from "react-redux";
+import { clearUser } from "../redux/userSlice";
+
 const Navbar = () => {
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+
    const [openDrawer, setOpenDrawer] = useState(false);
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
    const userData = parseJwt(localStorage.getItem('token'));
 
-   console.log(userData);
-
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
    };
+
+   const handleLogout = () => {    
+      dispatch(clearUser());
+      localStorage.removeItem("token");
+    
+      navigate("/auth/login");
+    };
 
    return (
       <AppBar position="sticky">
@@ -59,9 +70,18 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      <ListItem button>
-                        <Button component={Link} to="/auth/login" color="inherit" onClick={handleDrawerToggle}>
-                           Log in
-                        </Button>
+                     {userData
+                  ? (
+                     <Button component={Link} to="/auth/login" color="inherit">
+                        Log out
+                     </Button>
+                  )
+                  : (
+                     <Button component={Link} to="/auth/login" color="inherit">
+                        Login
+                     </Button>
+                  )
+                  }
                      </ListItem>
                   </List>
                </Drawer>
@@ -79,9 +99,18 @@ const Navbar = () => {
                   </Button>
                </ListItem>
                <ListItem sx={{ margin: '0 10px' }}>
-                  <Button component={Link} to="/auth/login" color="inherit">
-                     Login
-                  </Button>
+                  {userData
+                  ? (
+                     <Button component={Link} to="/auth/login" color="inherit">
+                        Logout
+                     </Button>
+                  )
+                  : (
+                     <Button component={Link} to="/auth/login" color="inherit">
+                        Login
+                     </Button>
+                  )
+                  }
                </ListItem>
             </List>
          )}
