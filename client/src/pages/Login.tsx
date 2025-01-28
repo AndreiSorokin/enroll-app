@@ -1,11 +1,9 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { z } from 'zod';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
 import { useLoginMutation } from '../redux/index';
 import useInput from '../hooks/UseInput';
 
@@ -22,7 +20,7 @@ const Login = () => {
     try {
       const credentials = { email: values.email, password: values.password };
       await login(credentials).unwrap();
-
+      toast.success('Login successful!');
       navigate("/procedures");
     } catch (error) {
       toast.error(error.message || 'Wrong email or password!');

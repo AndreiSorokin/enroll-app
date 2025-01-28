@@ -10,12 +10,6 @@ export default function UseInput(schema: z.ZodSchema<any>, initialValues: Record
    });
 
    return {
-      values: formik.values,
-      errors: formik.errors,
-      touched: formik.touched,
-      handleChange: formik.handleChange,
-      handleBlur: formik.handleBlur,
-      handleSubmit: formik.handleSubmit,
-      resetForm: formik.resetForm,
+      ...formik
    };
 }

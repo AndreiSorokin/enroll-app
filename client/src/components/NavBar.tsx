@@ -14,10 +14,16 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import parseJwt from '../helpers/decode';
+
 const Navbar = () => {
    const [openDrawer, setOpenDrawer] = useState(false);
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+   const userData = parseJwt(localStorage.getItem('token'));
+
+   console.log(userData);
 
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);

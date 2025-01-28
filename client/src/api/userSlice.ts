@@ -23,16 +23,16 @@ export const userApi = createApi({
             url: 'users/login',
             method: 'POST',
             body: credentials
-         })
-      }),
-      onQueryStarted: async (_, { queryFulfilled }) => {
-         try {
-            const { data } = await queryFulfilled;
-            localStorage.setItem('token', data.token);
-         } catch (error) {
-            console.error('Login failed:', error);
+         }),
+         onQueryStarted: async (_, { queryFulfilled }) => {
+            try {
+               const { data } = await queryFulfilled;
+               localStorage.setItem('token', data.token);
+            } catch (error) {
+               console.error('Login failed:', error);
+            }
          }
-      }
+      }),
    })
 });
 
