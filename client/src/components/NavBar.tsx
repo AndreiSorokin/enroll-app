@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../redux/store";
 import {
    AppBar,
    Toolbar,
@@ -15,37 +17,46 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 import parseJwt from '../helpers/decode';
-
-import { useDispatch } from "react-redux";
 import { clearUser } from "../redux/userSlice";
 
 const Navbar = () => {
-   const navigate = useNavigate();
    const dispatch = useDispatch();
-
    const [openDrawer, setOpenDrawer] = useState(false);
    const theme = useTheme();
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-   const userData = parseJwt(localStorage.getItem('token'));
+   const userData = useSelector((state: RootState) => state.user.userData);
+   console.log(userData)
 
+      // const userData = parseJwt(localStorage.getItem('token'));
+   
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
    };
 
    const handleLogout = () => {    
-      dispatch(clearUser());
-      localStorage.removeItem("token");
-    
-      navigate("/auth/login");
-    };
+      try {
+         dispatch(clearUser());
+         localStorage.removeItem("token");
+      } catch (error) {
+         console.log(error);
+      }
+   };
 
    return (
       <AppBar position="sticky">
          <Toolbar>
+            {userData
+            ? (
+               <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                  Welcome, {userData.name}!
+               </Typography>
+            )
+         : (
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
                Enroll app
             </Typography>
+         )}
             {isMobile ? (
                <>
                <IconButton
@@ -72,7 +83,7 @@ const Navbar = () => {
                      <ListItem button>
                      {userData
                   ? (
-                     <Button component={Link} to="/auth/login" color="inherit">
+                     <Button component={Link} to="/auth/login" color="inherit" onClick={handleLogout}>
                         Log out
                      </Button>
                   )

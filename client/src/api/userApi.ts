@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LoginResponse, User } from "../misc/types";
+import parseJwt from "../helpers/decode";
+import { setUser } from "../redux/userSlice";
 
 
 export const userApi = createApi({
@@ -24,10 +26,14 @@ export const userApi = createApi({
             method: 'POST',
             body: credentials
          }),
-         onQueryStarted: async (_, { queryFulfilled }) => {
+         onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
             try {
                const { data } = await queryFulfilled;
+               
                localStorage.setItem('token', data.token);
+
+               const userData = parseJwt(data.token);
+               dispatch(setUser(userData));
             } catch (error) {
                console.error('Login failed:', error);
             }

@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserState } from "../misc/types";
+import parseJwt from "../helpers/decode";
 
-
+const token = localStorage.getItem("token");
 const initialState: UserState = {
-   isLoggedIn: false,
-   userData: null,
+   isLoggedIn: !!token,
+   userData: token ? parseJwt(token) : null,
 };
 
 const userSlice = createSlice({
