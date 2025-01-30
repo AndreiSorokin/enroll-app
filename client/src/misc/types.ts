@@ -18,7 +18,7 @@ export type User = {
 }
 
 export type UserRegistrationData = {
-   [K in 'name' | 'password' | 'email' | 'image']: User[K];
+   [K in 'name' | 'password' | 'email' | 'image' | 'role']: User[K];
 }
 
 export type UserDataResponse = {

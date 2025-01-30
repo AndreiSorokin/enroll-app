@@ -1,9 +1,11 @@
 import { Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate, Link } from "react-router-dom";
 import { z } from 'zod';
 
 import { useRegistrationMutation } from '../redux';
+import { Role } from '../misc/types';
+import useInput from '../hooks/UseInput';
 
 export const loginSchema = z.object({
    email: z.string().email('Invalid email address'),
@@ -13,6 +15,28 @@ export const loginSchema = z.object({
 const Registration = () => {
    const navigate = useNavigate();
    const [registration] = useRegistrationMutation();
+   // const [avatar, setAvatar] = useState<File | null>(null)
+   // const [role, setRole] = useState<Role | null>(null)
+
+   const handleSignUp = async(e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const userInput = { name: values.name, email: values.email, password: values.password, role: values.role, image: values.image}
+      await registration(userInput).unwrap();
+   }
+
+   const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useInput(
+      loginSchema,
+      { email: '', password: '', name: '', role: null, image: null},
+      handleSignUp
+   );
+
+   // const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   //    if (event.target.files && event.target.files[0]) {
+   //       setAvatar(event.target.files[0]);
+   //    }
+   // };
+
    return (
       <Box>
          <Container component="main" maxWidth="xs">
@@ -25,16 +49,14 @@ const Registration = () => {
                   alignItems: 'center',
                }}
             >
-            {/* <Avatar src={avatar ? URL.createObjectURL(avatar) : ''} sx={{ m: 1, bgcolor: 'secondary.main' }} /> */}
+            <Avatar src={image ? URL.createObjectURL(image) : ''} sx={{ m: 1, bgcolor: 'secondary.main' }} />
             <Typography component="h1" variant="h5">
                Sign up
             </Typography>
-            <Box component="form" noValidate  sx={{ mt: 3 }}>
+            <Box component="form" noValidate  sx={{ mt: 3 }} onSubmit={handleSubmit}>
                <Grid container spacing={2}>
                   <Grid item xs={12}>
                      <TextField
-                        //   onChange={(e) => setFirstName(e.target.value)}
-                        //   value={firstName}
                         autoComplete="name"
                         name="name"
                         required
@@ -42,24 +64,30 @@ const Registration = () => {
                         id="name"
                         label="name"
                         autoFocus
+                        value={values.name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.name && Boolean(errors.name)}
+                        helperText={touched.name && errors.name}
                      />
                   </Grid>
                   <Grid item xs={12}>
                   <TextField
-                  //   onChange={(e) => setEmail(e.target.value)}
-                  //   value={email}
                      required
                      fullWidth
                      id="email"
                      label="Email Address"
                      name="email"
                      autoComplete="email"
+                     value={values.email}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     error={touched.email && Boolean(errors.email)}
+                     helperText={touched.email && errors.email}
                   />
                   </Grid>
                   <Grid item xs={12}>
                   <TextField
-                  //   onChange={(e) => setPassword(e.target.value)}
-                  //   value={password}
                      required
                      fullWidth
                      name="password"
@@ -67,6 +95,26 @@ const Registration = () => {
                      type="password"
                      id="password"
                      autoComplete="new-password"
+                     value={values.password}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     error={touched.password && Boolean(errors.password)}
+                     helperText={touched.password && errors.password}
+                  />
+                  </Grid>
+                  <Grid>
+                  <TextField
+                     required
+                     fullWidth
+                     name="role"
+                     label="role"
+                     type="role"
+                     id="role"
+                     value={values.role}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     error={touched.role && Boolean(errors.role)}
+                     helperText={touched.role && errors.role}
                   />
                   </Grid>
                   <Grid item xs={12}>
@@ -84,7 +132,7 @@ const Registration = () => {
                      <input
                         type="file"
                         hidden
-                     //  onChange={handleAvatarChange}
+                        onChange={handleAvatarChange}
                         accept="image/*"
                         multiple
                      />
