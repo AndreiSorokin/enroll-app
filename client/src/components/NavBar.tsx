@@ -24,6 +24,7 @@ const Navbar = () => {
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
    const userData = useSelector((state: RootState) => state.user.userData);
+   const id = userData?.id;
    
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
@@ -75,19 +76,26 @@ const Navbar = () => {
                            Procedures
                         </Button>
                      </ListItem>
+                     {userData && 
+                     <ListItem button>
+                        <Button component={Link} to={`/users/${id}`} color="inherit" onClick={handleDrawerToggle}>
+                           Profile
+                        </Button>
+                     </ListItem>
+                     }
                      <ListItem button>
                      {userData
-                  ? (
-                     <Button component={Link} to="/auth/login" color="inherit" onClick={handleLogout}>
-                        Log out
-                     </Button>
-                  )
-                  : (
-                     <Button component={Link} to="/auth/login" color="inherit">
-                        Login
-                     </Button>
-                  )
-                  }
+                        ? (
+                           <Button component={Link} to="/auth/login" color="inherit" onClick={handleLogout}>
+                              Log out
+                           </Button>
+                        )
+                        : (
+                           <Button component={Link} to="/auth/login" color="inherit">
+                              Login
+                           </Button>
+                     )
+                     }
                      </ListItem>
                   </List>
                </Drawer>
@@ -104,6 +112,13 @@ const Navbar = () => {
                      Procedures
                   </Button>
                </ListItem>
+               {userData && 
+                  <ListItem button>
+                     <Button component={Link} to="/users/:id" color="inherit" onClick={handleDrawerToggle}>
+                        Profile
+                     </Button>
+                  </ListItem>
+               }
                <ListItem sx={{ margin: '0 10px' }}>
                   {userData
                   ? (

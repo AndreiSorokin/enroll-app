@@ -20,6 +20,16 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      updateUser: builder.mutation<User, { id: string; email: string; token: string }>({
+         query: ({ id, email, token }) => ({
+            url: `users/${id}`,
+            method: 'PUT',
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+            body: { email, name },
+         })
+      }),
       login: builder.mutation<LoginResponse, { email: string, password: string }>({
          query: (credentials) => ({
             url: 'users/login',
@@ -39,7 +49,7 @@ export const userApi = createApi({
             }
          }
       }),
-      registration: builder.mutation<User, FormData>({
+      registration: builder.mutation<LoginResponse, FormData>({
          query: (user) => ({
             url: 'users/registration',
             method: 'POST',
@@ -49,7 +59,6 @@ export const userApi = createApi({
          onQueryStarted: async(_, { queryFulfilled, dispatch }) => {
             try {
                const { data } = await queryFulfilled;
-               console.log(data)
                localStorage.setItem('token', data.token!);
                const userData = parseJwt(data.token);
                dispatch(setUser(userData));
@@ -64,5 +73,6 @@ export const userApi = createApi({
 export const {
    useGetUserByIdQuery,
    useLoginMutation,
-   useRegistrationMutation
+   useRegistrationMutation,
+   useUpdateUserMutation,
 } = userApi;

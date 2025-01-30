@@ -426,7 +426,7 @@ const createUser = async(user: ICreateUserInput, fileBuffer?: Buffer) => {
     });
 
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, role: newUser.role },
+      { id: newUser.id, email: newUser.email, role: newUser.role, name: newUser.name },
       process.env.JWT_SECRET!,
       { expiresIn: "7d" }
     );

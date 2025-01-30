@@ -4,11 +4,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { z } from 'zod';
 
 import { useRegistrationMutation } from '../redux';
-import { Role } from '../misc/types';
 import useInput from '../hooks/UseInput';
 import { toast } from 'react-toastify';
 
-export const loginSchema = z.object({
+export const registrationSchema = z.object({
    name: z.string().min(1, 'Name is required'),
    email: z.string().email('Invalid email address'),
    password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
@@ -18,7 +17,6 @@ const Registration = () => {
    const navigate = useNavigate();
    const [registration] = useRegistrationMutation();
    const [avatar, setAvatar] = useState<File | null>(null)
-   // const [role, setRole] = useState<Role | null>(null)
 
    const handleSignUp = async() => {
       const formData = new FormData();
@@ -41,7 +39,7 @@ const Registration = () => {
    }
 
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useInput(
-      loginSchema,
+      registrationSchema,
       { email: '', password: '', name: '', role: 'user', image: null},
       handleSignUp
    );
