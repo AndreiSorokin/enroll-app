@@ -4,7 +4,8 @@ export type { RootState, AppDispatch } from './store';
 export { userApi } from '../api/userApi';
 export { 
    useGetUserByIdQuery,
-   useLoginMutation
+   useLoginMutation,
+   useRegistrationMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { z } from 'zod';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
-import { useLoginMutation } from '../redux/index';
+import { useLoginMutation } from '../redux';
 import useInput from '../hooks/UseInput';
 
 
@@ -97,6 +97,9 @@ const Login = () => {
             Sign In
           </Button>
         </Box>
+      </Box>
+      <Box>Don't have an account? 
+        <Box component={Link} to="/auth/signup">Sign up</Box>
       </Box>
     </Container>
   );

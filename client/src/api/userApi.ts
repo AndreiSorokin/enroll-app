@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LoginResponse, User } from "../misc/types";
+import { LoginResponse, User, UserRegistrationData } from "../misc/types";
 import parseJwt from "../helpers/decode";
 import { setUser } from "../redux/userSlice";
 
@@ -39,10 +39,28 @@ export const userApi = createApi({
             }
          }
       }),
+      registration: builder.mutation<User, UserRegistrationData>({
+         query: (user) => ({
+            url: 'users/registration',
+            method: 'POST',
+            body: user
+         }),
+         onQueryStarted: async(_, { queryFulfilled, dispatch }) => {
+            try {
+               const { data } = await queryFulfilled;
+               localStorage.setItem('token', data.token!);
+               const userData = parseJwt(data.token);
+               dispatch(setUser(userData));
+            } catch (error) {
+               console.error('Registration failed:', error);
+            }
+         }
+      })
    })
 });
 
 export const {
    useGetUserByIdQuery,
-   useLoginMutation
+   useLoginMutation,
+   useRegistrationMutation
 } = userApi;

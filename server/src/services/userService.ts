@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import validator from 'validator';
 import { validate as isUuid } from 'uuid';
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 import { User, Procedure, UserProcedure, MasterProcedure } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
@@ -424,7 +425,13 @@ const createUser = async(user: ICreateUserInput, fileBuffer?: Buffer) => {
       resetTokenExpiresAt: null,
     });
 
-    return newUser;
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email, role: newUser.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: "7d" }
+    );
+
+    return { token, user: newUser };
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;

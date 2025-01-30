@@ -15,8 +15,6 @@ import {
    useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-
-import parseJwt from '../helpers/decode';
 import { clearUser } from "../redux/userSlice";
 
 const Navbar = () => {
@@ -26,9 +24,6 @@ const Navbar = () => {
    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
    const userData = useSelector((state: RootState) => state.user.userData);
-   console.log(userData)
-
-      // const userData = parseJwt(localStorage.getItem('token'));
    
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
@@ -112,7 +107,7 @@ const Navbar = () => {
                <ListItem sx={{ margin: '0 10px' }}>
                   {userData
                   ? (
-                     <Button component={Link} to="/auth/login" color="inherit">
+                     <Button component={Link} to="/auth/login" color="inherit"  onClick={handleLogout}>
                         Logout
                      </Button>
                   )

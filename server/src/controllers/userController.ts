@@ -298,7 +298,6 @@ export async function createUser(req: Request, res: Response, next: NextFunction
    try {
       const fileBuffer = req.file ? req.file.buffer : undefined;
       const user = await userService.createUser(req.body, fileBuffer);
-      console.log("REQ BODY: ", req.body)
       res.status(201).json(user);
    } catch (error) {
       next(error);

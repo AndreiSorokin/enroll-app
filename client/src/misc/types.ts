@@ -14,7 +14,13 @@ export type User = {
    resetToken?: string | null;
    resetTokenExpiresAt?: Date | null;
    image?: string | null;
+   token: string | null;
 }
+
+export type UserRegistrationData = {
+   [K in 'name' | 'password' | 'email' | 'image']: User[K];
+}
+
 export type UserDataResponse = {
    [K in 'id' | 'name' | 'email' | 'role' | 'active']: User[K];
 }
