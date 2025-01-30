@@ -39,15 +39,17 @@ export const userApi = createApi({
             }
          }
       }),
-      registration: builder.mutation<User, UserRegistrationData>({
+      registration: builder.mutation<User, FormData>({
          query: (user) => ({
             url: 'users/registration',
             method: 'POST',
-            body: user
+            body: user,
+            formData: true,
          }),
          onQueryStarted: async(_, { queryFulfilled, dispatch }) => {
             try {
                const { data } = await queryFulfilled;
+               console.log(data)
                localStorage.setItem('token', data.token!);
                const userData = parseJwt(data.token);
                dispatch(setUser(userData));

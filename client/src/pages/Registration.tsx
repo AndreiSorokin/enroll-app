@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react'
 import { useNavigate, Link } from "react-router-dom";
 import { z } from 'zod';
@@ -6,8 +6,10 @@ import { z } from 'zod';
 import { useRegistrationMutation } from '../redux';
 import { Role } from '../misc/types';
 import useInput from '../hooks/UseInput';
+import { toast } from 'react-toastify';
 
 export const loginSchema = z.object({
+   name: z.string().min(1, 'Name is required'),
    email: z.string().email('Invalid email address'),
    password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
 });
@@ -15,27 +17,40 @@ export const loginSchema = z.object({
 const Registration = () => {
    const navigate = useNavigate();
    const [registration] = useRegistrationMutation();
-   // const [avatar, setAvatar] = useState<File | null>(null)
+   const [avatar, setAvatar] = useState<File | null>(null)
    // const [role, setRole] = useState<Role | null>(null)
 
-   const handleSignUp = async(e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+   const handleSignUp = async() => {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("role", values.role);
 
-      const userInput = { name: values.name, email: values.email, password: values.password, role: values.role, image: values.image}
-      await registration(userInput).unwrap();
+      if (avatar) {
+         formData.append("image", avatar);
+      }
+
+      try {
+         await registration(formData).unwrap(); 
+         toast.success("Registration successful!");
+         navigate('/procedures');
+      } catch (error) {
+         toast.error("Registration failed!");
+      }
    }
 
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useInput(
       loginSchema,
-      { email: '', password: '', name: '', role: null, image: null},
+      { email: '', password: '', name: '', role: 'user', image: null},
       handleSignUp
    );
 
-   // const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //    if (event.target.files && event.target.files[0]) {
-   //       setAvatar(event.target.files[0]);
-   //    }
-   // };
+   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+         setAvatar(event.target.files[0]);
+      }
+   };
 
    return (
       <Box>
@@ -49,7 +64,7 @@ const Registration = () => {
                   alignItems: 'center',
                }}
             >
-            <Avatar src={image ? URL.createObjectURL(image) : ''} sx={{ m: 1, bgcolor: 'secondary.main' }} />
+            <Avatar src={values.image ? URL.createObjectURL(values.image) : ''} sx={{ m: 1, bgcolor: 'secondary.main' }} />
             <Typography component="h1" variant="h5">
                Sign up
             </Typography>
@@ -102,20 +117,22 @@ const Registration = () => {
                      helperText={touched.password && errors.password}
                   />
                   </Grid>
-                  <Grid>
-                  <TextField
-                     required
-                     fullWidth
-                     name="role"
-                     label="role"
-                     type="role"
-                     id="role"
-                     value={values.role}
-                     onChange={handleChange}
-                     onBlur={handleBlur}
-                     error={touched.role && Boolean(errors.role)}
-                     helperText={touched.role && errors.role}
-                  />
+                  <Grid item xs={12}>
+                     <FormControl fullWidth>
+                        <InputLabel id="role-label">Role</InputLabel>
+                        <Select
+                           labelId="role-label"
+                           id="role"
+                           name="role"
+                           value={values.role}
+                           onChange={handleChange}
+                           onBlur={handleBlur}
+                           error={touched.role && Boolean(errors.role)}
+                        >
+                           <MenuItem value="user">User</MenuItem>
+                           <MenuItem value="master">Master</MenuItem>
+                        </Select>
+                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                   <Box sx={{ margin: "2vh" }}>
@@ -166,13 +183,9 @@ const Registration = () => {
                >
                   Sign Up
                </Button>
-               <Grid container justifyContent="flex-end">
-                  <Grid item>
-                  <Link to="/auth/login" style={{color: "#E9E9E9", textDecoration: "underline", fontSize: '18px'}}>
-                     Already have an account? Sign in
-                  </Link>
-                  </Grid>
-               </Grid>
+               <Box>Already have an account? 
+                  <Box component={Link} to="/auth/login">Sign in</Box>
+               </Box>
             </Box>
             </Box>
          </Container>
