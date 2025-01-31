@@ -7,6 +7,9 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import Profile from "./pages/Profile";
 
+//TODO: User: reset password, forgot password, enroll in procedure, ban users
+//TODO: Procedures: add/remove procedure, add/remove master proccedure
+//TODO: Other: tests, CI/CD
 function App() {
 
   return (

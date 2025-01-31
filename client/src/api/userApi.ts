@@ -20,14 +20,14 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
-      updateUser: builder.mutation<User, { id: string; email: string; token: string }>({
-         query: ({ id, email, token }) => ({
+      updateUser: builder.mutation<User, { id: string; name: string; token: string }>({
+         query: ({ id, name, token }) => ({
             url: `users/${id}`,
             method: 'PUT',
             headers: {
                Authorization: `Bearer ${token}`,
             },
-            body: { email, name },
+            body: { name },
          })
       }),
       login: builder.mutation<LoginResponse, { email: string, password: string }>({
