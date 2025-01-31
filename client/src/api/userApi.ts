@@ -20,6 +20,17 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      updatePassword: builder.mutation<User, { id: string; currentPassword: string; newPassword: string; token: string }>({
+         query: ({ id, currentPassword, newPassword, token }) => ({
+            url: `users/${id}/update-password`,
+            method: 'PUT',
+            headers: {
+               Authorization: `Bearer ${token}`,
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ currentPassword, newPassword })
+         })
+      }),
       updateUser: builder.mutation<User, { id: string; name: string; token: string }>({
          query: ({ id, name, token }) => ({
             url: `users/${id}`,
@@ -75,4 +86,5 @@ export const {
    useLoginMutation,
    useRegistrationMutation,
    useUpdateUserMutation,
+   useUpdatePasswordMutation
 } = userApi;

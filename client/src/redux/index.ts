@@ -6,7 +6,8 @@ export {
    useGetUserByIdQuery,
    useLoginMutation,
    useRegistrationMutation,
-   useUpdateUserMutation
+   useUpdateUserMutation,
+   useUpdatePasswordMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

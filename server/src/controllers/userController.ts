@@ -195,9 +195,9 @@ export async function resetPassword(req: Request, res: Response, next: NextFunct
 
 export async function changePassword(req: Request, res: Response, next: NextFunction) {
    try {
-      const { oldPassword, newPassword } = req.body;
+      const { currentPassword, newPassword } = req.body;
 
-      if (!oldPassword || !newPassword) {
+      if (!currentPassword || !newPassword) {
          throw new BadRequestError(
             "Please provide both old password and new password!"
          );
@@ -210,7 +210,7 @@ export async function changePassword(req: Request, res: Response, next: NextFunc
       }
 
       const hashedPassword = user.password;
-      const isPasswordCorrect = await bcrypt.compare(oldPassword, hashedPassword);
+      const isPasswordCorrect = await bcrypt.compare(currentPassword, hashedPassword);
 
       if (!isPasswordCorrect) {
          throw new BadRequestError('Old password is incorrect');

@@ -328,6 +328,7 @@ const updatePassword = async(user: User, newPassword: string) => {
     user.resetTokenExpiresAt = null;
 
     await user.save();
+    return user;
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
