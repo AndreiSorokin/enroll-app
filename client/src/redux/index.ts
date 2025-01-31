@@ -7,7 +7,9 @@ export {
    useLoginMutation,
    useRegistrationMutation,
    useUpdateUserMutation,
-   useUpdatePasswordMutation
+   useUpdatePasswordMutation,
+   useForgotPasswordMutation,
+   useResetPasswordMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

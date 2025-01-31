@@ -101,6 +101,9 @@ const Login = () => {
       <Box>Don't have an account? 
         <Box component={Link} to="/auth/signup">Sign up</Box>
       </Box>
+      <Box>
+        <Box component={Link} to ="/users/forgot-password">Forgot password?</Box>
+      </Box>
     </Container>
   );
 }

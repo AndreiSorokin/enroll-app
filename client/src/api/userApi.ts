@@ -20,6 +20,26 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      resetPassword: builder.mutation<User, { newPassword: string; token: string }>({
+         query: ({ newPassword, token }) => ({
+            url: `users/reset-password?token=${token}`,
+            method: 'POST',
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: { newPassword }
+         })
+      }),
+      forgotPassword: builder.mutation<{ token: string }, { email: string }>({
+         query: ({ email }) => ({
+            url: `users/forgot-password`,
+            method: 'POST',
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: { email }
+         })
+      }),
       updatePassword: builder.mutation<User, { id: string; currentPassword: string; newPassword: string; token: string }>({
          query: ({ id, currentPassword, newPassword, token }) => ({
             url: `users/${id}/update-password`,
@@ -86,5 +106,7 @@ export const {
    useLoginMutation,
    useRegistrationMutation,
    useUpdateUserMutation,
-   useUpdatePasswordMutation
+   useUpdatePasswordMutation,
+   useForgotPasswordMutation,
+   useResetPasswordMutation
 } = userApi;

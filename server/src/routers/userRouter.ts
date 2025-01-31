@@ -44,7 +44,7 @@ router.put('/:id', authMiddleware, authOwnershipMiddleware, userStatusCheck, upd
 router.delete('/:id', authMiddleware, adminCheck, deleteUser);
 
 router.post('/login', userLogin);
-router.post('/forgor-password', forgotPassword);
+router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.put('/:id/update-password', authMiddleware, authOwnershipMiddleware, changePassword);
 

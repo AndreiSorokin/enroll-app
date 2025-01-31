@@ -13,7 +13,13 @@ export const updateUserSchema = z.object({
 });
 
 export const updatePasswordSchema = z.object({
-   newPassword: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
+   newPassword: z
+   .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+         "Password must contain at least one letter and one number"
+      ),
 })
 
 
