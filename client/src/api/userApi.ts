@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LoginResponse, User, UserRegistrationData } from "../misc/types";
+import { User } from "../misc/types";
 import parseJwt from "../helpers/decode";
 import { setUser } from "../redux/userSlice";
 
@@ -61,7 +61,7 @@ export const userApi = createApi({
             body: { name },
          })
       }),
-      login: builder.mutation<LoginResponse, { email: string, password: string }>({
+      login: builder.mutation<User, { email: string, password: string }>({
          query: (credentials) => ({
             url: 'users/login',
             method: 'POST',
@@ -71,7 +71,7 @@ export const userApi = createApi({
             try {
                const { data } = await queryFulfilled;
                
-               localStorage.setItem('token', data.token);
+               localStorage.setItem('token', data.token!);
 
                const userData = parseJwt(data.token);
                dispatch(setUser(userData));
@@ -80,7 +80,7 @@ export const userApi = createApi({
             }
          }
       }),
-      registration: builder.mutation<LoginResponse, FormData>({
+      registration: builder.mutation<User, FormData>({
          query: (user) => ({
             url: 'users/registration',
             method: 'POST',

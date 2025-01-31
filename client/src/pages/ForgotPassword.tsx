@@ -1,7 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
-import React from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-import { z } from 'zod';
 
 import { useForgotPasswordMutation } from '../redux';
 import useInput from '../hooks/UseInput';
@@ -13,9 +11,8 @@ const ForgotPassword = () => {
 
    const handleForgotPassword = async(email: string) => {
       try {
-         const response = await forgotPassword(email).unwrap();
-         toast.success(response.message);
-      } catch (error) {
+         await forgotPassword({ email }).unwrap();
+      } catch {
          toast.error('Unexpected error occured');
       }
    }
@@ -40,7 +37,7 @@ const ForgotPassword = () => {
                onChange={handleChange}
                onBlur={handleBlur}
                error={touched.email && Boolean(errors.email)}
-               helperText={touched.email && errors.email}
+               helperText={touched.email && typeof errors.email === 'string' ? errors.email : ''}
             />
             <Button 
             type="submit"

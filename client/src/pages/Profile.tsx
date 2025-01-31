@@ -1,4 +1,3 @@
-import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useGetUserByIdQuery, useUpdateUserMutation, useUpdatePasswordMutation } from '../redux';
@@ -13,24 +12,22 @@ const Profile = () => {
    const { id } = useParams<{ id:string }>();
    const { data, refetch } = useGetUserByIdQuery(id!);
    const [updateUser] = useUpdateUserMutation();
-   const [updatePassword] = useUpdatePasswordMutation(id!);
+   const [updatePassword] = useUpdatePasswordMutation();
    const token = localStorage.getItem("token");
 
    const handleUpdate = async() => {
       try {
          await updateUser({
-            id,
+            id: id!,
             name: nameValues.name,
-            token
+            token: token!
          }).unwrap();
          toast.success("Name updated successfully!");
          refetch();
-      } catch (error) {
+      } catch {
          toast.error("Updating name failed!");
       }
    }
-
-   
 
    const { 
       values: nameValues, 
@@ -48,14 +45,14 @@ const Profile = () => {
    const handlePasswordUpdate = async() => {
       try {
          await updatePassword({
-            id,
+            id: id!,
             currentPassword: passwordValues.currentPassword,
             newPassword: passwordValues.newPassword,
-            token
+            token: token!
          }).unwrap();
          toast.success("Password updated successfully!");
          refetch();
-      } catch (error) {
+      } catch {
          toast.error("Wrong password");
       }
    }
@@ -96,7 +93,7 @@ const Profile = () => {
                      onChange={handleNameChange}
                      onBlur={handleNameBlur}
                      error={nameTouched.name && Boolean(nameErrors.name)}
-                     helperText={nameTouched.name && nameErrors.name}
+                     helperText={nameTouched.name && typeof nameErrors.name === 'string' ? nameErrors.name : ''}
                   />
                   <Button
                      type="submit"
@@ -131,7 +128,7 @@ const Profile = () => {
                      onChange={handlePasswordChange}
                      onBlur={handlePasswordBlur}
                      error={passwordTouched.currentPassword && Boolean(passwordErrors.currentPassword)}
-                     helperText={passwordTouched.currentPassword && passwordErrors.currentPassword}
+                     helperText={passwordTouched.currentPassword && typeof passwordErrors.currentPassword === 'string' ? passwordErrors.currentPassword : ''}
                   />
                   <TextField
                      margin="normal"
@@ -145,7 +142,7 @@ const Profile = () => {
                      onChange={handlePasswordChange}
                      onBlur={handlePasswordBlur}
                      error={passwordTouched.newPassword && Boolean(passwordErrors.newPassword)}
-                     helperText={passwordTouched.newPassword && passwordErrors.newPassword}
+                     helperText={passwordTouched.newPassword && typeof passwordErrors.newPassword === 'string' ? passwordErrors.newPassword : ''}
                   />
                   <Button
                      type="submit"

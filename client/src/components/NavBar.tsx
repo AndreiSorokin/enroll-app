@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../redux/store";
@@ -66,24 +66,24 @@ const Navbar = () => {
 
                <Drawer anchor="right" open={openDrawer} onClose={handleDrawerToggle}>
                   <List sx={{ width: 250 }}>
-                     <ListItem button>
+                     <ListItem component="li">
                         <Button component={Link} to="/" color="inherit" onClick={handleDrawerToggle}>
                            Home
                         </Button>
                      </ListItem>
-                     <ListItem button>
+                     <ListItem component="li">
                         <Button component={Link} to="/procedures" color="inherit" onClick={handleDrawerToggle}>
                            Procedures
                         </Button>
                      </ListItem>
                      {userData && 
-                     <ListItem button>
+                     <ListItem component="li">
                         <Button component={Link} to={`/users/${id}`} color="inherit" onClick={handleDrawerToggle}>
                            Profile
                         </Button>
                      </ListItem>
                      }
-                     <ListItem button>
+                     <ListItem component="li">
                      {userData
                         ? (
                            <Button component={Link} to="/auth/login" color="inherit" onClick={handleLogout}>
@@ -113,7 +113,7 @@ const Navbar = () => {
                   </Button>
                </ListItem>
                {userData && 
-                  <ListItem button>
+                  <ListItem component="li">
                      <Button component={Link} to="/users/:id" color="inherit" onClick={handleDrawerToggle}>
                         Profile
                      </Button>

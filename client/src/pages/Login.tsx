@@ -17,8 +17,8 @@ const Login = () => {
       await login(credentials).unwrap();
       toast.success('Login successful!');
       navigate("/procedures");
-    } catch (error) {
-      toast.error(error.message || 'Wrong email or password!');
+    } catch {
+      toast.error('Wrong email or password!');
     }
   }
 
@@ -56,7 +56,7 @@ const Login = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             error={touched.email && Boolean(errors.email)}
-            helperText={touched.email && errors.email}
+            helperText={touched.email && typeof errors.email === 'string' ? errors.email : ''}
           />
           <TextField
             margin="normal"
@@ -70,7 +70,7 @@ const Login = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             error={touched.password && Boolean(errors.password)}
-            helperText={touched.password && errors.password}
+            helperText={touched.password && typeof errors.password === 'string' ? errors.password : ''}
           />
           <Button
             type="submit"

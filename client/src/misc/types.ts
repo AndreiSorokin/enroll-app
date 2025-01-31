@@ -28,7 +28,7 @@ export type UserDataResponse = {
 export type LoginResponse = {
    token: string;
    refreshToken: string;
-   userData: UserDataResponse
+   userData: UserDataResponse;
 }
 
 export type UserState = {

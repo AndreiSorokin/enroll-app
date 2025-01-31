@@ -1,5 +1,4 @@
 import { Box, Button, TextField } from '@mui/material';
-import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -14,17 +13,15 @@ const ResetPassword = () => {
    const [resetPassword] = useResetPasswordMutation();
    const navigate = useNavigate();
 
-   console.log(token);
-
    const handleResetPassword = async() => {
       try {
          await resetPassword({
             newPassword: values.newPassword,
-            token
+            token: token!
          }).unwrap();
          toast.success("New password has been set successfully");
          navigate('/auth/login');
-      } catch (error) {
+      } catch {
          toast.error("Password must contain letters and numbers and to be at least 6 characters long");
       }
    }
@@ -50,7 +47,7 @@ const ResetPassword = () => {
                onChange={handleChange}
                onBlur={handleBlur}
                error={touched.newPassword && Boolean(errors.newPassword)}
-               helperText={touched.newPassword && errors.newPassword}
+               helperText={touched.newPassword && typeof errors.newPassword === 'string' ? errors.newPassword : ''}
             />
             <Button type="submit" variant="contained" color="primary">
                Reset Password

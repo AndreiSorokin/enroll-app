@@ -33,7 +33,7 @@ const Registration = () => {
          await registration(formData).unwrap(); 
          toast.success("Registration successful!");
          navigate('/procedures');
-      } catch (error) {
+      } catch {
          toast.error("Registration failed!");
       }
    }
@@ -81,7 +81,7 @@ const Registration = () => {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         error={touched.name && Boolean(errors.name)}
-                        helperText={touched.name && errors.name}
+                        helperText={touched.name && typeof errors.name === 'string' ? errors.name : ''}
                      />
                   </Grid>
                   <Grid item xs={12}>
@@ -96,7 +96,7 @@ const Registration = () => {
                      onChange={handleChange}
                      onBlur={handleBlur}
                      error={touched.email && Boolean(errors.email)}
-                     helperText={touched.email && errors.email}
+                     helperText={touched.email && typeof errors.email === 'string' ? errors.email : ''}
                   />
                   </Grid>
                   <Grid item xs={12}>
@@ -112,7 +112,7 @@ const Registration = () => {
                      onChange={handleChange}
                      onBlur={handleBlur}
                      error={touched.password && Boolean(errors.password)}
-                     helperText={touched.password && errors.password}
+                     helperText={touched.password && typeof errors.password === 'string' ? errors.password : ''}
                   />
                   </Grid>
                   <Grid item xs={12}>
