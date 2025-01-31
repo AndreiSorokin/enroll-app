@@ -1,0 +1,35 @@
+import { z } from 'zod';
+
+export const loginSchema = z.object({
+   email: z.string().email('Invalid email address'),
+   password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
+});
+
+export const updateUserSchema = z.object({
+   name: z.string().min(1, 'Invalid name'),
+});
+
+export const updatePasswordSchema = z.object({
+   newPassword: z
+   .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+         "Password must contain at least one letter and one number"
+      ),
+});
+
+
+export const resetPasswordSchema = z.object({
+   newPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters long")
+      .regex(
+         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+         "Password must contain at least one letter and one number"
+      ),
+});
+
+export const emailSchema = z.object({
+   email: z.string().email('Invalid email address'),
+});

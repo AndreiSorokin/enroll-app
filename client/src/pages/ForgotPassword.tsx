@@ -5,10 +5,7 @@ import { z } from 'zod';
 
 import { useForgotPasswordMutation } from '../redux';
 import useInput from '../hooks/UseInput';
-
-export const emailSchema = z.object({
-   email: z.string().email('Invalid email address'),
-});
+import { emailSchema } from '../schemas/schemas';
 
 const ForgotPassword = () => {
    const [forgotPassword] = useForgotPasswordMutation();

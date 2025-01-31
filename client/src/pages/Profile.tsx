@@ -1,26 +1,12 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { z } from 'zod';
 
 import { useGetUserByIdQuery, useUpdateUserMutation, useUpdatePasswordMutation } from '../redux';
 import { Box, Button, TextField } from '@mui/material';
 import defaultPicture from '../img/defaultPicture.png'
 import { toast, ToastContainer } from 'react-toastify';
 import useInput from '../hooks/UseInput';
-
-export const updateUserSchema = z.object({
-   name: z.string().min(1, 'Invalid name'),
-});
-
-export const updatePasswordSchema = z.object({
-   newPassword: z
-   .string()
-      .min(6, "Password must be at least 6 characters long")
-      .regex(
-         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-         "Password must contain at least one letter and one number"
-      ),
-})
+import { updatePasswordSchema, updateUserSchema } from '../schemas/schemas';
 
 
 const Profile = () => {

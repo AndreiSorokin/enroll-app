@@ -2,26 +2,19 @@ import { Box, Button, TextField } from '@mui/material';
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { z } from 'zod';
 
-import { useLoginMutation, useResetPasswordMutation } from '../redux';
+import { useResetPasswordMutation } from '../redux';
 import useInput from '../hooks/UseInput';
-
-export const resetPasswordSchema = z.object({
-   newPassword: z
-      .string()
-      .min(6, "Password must be at least 6 characters long")
-      .regex(
-         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-         "Password must contain at least one letter and one number"
-      ),
-});
+import { resetPasswordSchema } from '../schemas/schemas';
 
 const ResetPassword = () => {
    const location = useLocation();
    const queryParams = new URLSearchParams(location.search);
    const token = queryParams.get('token');
    const [resetPassword] = useResetPasswordMutation();
+   const navigate = useNavigate();
+
+   console.log(token);
 
    const handleResetPassword = async() => {
       try {
@@ -29,7 +22,8 @@ const ResetPassword = () => {
             newPassword: values.newPassword,
             token
          }).unwrap();
-         toast.success("New password has been set successfully")
+         toast.success("New password has been set successfully");
+         navigate('/auth/login');
       } catch (error) {
          toast.error("Password must contain letters and numbers and to be at least 6 characters long");
       }

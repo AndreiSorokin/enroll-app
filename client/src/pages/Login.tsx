@@ -1,17 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
-import { z } from 'zod';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
 import { useLoginMutation } from '../redux';
 import useInput from '../hooks/UseInput';
-
-
-export const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
-});
+import { loginSchema } from "../schemas/schemas";
 
 const Login = () => {
   const navigate = useNavigate();

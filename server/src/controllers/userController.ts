@@ -154,7 +154,7 @@ export async function forgotPassword(req: Request, res: Response, next: NextFunc
          throw new BadRequestError('Invalid email format');
       }
 
-      const verificationLink = `http://localhost:5173/api/v1/users/reset-password?token=${token}`;
+      const verificationLink = `http://localhost:5173/users/reset-password?token=${token}`;
       await userService.sendVerificationMail(email, verificationLink);
 
       userData.resetToken = token;
