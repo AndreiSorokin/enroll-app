@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "../misc/types";
+import { User, userProcedures } from "../misc/types";
 import parseJwt from "../helpers/decode";
 import { setUser } from "../redux/userSlice";
 
@@ -19,6 +19,9 @@ export const userApi = createApi({
    endpoints: (builder) => ({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
+      }),
+      getUserProcedure: builder.query<userProcedures, string>({
+         query: (id) => `users/${id}/user-procedures`
       }),
       resetPassword: builder.mutation<User, { newPassword: string; token: string }>({
          query: ({ newPassword, token }) => ({
@@ -103,6 +106,7 @@ export const userApi = createApi({
 
 export const {
    useGetUserByIdQuery,
+   useGetUserProcedureQuery,
    useLoginMutation,
    useRegistrationMutation,
    useUpdateUserMutation,

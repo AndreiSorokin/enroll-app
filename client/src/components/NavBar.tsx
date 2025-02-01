@@ -84,6 +84,11 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      }
+                     {userData && userData.role === "user" &&
+                        <ListItem component="li">
+                           <Button component={Link} to={`/users/${id}/user-procedures`}>Enrollments</Button>
+                        </ListItem>
+                     }
                      <ListItem component="li">
                      {userData
                         ? (
@@ -118,6 +123,11 @@ const Navbar = () => {
                      <Button component={Link} to={`/users/${id}`} color="inherit" onClick={handleDrawerToggle}>
                         Profile
                      </Button>
+                  </ListItem>
+               }
+               {userData && userData.role === "user" &&
+                  <ListItem component="li">
+                     <Button component={Link} to={`/users/${id}/user-procedures`}>Enrollments</Button>
                   </ListItem>
                }
                <ListItem sx={{ margin: '0 10px' }}>

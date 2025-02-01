@@ -6,6 +6,8 @@ const SingleProcedure = () => {
    const { id } = useParams<{ id:string }>();
    const { data, error, isLoading } = useGetMastersByProcedureQuery(id!);
 
+   console.log(data)
+
    if(error) {
       return <p>Error fetching procedure</p>;
    }

@@ -8,6 +8,7 @@ import Registration from "./pages/Registration";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
+import UserProcedures from "./pages/UserProcedures";
 
 //TODO: User: enroll in procedure, ban users
 //TODO: Procedures: add/remove procedure, add/remove master proccedure
@@ -25,6 +26,7 @@ function App() {
         <Route path="/users/:id" element={<Profile/>}/>
         <Route path="/users/reset-password" element={<ResetPassword/>}/>
         <Route path="/users/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/users/:id/user-procedures" element={<UserProcedures/>}/>
       </Routes>
     </div>
   )

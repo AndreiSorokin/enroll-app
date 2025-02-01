@@ -19,22 +19,19 @@ interface ICreateUserInput {
 
 const getUserProcedure = async (userId: string) => {
   try {
-    // Fetch the procedures the user is enrolled in
     const userProcedures = await UserProcedure.findAll({
-      where: { userId },  // Use userId to find all procedures for that user
+      where: { userId },
       include: [
         {
           model: Procedure,
-          as: "Procedure", // Alias must match the association
+          as: "Procedure",
         },
         {
           model: User,
-          as: "Master", // Alias for master of the procedure
+          as: "Master",
         }
       ]
     });
-
-    console.log("Retrieved procedures:", userProcedures);
 
     if (userProcedures.length === 0) {
       throw new NotFoundError("No procedures found for this user");
@@ -42,14 +39,12 @@ const getUserProcedure = async (userId: string) => {
 
     return userProcedures;
   } catch (error) {
-    console.error("❌ Error in getUserProcedures:", error);
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
-    throw error; // Re-throw the error if it's an unexpected one
+    throw error;
   }
 };
-
 
 const getSingleMasterProcedure = async (id: string) => {
   try {

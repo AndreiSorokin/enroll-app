@@ -43,6 +43,17 @@ export type Master = {
    masterProcedures: MasterProcedure[];
 }
 
+export type UserProcedure = {
+   id: string;
+   userId: string;
+   procedureId: string;
+   masterId: string;
+   Procedure: Procedure[];
+   Master: User;
+}
+
+export type userProcedures = UserProcedure[];
+
 export type Procedure = {
    id: string;
    duration: number;

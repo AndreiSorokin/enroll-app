@@ -41,7 +41,6 @@ const getAllProcedures = async () => {
    }
 };
 
-
 const getSingleProcedure = async(id: string) => {
    try {
       if (!validator.isUUID(id)) {
@@ -93,9 +92,6 @@ const getMastersByProcedure = async(id: string) => {
             'updatedAt',
          ],
       });
-
-      console.log("Procedure ID:", id);
-      console.log("Query Result:", masters);    
 
       if (masters.length === 0) {
          throw new NotFoundError("No masters found for this procedure");
