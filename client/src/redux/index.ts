@@ -20,7 +20,7 @@ export {
 } from '../api/procedureApi';
 
 export { bookingApi } from '../api/bookingApi';
-export { useCreateBookingQuery } from '../api/bookingApi'
+export { useCreateBookingMutation } from '../api/bookingApi'
 
 export { timeSlotApi } from '../api/timeSlotApi';
 export { useGetAllTimeSlotsQuery } from '../api/timeSlotApi';

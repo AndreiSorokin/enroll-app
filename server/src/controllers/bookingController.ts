@@ -2,6 +2,16 @@ import { NextFunction, Request, Response } from "express";
 
 import bookingService from '../services/bookingService';
 
+export async function getUserBookings (req: Request, res: Response, next: NextFunction) {
+   try {
+      const userId = req.params.userId;
+      const bookings = await bookingService.getUserBookings(userId);
+      res.status(200).json(bookings);
+   } catch (error) {
+      next(error);
+   }
+};
+
 export async function getAllBookings(req: Request, res: Response, next: NextFunction) {
    try {
       const bookings = await bookingService.getAllBookings();

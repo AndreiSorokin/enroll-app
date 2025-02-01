@@ -7,6 +7,16 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+export async function getUserProcedure(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+      const procedures = await userService.getUserProcedure(id!);
+      res.json(procedures);
+   } catch (error) {
+      next(error);
+   }
+};
+
 export async function getSingleMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;

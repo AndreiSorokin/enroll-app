@@ -13,12 +13,20 @@ export const bookingApi = createApi({
       }
    }),
    endpoints: (builder) => ({
-      createBooking: builder.query<Booking, void>({
-         query: () => `/bookings`
+      createBooking: builder.mutation<Booking, { userId: string; timeSlotId: string, token: string }>({
+         query: ({ userId, timeSlotId, token }) => ({
+            url: "bookings",
+            method: "POST",
+            headers: {
+               Authorization: `Bearer ${token}`,
+               "Content-Type": "application/json",
+            },
+            body: { userId, timeSlotId }
+         })
       })
    })
 })
 
 export const {
-   useCreateBookingQuery,
+   useCreateBookingMutation,
 } = bookingApi;

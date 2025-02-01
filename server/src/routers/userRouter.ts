@@ -21,7 +21,8 @@ import {
    updateMasterProcedure,
    updateUserStatus,
    googleLogin,
-   getSingleMasterProcedure
+   getSingleMasterProcedure,
+   getUserProcedure
 } from "../controllers/userController";
 import adminCheck from "../middlewares/adminCheck";
 import userStatusCheck from "../middlewares/userStatusCheck";
@@ -48,6 +49,7 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.put('/:id/update-password', authMiddleware, authOwnershipMiddleware, changePassword);
 
+router.get('/:id/user-procedures', authMiddleware, userStatusCheck, getUserProcedure);
 router.post('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addUserProcedure);
 router.delete('/:id/user-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteUserProcedure);
 

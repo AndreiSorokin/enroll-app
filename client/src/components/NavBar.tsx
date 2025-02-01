@@ -25,6 +25,7 @@ const Navbar = () => {
 
    const userData = useSelector((state: RootState) => state.user.userData);
    const id = userData?.id;
+   console.log(id)
    
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
@@ -114,7 +115,7 @@ const Navbar = () => {
                </ListItem>
                {userData && 
                   <ListItem component="li">
-                     <Button component={Link} to="/users/:id" color="inherit" onClick={handleDrawerToggle}>
+                     <Button component={Link} to={`/users/${id}`} color="inherit" onClick={handleDrawerToggle}>
                         Profile
                      </Button>
                   </ListItem>

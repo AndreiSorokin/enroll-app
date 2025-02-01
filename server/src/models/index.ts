@@ -6,9 +6,18 @@ import MasterProcedure from './masterProcedure';
 import TimeSlot from './timeSlot';
 import Booking from './booking';
 
+
 // User and Procedure for enrolled procedures
 User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'userId', as: 'EnrolledProcedures' });
 Procedure.belongsToMany(User, { through: UserProcedure, foreignKey: 'procedureId', as: 'UsersEnrolled' });
+
+User.hasMany(UserProcedure, { foreignKey: "userId" });
+UserProcedure.belongsTo(User, { foreignKey: "userId" });
+
+Procedure.hasMany(UserProcedure, { foreignKey: "procedureId" });
+UserProcedure.belongsTo(Procedure, { foreignKey: "procedureId", as: "Procedure" });
+
+UserProcedure.belongsTo(User, { foreignKey: "masterId", as: "Master" });
 
 // User (master) and Procedure for procedures masters can perform
 User.belongsToMany(Procedure, { through: MasterProcedure, foreignKey: 'masterId', as: 'MasterProcedures' });

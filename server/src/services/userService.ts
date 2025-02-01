@@ -17,6 +17,40 @@ interface ICreateUserInput {
   image?: string;
 };
 
+const getUserProcedure = async (userId: string) => {
+  try {
+    // Fetch the procedures the user is enrolled in
+    const userProcedures = await UserProcedure.findAll({
+      where: { userId },  // Use userId to find all procedures for that user
+      include: [
+        {
+          model: Procedure,
+          as: "Procedure", // Alias must match the association
+        },
+        {
+          model: User,
+          as: "Master", // Alias for master of the procedure
+        }
+      ]
+    });
+
+    console.log("Retrieved procedures:", userProcedures);
+
+    if (userProcedures.length === 0) {
+      throw new NotFoundError("No procedures found for this user");
+    }
+
+    return userProcedures;
+  } catch (error) {
+    console.error("❌ Error in getUserProcedures:", error);
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+    throw error; // Re-throw the error if it's an unexpected one
+  }
+};
+
+
 const getSingleMasterProcedure = async (id: string) => {
   try {
     const user = await User.findByPk(id);
@@ -25,7 +59,7 @@ const getSingleMasterProcedure = async (id: string) => {
       throw error;
     }
   }
-}
+};
 
 const updateUserStatus = async(userId: string, active: boolean) => {
   try {
@@ -497,5 +531,6 @@ export default {
   updateUserStatus,
   getUserByResetToken,
   updatePassword,
-  getSingleMasterProcedure
+  getSingleMasterProcedure,
+  getUserProcedure
 }

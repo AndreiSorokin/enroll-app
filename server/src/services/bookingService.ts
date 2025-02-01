@@ -1,12 +1,33 @@
 import { BadRequestError, NotFoundError } from "../errors/ApiError";
-import { TimeSlot } from "../models";
+import { TimeSlot, UserProcedure } from "../models";
 import Booking from "../models/booking";
+
+const getUserBookings = async(userId: string) => {
+   try {
+      const bookings = await Booking.findAll({
+         where: { userId },
+         include: [{ model: TimeSlot, as: 'TimeSlot' }]
+      });
+
+      console.log("bookings: ", bookings)
+      if(bookings.length === 0) {
+         throw new NotFoundError("No bookings found for this user");
+      }
+
+      return bookings;
+   } catch (error) {
+      console.error("❌ Error in getUserBookings:", error);
+      if (error instanceof BadRequestError || error instanceof NotFoundError) {
+         throw error;
+      }
+   }
+};
 
 const getAllBookings = async() => {
    try {
       const bookings = await Booking.findAll();
 
-      if(!bookings || bookings.length === 0) {
+      if(bookings.length === 0) {
          throw new NotFoundError("No bookings found");
       }
 
@@ -65,5 +86,6 @@ const deleteBooking = async(id: string, timeSlotId: string) => {
 export default {
    getAllBookings,
    createBooking,
-   deleteBooking
+   deleteBooking,
+   getUserBookings
 }
