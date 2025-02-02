@@ -47,6 +47,13 @@ const createBooking = async(userId: string, timeSlotId: string) => {
          throw new NotFoundError("Time slot is not available");
       }
 
+      const userProcedure = await UserProcedure.findOne({
+         where: { userId, procedureId: timeSlot.procedureId, masterId: timeSlot.masterId }
+      });
+
+      if (!userProcedure) throw new BadRequestError("User is not enrolled in this procedure");
+
+
       const booking = await Booking.create({
          userId,
          timeSlotId

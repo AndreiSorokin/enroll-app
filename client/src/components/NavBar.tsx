@@ -127,7 +127,7 @@ const Navbar = () => {
                }
                {userData && userData.role === "user" &&
                   <ListItem component="li">
-                     <Button component={Link} to={`/users/${id}/user-procedures`}>Enrollments</Button>
+                     <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                   </ListItem>
                }
                <ListItem sx={{ margin: '0 10px' }}>

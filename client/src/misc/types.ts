@@ -33,7 +33,7 @@ export type LoginResponse = {
 
 export type UserState = {
    isLoggedIn: boolean;
-   userData: null | LoginResponse;
+   userData: null | User;
 }
 
 export type Master = {

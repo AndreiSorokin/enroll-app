@@ -23,6 +23,18 @@ export const userApi = createApi({
       getUserProcedure: builder.query<userProcedures, string>({
          query: (id) => `users/${id}/user-procedures`
       }),
+      addUserProcedure: builder.mutation<userProcedures, { userId: string, procedureId: string, masterId: string; token: string }>({
+         query: ({ userId, procedureId, masterId, token }) => ({
+            url: `users/${userId}/user-procedures/`,
+            method: "POST",
+            headers: {
+               Authorization: `Bearer ${token}`,
+               "Content-Type": "application/json",
+            },
+            
+            body: { userId, procedureId, masterId }
+         })
+      }),
       resetPassword: builder.mutation<User, { newPassword: string; token: string }>({
          query: ({ newPassword, token }) => ({
             url: `users/reset-password?token=${token}`,
@@ -112,5 +124,6 @@ export const {
    useUpdateUserMutation,
    useUpdatePasswordMutation,
    useForgotPasswordMutation,
-   useResetPasswordMutation
+   useResetPasswordMutation,
+   useAddUserProcedureMutation
 } = userApi;

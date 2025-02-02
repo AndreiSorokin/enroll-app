@@ -10,7 +10,8 @@ export {
    useUpdatePasswordMutation,
    useForgotPasswordMutation,
    useResetPasswordMutation,
-   useGetUserProcedureQuery
+   useGetUserProcedureQuery,
+   useAddUserProcedureMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';
@@ -24,4 +25,4 @@ export { bookingApi } from '../api/bookingApi';
 export { useCreateBookingMutation } from '../api/bookingApi'
 
 export { timeSlotApi } from '../api/timeSlotApi';
-export { useGetAllTimeSlotsQuery } from '../api/timeSlotApi';
+export { useGetAllTimeSlotsQuery, useGetAllAvailableTimeSlotsQuery } from '../api/timeSlotApi';
