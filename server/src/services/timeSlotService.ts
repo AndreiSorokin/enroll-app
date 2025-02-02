@@ -14,7 +14,7 @@ const getAllTimeSlots = async() => {
 
 const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, date: Date) => {
    try {
-      return await TimeSlot.findAll({
+      const timeSlots = await TimeSlot.findAll({
          where: {
             masterId,
             procedureId,
@@ -22,24 +22,8 @@ const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, da
             isAvailable: true,
          },
       });
-      // return await TimeSlot.findAll({
-      //    where: {
-      //      masterId,
-      //      procedureId,
-      //      date: sequelize.literal(`DATE("date") = '${date.toISOString().split('T')[0]}'`),
-      //      isAvailable: true,
-      //    },
-      //    include: [
-      //      {
-      //        model: Procedure,
-      //        as: "procedure",
-      //      },
-      //      {
-      //        model: User,
-      //        as: "master",
-      //      }
-      //    ]
-      //  });
+      console.log("timeSlots: ", timeSlots)
+      return timeSlots;
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
          throw error;

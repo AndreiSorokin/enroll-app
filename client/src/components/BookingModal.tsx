@@ -1,47 +1,70 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from "@mui/material";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 import { useAddUserProcedureMutation, useCreateBookingMutation, useGetAllAvailableTimeSlotsQuery } from "../redux";
 
-const BookingModal = ({ data, userData, getAvailableTimeSlots, open, setOpen }) => {
-   const { data: timeSlotData } = useGetAllAvailableTimeSlotsQuery();
+const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) => {
    const [createBooking] = useCreateBookingMutation();
+   const [addUserProcedure] = useAddUserProcedureMutation();
    const [selectedDate, setSelectedDate] = useState(null);
-   const [availableSlots, setAvailableSlots] = useState([]);
    const [selectedSlot, setSelectedSlot] = useState("");
-   const [selectedMaster, setSelectedMaster] = useState(null);
+
+
+   const { data: timeSlotData, isLoading } = useGetAllAvailableTimeSlotsQuery(
+      selectedMaster && selectedDate
+         ? { 
+               masterId: selectedMaster.id, 
+               procedureId: data?.[0]?.id, 
+               date: dayjs(selectedDate).format("YYYY-MM-DD") 
+            }   
+         : skipToken
+   );
+
+   console.log("selectedMaster: ", selectedMaster)
+   console.log("Fetched timeSlotData:", timeSlotData);
+   console.log("API Query Params:", {
+      masterId: selectedMaster?.id,
+      procedureId: data?.[0]?.id,
+      date: dayjs(selectedDate).format("YYYY-MM-DD"),
+   });
+   const formattedDate = selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : null;
+   console.log("Formatted Date:", formattedDate);
+
+
 
    const handleClose = () => {
       setOpen(false);
    };
 
-   const handleDateChange = async (date) => {
-      setSelectedDate(date);
-      const formattedDate = dayjs(date).format("YYYY-MM-DD");
-
-      try {
-         const slots = await getAvailableTimeSlots(selectedMaster.id, formattedDate);
-         setAvailableSlots(slots);
-      } catch (error) {
-         console.error("Error fetching time slots:", error);
-      }
-   };
-
-   const handleBooking = async() => {
+   const handleBooking = async () => {
       if (!selectedSlot) return alert("Please select a time slot!");
+
       try {
          await createBooking({
-            masterId: data[0].id,
-            userId: userData?.id
+            userId: userData?.id,
+            timeSlotId: selectedSlot,
+            token: token,
          });
+
+         await addUserProcedure({
+            userId: userData?.id,
+            procedureId: data[0].id,
+            masterId: selectedMaster.id,
+            token: token,
+         });
+
+         alert("Booking successful!");
+         handleClose();
       } catch (error) {
-         console.error('Error booking procedure:', error);
+         console.error("Error booking procedure:", error);
+         alert("Booking failed!");
       }
-   }
+   };
 
    return (
       <Modal open={open} onClose={handleClose}>
@@ -61,17 +84,24 @@ const BookingModal = ({ data, userData, getAvailableTimeSlots, open, setOpen }) 
             <Typography variant="h6">Book an Appointment</Typography>
             <Typography sx={{ mt: 2 }}>Master: {selectedMaster?.name}</Typography>
 
-            {/* Date Picker */}
+            
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-               <DatePicker label="Select Date" value={selectedDate} onChange={handleDateChange} sx={{ width: "100%", mt: 2 }} />
+               <DatePicker
+                  label="Select Date"
+                  value={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  sx={{ width: "100%", mt: 2 }}
+               />
             </LocalizationProvider>
 
-            {/* Time Slot Selection */}
+            
             <FormControl fullWidth sx={{ mt: 2 }}>
                <InputLabel>Select Time Slot</InputLabel>
                <Select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-                  {availableSlots.length > 0 ? (
-                     availableSlots.map((slot) => (
+                  {isLoading ? (
+                     <MenuItem disabled>Loading...</MenuItem>
+                  ) : timeSlotData?.length > 0 ? (
+                     timeSlotData.map((slot) => (
                         <MenuItem key={slot.id} value={slot.id}>
                            {dayjs(slot.startTime).format("hh:mm A")}
                         </MenuItem>
@@ -82,12 +112,18 @@ const BookingModal = ({ data, userData, getAvailableTimeSlots, open, setOpen }) 
                </Select>
             </FormControl>
 
-            <Button fullWidth variant="contained" sx={{ mt: 3, bgcolor: "#230248" }} onClick={handleBooking} disabled={!selectedSlot}>
+            <Button
+               fullWidth
+               variant="contained"
+               sx={{ mt: 3, bgcolor: "#230248" }}
+               onClick={handleBooking}
+               disabled={!selectedSlot}
+            >
                Confirm Booking
             </Button>
          </Box>
       </Modal>
    );
-}
+};
 
-export default BookingModal
+export default BookingModal;

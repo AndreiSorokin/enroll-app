@@ -11,9 +11,7 @@ const SingleProcedure = () => {
    const { data } = useGetMastersByProcedureQuery(id!);
    const [open, setOpen] = useState(false);
    const [selectedMaster, setSelectedMaster] = useState(null);
-
-   console.log('data: ',data)
-   console.log('userData: ', userData)
+   const token = localStorage.getItem('token');
 
    const handleOpen = (master) => {
       setSelectedMaster(master);
@@ -23,10 +21,13 @@ const SingleProcedure = () => {
    return (
       <Box>
          <BookingModal 
+            data={data}
             open={open} 
             setOpen={setOpen} 
             selectedMaster={selectedMaster} 
             userData={userData} 
+            setSelectedMaster={setSelectedMaster}
+            token={token}
          />
          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>Masters for the procedure:</Box>
          <ul>

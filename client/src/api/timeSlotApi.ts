@@ -17,8 +17,10 @@ export const timeSlotApi= createApi({
          query: () => `time-slots`
       }),
       getAllAvailableTimeSlots: builder.query<TimeSlot[], { masterId: string, procedureId: string, date: string }>({
-         query: ({ masterId, procedureId, date }) => 
-            `time-slots/available?masterId=${masterId}&procedureId=${procedureId}&date=${date}`
+         query: ({ masterId, procedureId, date }) => ({
+            url: `time-slots/available`,
+            params: { masterId, procedureId, date }
+         })
       })
    })
 })
