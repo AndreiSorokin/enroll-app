@@ -4,7 +4,7 @@ import { validate as isUuid } from 'uuid';
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 
-import { User, Procedure, UserProcedure, MasterProcedure } from '../models';
+import { User, Procedure, UserProcedure, MasterProcedure, Booking, TimeSlot } from '../models';
 import { ApiError, BadRequestError, InternalServerError, NotFoundError } from "../errors/ApiError";
 import { uploadImageToCloudinary } from "./uploads"
 
@@ -29,6 +29,18 @@ const getUserProcedure = async (userId: string) => {
         {
           model: User,
           as: "Master",
+        },
+        {
+          model: TimeSlot,
+          as: "TimeSlots",
+          include: [
+            {
+              model: Booking,
+              as: "Bookings",
+              where: { userId }, // Ensures we get only the current user's bookings
+              required: false, // Allows procedures without bookings to still be returned
+            }
+          ]
         }
       ]
     });
@@ -39,6 +51,7 @@ const getUserProcedure = async (userId: string) => {
 
     return userProcedures;
   } catch (error) {
+    console.error("Error: ",error)
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }

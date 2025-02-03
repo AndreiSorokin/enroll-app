@@ -18,7 +18,6 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
       (p) => p.masterId === selectedMaster?.id
    )?.procedureId;
 
-
    const { data: timeSlotData, isLoading, error } = useGetAllAvailableTimeSlotsQuery(
       selectedMaster && selectedDate
          ? { 
@@ -29,12 +28,11 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
          : skipToken
    );
    
-   
+   console.log("procedureId: ", procedureId)
    useEffect(() => {
       console.log("API response - timeSlotData:", timeSlotData);
       if (error) console.error("API Error:", error);
    }, [timeSlotData, error]);
-   console.log("timeSlotData: ", timeSlotData)
 
    const handleClose = () => {
       setOpen(false);
@@ -52,7 +50,7 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
 
          await addUserProcedure({
             userId: userData?.id,
-            procedureId: data[0].id,
+            procedureId: procedureId,
             masterId: selectedMaster.id,
             token: token,
          });

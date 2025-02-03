@@ -11,6 +11,7 @@ interface TimeSlotAttributes {
    isAvailable: boolean;
    createdAt?: Date;
    slotDuration?: number;
+   userProcedureId?: string;
 }
 
 interface TimeSlotCreationAttributes extends Optional<TimeSlotAttributes, 'id'> {}
@@ -25,6 +26,7 @@ class TimeSlot extends Model<TimeSlotAttributes, TimeSlotCreationAttributes> imp
    public isAvailable!: boolean;
    public readonly createdAt!: Date;
    public slotDuration!: number;
+   public userProcedureId!: string;
 }
 
 TimeSlot.init({
@@ -77,6 +79,17 @@ TimeSlot.init({
       type: DataTypes.INTEGER,
       allowNull: false,
    },
+   userProcedureId: {
+      type: DataTypes.UUID,
+         allowNull: true,
+         references: {
+         model: "user_procedures",
+         key: "id",
+      },
+      field: "user_procedure_id",
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+   }
 }, {
    sequelize,
    modelName: 'TimeSlot',

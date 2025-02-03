@@ -39,6 +39,17 @@ Booking.init({
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
    },
+   userProcedureId: {
+      type: DataTypes.UUID,
+         allowNull: true,
+         references: {
+         model: "user_procedures",
+         key: "id",
+      },
+      field: "user_procedure_id",
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+   }
 }, {
    sequelize,
    modelName: 'Booking',
