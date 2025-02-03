@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -14,28 +14,27 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
    const [selectedDate, setSelectedDate] = useState(null);
    const [selectedSlot, setSelectedSlot] = useState("");
 
+   const procedureId = selectedMaster?.masterProcedures?.find(
+      (p) => p.masterId === selectedMaster?.id
+   )?.procedureId;
 
-   const { data: timeSlotData, isLoading } = useGetAllAvailableTimeSlotsQuery(
+
+   const { data: timeSlotData, isLoading, error } = useGetAllAvailableTimeSlotsQuery(
       selectedMaster && selectedDate
          ? { 
                masterId: selectedMaster.id, 
-               procedureId: data?.[0]?.id, 
+               procedureId: procedureId,
                date: dayjs(selectedDate).format("YYYY-MM-DD") 
             }   
          : skipToken
    );
-
-   console.log("selectedMaster: ", selectedMaster)
-   console.log("Fetched timeSlotData:", timeSlotData);
-   console.log("API Query Params:", {
-      masterId: selectedMaster?.id,
-      procedureId: data?.[0]?.id,
-      date: dayjs(selectedDate).format("YYYY-MM-DD"),
-   });
-   const formattedDate = selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : null;
-   console.log("Formatted Date:", formattedDate);
-
-
+   
+   
+   useEffect(() => {
+      console.log("API response - timeSlotData:", timeSlotData);
+      if (error) console.error("API Error:", error);
+   }, [timeSlotData, error]);
+   console.log("timeSlotData: ", timeSlotData)
 
    const handleClose = () => {
       setOpen(false);
@@ -89,7 +88,10 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
                <DatePicker
                   label="Select Date"
                   value={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  onChange={(date) => {
+                     console.log("Date selected:", date);
+                     setSelectedDate(date)}
+                  }
                   sx={{ width: "100%", mt: 2 }}
                />
             </LocalizationProvider>
@@ -103,7 +105,7 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
                   ) : timeSlotData?.length > 0 ? (
                      timeSlotData.map((slot) => (
                         <MenuItem key={slot.id} value={slot.id}>
-                           {dayjs(slot.startTime).format("hh:mm A")}
+                           {dayjs(slot.startTime, "HH:mm:ss").format("hh:mm A")}
                         </MenuItem>
                      ))
                   ) : (
