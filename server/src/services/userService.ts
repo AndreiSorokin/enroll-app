@@ -37,8 +37,8 @@ const getUserProcedure = async (userId: string) => {
             {
               model: Booking,
               as: "Bookings",
-              where: { userId }, // Ensures we get only the current user's bookings
-              required: false, // Allows procedures without bookings to still be returned
+              where: { userId },
+              required: false,
             }
           ]
         }
@@ -266,14 +266,6 @@ const addUserProcedure = async (userId: string, procedureId: string, masterId: s
 
     if (!masterProcedure) {
       throw new NotFoundError('The specified master cannot perform this procedure');
-    }
-
-    const existingEntry = await UserProcedure.findOne({
-      where: { userId, procedureId, masterId },
-    });
-
-    if (existingEntry) {
-      throw new BadRequestError('User already enrolled in this procedure');
     }
 
     return await UserProcedure.create({

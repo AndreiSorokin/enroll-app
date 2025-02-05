@@ -8,38 +8,38 @@ import Booking from './booking';
 
 
 // User and Procedure for enrolled procedures
-User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'user_id', as: 'EnrolledProcedures' });
+User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'userId', as: 'EnrolledProcedures' });
 Procedure.belongsToMany(User, { through: UserProcedure, foreignKey: 'procedureId', as: 'UsersEnrolled' });
 
-User.hasMany(UserProcedure, { foreignKey: "user_id" });
-UserProcedure.belongsTo(User, { foreignKey: "master_id", as: "Master" });
+User.hasMany(UserProcedure, { foreignKey: "userId" });
+UserProcedure.belongsTo(User, { foreignKey: "masterId", as: "Master" });
 
-Procedure.hasMany(UserProcedure, { foreignKey: "procedure_id" });
-UserProcedure.belongsTo(Procedure, { foreignKey: "procedure_id", as: "Procedure" });
+Procedure.hasMany(UserProcedure, { foreignKey: "procedureId" });
+UserProcedure.belongsTo(Procedure, { foreignKey: "procedureId", as: "Procedure" });
 
 // User (master) and Procedure for procedures masters can perform
-User.belongsToMany(Procedure, { through: MasterProcedure, foreignKey: 'master_id', as: 'MasterProcedures' });
+User.belongsToMany(Procedure, { through: MasterProcedure, foreignKey: 'masterId', as: 'MasterProcedures' });
 Procedure.belongsToMany(User, { through: MasterProcedure, foreignKey: 'procedureId', as: 'Masters' });
 
 Procedure.hasMany(MasterProcedure, { foreignKey: 'procedureId', as: 'masterProcedures' });
 MasterProcedure.belongsTo(Procedure, { foreignKey: 'procedureId', as: 'procedure' });
-MasterProcedure.belongsTo(User, { as: 'master', foreignKey: 'master_id' });
-User.hasMany(MasterProcedure, { as: 'masterProcedures', foreignKey: 'master_id' });
+MasterProcedure.belongsTo(User, { as: 'master', foreignKey: 'masterId' });
+User.hasMany(MasterProcedure, { as: 'masterProcedures', foreignKey: 'masterId' });
 
 
-User.hasMany(TimeSlot, { foreignKey: 'master_id', as: 'timeSlots' });
-TimeSlot.belongsTo(User, { foreignKey: 'master_id', as: 'master' });
+User.hasMany(TimeSlot, { foreignKey: 'masterId', as: 'timeSlots' });
+TimeSlot.belongsTo(User, { foreignKey: 'masterId', as: 'master' });
 
-UserProcedure.hasMany(Booking, { foreignKey: "user_procedure_id", as: "Bookings" });
-Booking.belongsTo(UserProcedure, { foreignKey: "user_procedure_id" });
+UserProcedure.hasMany(Booking, { foreignKey: "userProcedureId", as: "Bookings" });
+Booking.belongsTo(UserProcedure, { foreignKey: "userProcedureId" });
 
-User.hasMany(Booking, { foreignKey: 'user_id' });
-TimeSlot.hasMany(Booking, { foreignKey: 'time_slot_id' });
-Booking.belongsTo(User, { foreignKey: 'user_id', as: "User" });
-Booking.belongsTo(TimeSlot, { foreignKey: "time_slot_id", as: "TimeSlot" });
+User.hasMany(Booking, { foreignKey: 'userId' });
+TimeSlot.hasMany(Booking, { foreignKey: 'timeSlotId' });
+Booking.belongsTo(User, { foreignKey: 'userId', as: "User" });
+Booking.belongsTo(TimeSlot, { foreignKey: "timeSlotId", as: "TimeSlot" });
 
-TimeSlot.belongsTo(UserProcedure, { foreignKey: "user_procedure_id", as: "UserProcedure" });
-UserProcedure.hasMany(TimeSlot, { foreignKey: "user_procedure_id", as: "TimeSlots" });
+TimeSlot.belongsTo(UserProcedure, { foreignKey: "userProcedureId", as: "UserProcedure" });
+UserProcedure.hasMany(TimeSlot, { foreignKey: "userProcedureId", as: "TimeSlots" });
 
 
 
