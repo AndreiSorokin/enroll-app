@@ -18,9 +18,6 @@ export async function getAllTimeSlots(req: Request, res: Response, next: NextFun
 export async function getAllAvailableTimeSlots(req: Request, res: Response, next: NextFunction) {
    try {
       const { masterId, procedureId, date } = req.query;
-      console.log(masterId, procedureId, date);
-      console.log("req.query:", req.query);
-
 
       if (!masterId || !procedureId || !date) {
          res.status(400).json({ message: "masterId, procedureId, and date are required." });

@@ -47,19 +47,32 @@ const createBooking = async(userId: string, timeSlotId: string) => {
          throw new NotFoundError("Time slot is not available");
       }
 
+      const now = new Date();
+      const slotDateTime = new Date(timeSlot.date); 
+
+      const [hours, minutes, seconds] = timeSlot.startTime.split(":").map(Number);
+      slotDateTime.setHours(hours, minutes, seconds || 0, 0);
+
+      if (slotDateTime <= now) {
+         throw new BadRequestError("Cannot book a procedure in the past");
+      }
+
       const userProcedure = await UserProcedure.findOne({
          where: { userId, procedureId: timeSlot.procedureId, masterId: timeSlot.masterId }
       });
 
       if (!userProcedure) throw new BadRequestError("User is not enrolled in this procedure");
 
-
       const booking = await Booking.create({
          userId,
          timeSlotId
       });
 
-      await timeSlot.update({ isAvailable: false });
+      await timeSlot.update(
+         { isAvailable: false }      
+      );
+      await timeSlot.reload();
+
       return booking;
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {

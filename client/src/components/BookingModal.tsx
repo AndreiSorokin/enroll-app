@@ -18,14 +18,15 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
       (p) => p.masterId === selectedMaster?.id
    )?.procedureId;
 
-   const { data: timeSlotData, isLoading, error } = useGetAllAvailableTimeSlotsQuery(
+   const { data: timeSlotData, isLoading, error, refetch: refetchTimeSlots } = useGetAllAvailableTimeSlotsQuery(
       selectedMaster && selectedDate
          ? { 
                masterId: selectedMaster.id, 
                procedureId: procedureId,
-               date: dayjs(selectedDate).format("YYYY-MM-DD") 
+               date: dayjs(selectedDate).format("YYYY-MM-DD")
             }   
-         : skipToken
+         : skipToken,
+         { refetchOnMountOrArgChange: true }
    );
    
    console.log("procedureId: ", procedureId)
@@ -40,22 +41,32 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
 
    const handleBooking = async () => {
       if (!selectedSlot) return alert("Please select a time slot!");
+      console.log("Selected slot before booking:", selectedSlot);
+
+      const today = dayjs().startOf("day");
+      const chosenDate = dayjs(selectedDate).startOf("day");
+
+      if (chosenDate.isBefore(today)) {
+         alert("Cannot book a past date!");
+         return;
+      }
 
       try {
-         await createBooking({
-            userId: userData?.id,
-            timeSlotId: selectedSlot,
-            token: token,
-         });
-
          await addUserProcedure({
             userId: userData?.id,
             procedureId: procedureId,
             masterId: selectedMaster.id,
             token: token,
          });
+         
+         await createBooking({
+            userId: userData?.id,
+            timeSlotId: selectedSlot,
+            token: token,
+         });
 
          alert("Booking successful!");
+         refetchTimeSlots();
          handleClose();
       } catch (error) {
          console.error("Error booking procedure:", error);
@@ -90,6 +101,7 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
                      console.log("Date selected:", date);
                      setSelectedDate(date)}
                   }
+                  disablePast
                   sx={{ width: "100%", mt: 2 }}
                />
             </LocalizationProvider>
@@ -101,16 +113,29 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
                   {isLoading ? (
                      <MenuItem disabled>Loading...</MenuItem>
                   ) : timeSlotData?.length > 0 ? (
-                     timeSlotData.map((slot) => (
-                        <MenuItem key={slot.id} value={slot.id}>
-                           {dayjs(slot.startTime, "HH:mm:ss").format("hh:mm A")}
-                        </MenuItem>
-                     ))
+                     timeSlotData
+                        .filter((slot) => {
+                           const now = dayjs();
+                           const slotDate = dayjs(selectedDate).startOf("day");
+                           const slotTime = dayjs(slot.startTime, "HH:mm:ss");
+                        
+                           if (slotDate.isSame(now, "day")) {
+                              return slotTime.isAfter(now);
+                           }
+                        
+                           return true;
+                        })
+                        .map((slot) => (
+                           <MenuItem key={slot.id} value={slot.id}>
+                              {dayjs(slot.startTime, "HH:mm:ss").format("hh:mm A")}
+                           </MenuItem>
+                        ))
                   ) : (
                      <MenuItem disabled>No available slots</MenuItem>
                   )}
                </Select>
             </FormControl>
+
 
             <Button
                fullWidth

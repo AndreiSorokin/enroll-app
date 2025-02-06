@@ -22,7 +22,6 @@ const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, da
             isAvailable: true,
          },
       });
-      console.log("timeSlots: ", timeSlots)
       return timeSlots;
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
