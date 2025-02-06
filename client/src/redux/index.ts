@@ -11,7 +11,8 @@ export {
    useForgotPasswordMutation,
    useResetPasswordMutation,
    useGetUserProcedureQuery,
-   useAddUserProcedureMutation
+   useAddUserProcedureMutation,
+   useDeleteUserProcedureMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

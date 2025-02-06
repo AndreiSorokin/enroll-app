@@ -173,16 +173,8 @@ const deleteUserProcedure = async (userId: string, procedureId: string, masterId
       throw new NotFoundError('Master not found or the provided ID is not a master');
     }
 
-    const masterProcedure = await MasterProcedure.findOne({
-      where: { masterId, procedureId },
-    });
-
-    if (!masterProcedure) {
-      throw new NotFoundError('The specified master cannot perform this procedure');
-    }
-
     const userProcedure = await UserProcedure.findOne({
-      where: { userId, procedureId },
+      where: { userId, procedureId, masterId },
     });
 
     if (!userProcedure) {
@@ -190,6 +182,13 @@ const deleteUserProcedure = async (userId: string, procedureId: string, masterId
     }
 
     await userProcedure.destroy();
+
+    // const timeSlot = await TimeSlot.findByPk(timeSlotId);
+
+    // await timeSlot.update(
+    //   { isAvailable: true }      
+    // );
+    // await timeSlot.reload();
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;

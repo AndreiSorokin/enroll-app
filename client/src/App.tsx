@@ -10,7 +10,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import UserProcedures from "./pages/UserProcedures";
 
-//TODO: User: enroll in procedure, ban users
+//TODO: User: ban users
 //TODO: Procedures: add/remove procedure, add/remove master proccedure
 //TODO: Other: tests, CI/CD
 function App() {

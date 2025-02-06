@@ -20,6 +20,16 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      deleteUserProcedure: builder.mutation<void, { userId: string; procedureId: string; masterId: string; token: string }>({
+         query: ({ userId, procedureId, masterId, token }) => ({
+            url: `users/${userId}/user-procedures`,
+            params: { procedureId, masterId },  
+            method: "DELETE",
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         })
+      }),
       getUserProcedure: builder.query<userProcedures, string>({
          query: (id) => `users/${id}/user-procedures`
       }),
@@ -125,5 +135,6 @@ export const {
    useUpdatePasswordMutation,
    useForgotPasswordMutation,
    useResetPasswordMutation,
-   useAddUserProcedureMutation
+   useAddUserProcedureMutation,
+   useDeleteUserProcedureMutation
 } = userApi;

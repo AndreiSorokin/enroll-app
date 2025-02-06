@@ -101,16 +101,26 @@ export async function deleteMasterProcedure(req: Request, res: Response, next: N
 
 export async function deleteUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { userId, procedureId, masterId } = req.body;
+      const { id: userId } = req.params;
+      const { procedureId, masterId } = req.query;
+      console.log("procedureId: ", procedureId)
+      console.log("masterId: ", masterId)
+      console.log("userId: ", userId)
+
+      if (!userId || !procedureId || !masterId) {
+         res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required', userId, procedureId, masterId });
+         return;
+      }
 
       if (!userId || !procedureId || !masterId) {
          res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required' });
          return;
       }
 
-      await userService.deleteUserProcedure(userId, procedureId, masterId);
+      await userService.deleteUserProcedure(userId, procedureId as string, masterId as string);
       res.status(200).json({ message: 'Enrollment cancelled' });
    } catch (error) {
+      console.error("error: ",error);
       next(error);
    }
 };
