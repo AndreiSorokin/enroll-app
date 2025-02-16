@@ -21,11 +21,21 @@ export const timeSlotApi= createApi({
             url: `time-slots/available`,
             params: { masterId, procedureId, date }
          })
-      })
+      }),
+      createTimeSlots: builder.mutation<TimeSlot[], { masterId: string, procedureId: string, date: string, startTime: string, endTime: string, slotDuration: number }>({
+         query: ({ masterId, procedureId, date, startTime, endTime, slotDuration }) => ({
+            url: `time-slots/${masterId}/${procedureId}`,
+            method: "POST",
+            body: { date, startTime, endTime, slotDuration },
+            params: { masterId, procedureId },
+            headers: { 'Content-Type': 'application/json' }
+         })
+      }),
    })
 })
 
 export const {
    useGetAllTimeSlotsQuery,
-   useGetAllAvailableTimeSlotsQuery
+   useGetAllAvailableTimeSlotsQuery,
+   useCreateTimeSlotsMutation
 } = timeSlotApi;

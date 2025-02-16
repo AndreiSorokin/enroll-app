@@ -51,7 +51,8 @@ export async function getAllAvailableTimeSlots(req: Request, res: Response, next
 
 export async function createTimeSlots(req: Request, res: Response, next: NextFunction) {
    try {
-      const { masterId, procedureId, date, startTime, endTime, slotDuration} = req.body;
+      const { masterId, procedureId } = req.params; 
+      const { date, startTime, endTime, slotDuration } = req.body;
       if (!masterId ||!procedureId ||!date ||!startTime ||!endTime ||!slotDuration) {
          res.status(400).json({ message: "masterId, procedureId, date, startTime, endTime, and slotDuration are required." });
          return

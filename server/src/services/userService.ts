@@ -57,10 +57,35 @@ const getUserProcedure = async (userId: string) => {
   }
 };
 
+const getAllMasterProcedures = async(masterId : string) => {
+  try {
+    const masterProcedures = await MasterProcedure.findAll({
+      where: { masterId  },
+      include: [
+        {
+          model: Procedure,
+          as: "procedure",
+        }
+      ]
+    });
+    return masterProcedures;
+} catch (error) {
+    if (error instanceof BadRequestError || error instanceof NotFoundError) {
+      throw error;
+    }
+  }
+};
+
 const getSingleMasterProcedure = async (masterId: string, procedureId: string) => {
   try {
     const masterProcedure = await MasterProcedure.findOne({
       where: { masterId, procedureId },
+      include: [
+        {
+          model: Procedure,
+          as: "procedure",
+        }
+      ]
     });
 
     if (!masterProcedure) {
@@ -69,7 +94,6 @@ const getSingleMasterProcedure = async (masterId: string, procedureId: string) =
 
     return masterProcedure;
   } catch (error) {
-    console.error(error);
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
@@ -531,5 +555,6 @@ export default {
   getUserByResetToken,
   updatePassword,
   getSingleMasterProcedure,
-  getUserProcedure
+  getUserProcedure,
+  getAllMasterProcedures
 }

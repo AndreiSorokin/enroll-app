@@ -67,7 +67,10 @@ export type MasterProcedure = {
    masterId: string;
    procedureId: string;
    price: number;
+   procedure: Procedure;
 }
+
+export type MasterProcedures = MasterProcedure[];
 
 export type TimeSlot = {
    id: string;

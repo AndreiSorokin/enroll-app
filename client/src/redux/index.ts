@@ -12,7 +12,8 @@ export {
    useResetPasswordMutation,
    useGetUserProcedureQuery,
    useAddUserProcedureMutation,
-   useDeleteUserProcedureMutation
+   useDeleteUserProcedureMutation,
+   useGetAllMasterProceduresQuery
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';
@@ -26,4 +27,4 @@ export { bookingApi } from '../api/bookingApi';
 export { useCreateBookingMutation, useDeleteBookingMutation } from '../api/bookingApi'
 
 export { timeSlotApi } from '../api/timeSlotApi';
-export { useGetAllTimeSlotsQuery, useGetAllAvailableTimeSlotsQuery } from '../api/timeSlotApi';
+export { useGetAllTimeSlotsQuery, useGetAllAvailableTimeSlotsQuery, useCreateTimeSlotsMutation } from '../api/timeSlotApi';

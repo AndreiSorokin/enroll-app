@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { MasterProcedure, User, userProcedures } from "../misc/types";
+import { MasterProcedure, MasterProcedures, User, userProcedures } from "../misc/types";
 import parseJwt from "../helpers/decode";
 import { setUser } from "../redux/userSlice";
 
@@ -32,6 +32,9 @@ export const userApi = createApi({
       }),
       getUserProcedure: builder.query<userProcedures, string>({
          query: (id) => `users/${id}/user-procedures`
+      }),
+      getAllMasterProcedures: builder.query<MasterProcedures, string>({
+         query: (id) => `users/${id}/master-procedures`
       }),
       addUserProcedure: builder.mutation<userProcedures, { userId: string, procedureId: string, masterId: string; token: string }>({
          query: ({ userId, procedureId, masterId, token }) => ({
@@ -137,5 +140,5 @@ export const {
    useResetPasswordMutation,
    useAddUserProcedureMutation,
    useDeleteUserProcedureMutation,
-
+   useGetAllMasterProceduresQuery
 } = userApi;

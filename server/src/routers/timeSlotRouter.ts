@@ -13,6 +13,6 @@ const router = express.Router();
 
 router.get('/', getAllTimeSlots);
 router.get('/available', getAllAvailableTimeSlots);
-router.post('/', authMiddleware, userStatusCheck, masterCheck, createTimeSlots);
+router.post('/:masterId/:procedureId', authMiddleware, userStatusCheck, masterCheck, createTimeSlots);
 
 export default router;

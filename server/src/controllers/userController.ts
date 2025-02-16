@@ -18,6 +18,16 @@ export async function getUserProcedure(req: Request, res: Response, next: NextFu
    }
 };
 
+export async function getAllMasterProcedures(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id: masterId  } = req.params;
+      const procedures = await userService.getAllMasterProcedures(masterId);
+      res.json(procedures);
+   } catch (error) {
+      next(error);
+   }
+};
+
 export async function getSingleMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { id: masterId, procedureId } = req.params;

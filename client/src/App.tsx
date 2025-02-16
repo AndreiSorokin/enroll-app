@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import UserProcedures from "./pages/UserProcedures";
-import Master from "./pages/Master";
+import MasterProcedures from "./pages/MasterProcedures";
 
 //TODO: User: ban users
 //TODO: add/remove/update master proccedure, add time slots
@@ -28,7 +28,7 @@ function App() {
         <Route path="/users/reset-password" element={<ResetPassword/>}/>
         <Route path="/users/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/users/:id/user-procedures" element={<UserProcedures/>}/>
-        <Route path="/users/:id/master-procedures" element={<Master/>}/>
+        <Route path="/users/:id/master-procedures" element={<MasterProcedures/>}/>
       </Routes>
     </div>
   )

@@ -30,7 +30,7 @@ const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, da
    }
 };
 
-const createTimeSlots = async (masterId: string, procedureId: string, date: string, startTime: string, endTime: string, slotDuration: number, userId?: string) => {
+const createTimeSlots = async (masterId: string, procedureId: string, date: string, startTime: string, endTime: string, slotDuration: number) => {
    try {
       const master = await User.findByPk(masterId);
       if (!master || master.role !== 'master') {
@@ -89,6 +89,7 @@ const createTimeSlots = async (masterId: string, procedureId: string, date: stri
       await TimeSlot.bulkCreate(slots, { ignoreDuplicates: true });
       return slots;
       } catch (error) {
+         console.error(error);
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
          throw error;
       }
