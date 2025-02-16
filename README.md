@@ -1,3 +1,8 @@
+
+Timeslots are created by masters and are being available times for procedures
+Booking has userProcedureId, and booking had timeSlotId
+
+
 Backend:
 duration in addMasterProcedure specifies the time required to perform a specific procedure
 

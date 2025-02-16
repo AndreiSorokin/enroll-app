@@ -28,12 +28,6 @@ const BookingModal = ({ data, userData, open, setOpen, selectedMaster, token }) 
          : skipToken,
          { refetchOnMountOrArgChange: true }
    );
-   
-   console.log("procedureId: ", procedureId)
-   useEffect(() => {
-      console.log("API response - timeSlotData:", timeSlotData);
-      if (error) console.error("API Error:", error);
-   }, [timeSlotData, error]);
 
    const handleClose = () => {
       setOpen(false);

@@ -39,16 +39,16 @@ const getAllBookings = async() => {
    }
 };
 
-const createBooking = async(userId: string, timeSlotId: string) => {
+const createBooking = async (userId: string, timeSlotId: string) => {
    try {
       const timeSlot = await TimeSlot.findByPk(timeSlotId);
 
-      if(!timeSlot || !timeSlot.isAvailable) {
+      if (!timeSlot || !timeSlot.isAvailable) {
          throw new NotFoundError("Time slot is not available");
       }
 
       const now = new Date();
-      const slotDateTime = new Date(timeSlot.date); 
+      const slotDateTime = new Date(timeSlot.date);
 
       const [hours, minutes, seconds] = timeSlot.startTime.split(":").map(Number);
       slotDateTime.setHours(hours, minutes, seconds || 0, 0);
@@ -57,29 +57,38 @@ const createBooking = async(userId: string, timeSlotId: string) => {
          throw new BadRequestError("Cannot book a procedure in the past");
       }
 
-      const userProcedure = await UserProcedure.findOne({
+      let userProcedure = await UserProcedure.findOne({
          where: { userId, procedureId: timeSlot.procedureId, masterId: timeSlot.masterId }
       });
 
-      if (!userProcedure) throw new BadRequestError("User is not enrolled in this procedure");
+      if (!userProcedure) {
+         userProcedure = await UserProcedure.create({
+            userId,
+            procedureId: timeSlot.procedureId,
+            masterId: timeSlot.masterId
+         });
+
+         await userProcedure.reload();
+      }
 
       const booking = await Booking.create({
          userId,
-         timeSlotId
+         timeSlotId,
+         userProcedureId: userProcedure.id
       });
 
-      await timeSlot.update(
-         { isAvailable: false }      
-      );
+      await timeSlot.update({ isAvailable: false });
       await timeSlot.reload();
 
       return booking;
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
-            throw error;
+         throw error;
       }
+      throw error;
    }
 };
+
 
 const deleteBooking = async(id: string, timeSlotId: string) => {
    try {
@@ -94,8 +103,8 @@ const deleteBooking = async(id: string, timeSlotId: string) => {
          throw new BadRequestError("The provided time slot ID does not match the booking's time slot ID");
       }
 
-      await timeSlot.update({ isAvailable: true });
       await booking.destroy();
+      await timeSlot.update({ isAvailable: true });
    } catch (error) {
       if (error instanceof BadRequestError || error instanceof NotFoundError) {
          throw error;

@@ -1,5 +1,5 @@
 import { BadRequestError, NotFoundError } from "../errors/ApiError";
-import { Procedure, TimeSlot, User } from "../models";
+import { Procedure, TimeSlot, User, UserProcedure } from "../models";
 
 
 const getAllTimeSlots = async() => {
@@ -30,7 +30,7 @@ const getAllAvailableTimeSlots = async(masterId: string, procedureId: string, da
    }
 };
 
-const createTimeSlots = async (masterId: string, procedureId: string, date: string, startTime: string, endTime: string, slotDuration: number) => {
+const createTimeSlots = async (masterId: string, procedureId: string, date: string, startTime: string, endTime: string, slotDuration: number, userId?: string) => {
    try {
       const master = await User.findByPk(masterId);
       if (!master || master.role !== 'master') {

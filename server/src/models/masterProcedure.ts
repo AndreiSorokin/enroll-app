@@ -1,6 +1,20 @@
 import { sequelize, DataTypes, Model } from '../utils/db';
 
-class MasterProcedure extends Model {}
+interface MasterProcedureAttributes {
+   id: string;
+   masterId: string;
+   procedureId: string;
+   price: number;
+}
+
+interface MasterProcedureCreationAttributes extends Omit<MasterProcedureAttributes, 'id'> {}
+
+class MasterProcedure extends Model<MasterProcedureAttributes, MasterProcedureCreationAttributes> implements MasterProcedureAttributes {
+   public id!: string;
+   public masterId!: string;
+   public procedureId!: string;
+   public price!: number;
+}
 
    MasterProcedure.init({
       id: {

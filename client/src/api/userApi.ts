@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User, userProcedures } from "../misc/types";
+import { MasterProcedure, User, userProcedures } from "../misc/types";
 import parseJwt from "../helpers/decode";
 import { setUser } from "../redux/userSlice";
 
@@ -136,5 +136,6 @@ export const {
    useForgotPasswordMutation,
    useResetPasswordMutation,
    useAddUserProcedureMutation,
-   useDeleteUserProcedureMutation
+   useDeleteUserProcedureMutation,
+
 } = userApi;

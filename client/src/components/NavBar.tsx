@@ -73,9 +73,14 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      <ListItem component="li">
-                        <Button component={Link} to="/procedures" color="inherit" onClick={handleDrawerToggle}>
-                           Procedures
-                        </Button>
+                        {userData?.role === "master"
+                           ?<Button component={Link} to="/master-procedures" color="inherit" onClick={handleDrawerToggle}>
+                              Procedures
+                           </Button>
+                           :<Button component={Link} to="/procedures" color="inherit" onClick={handleDrawerToggle}>
+                              Procedures
+                           </Button>
+                        }
                      </ListItem>
                      {userData && 
                      <ListItem component="li">
@@ -87,6 +92,11 @@ const Navbar = () => {
                      {userData && userData.role === "user" &&
                         <ListItem component="li">
                            <Button component={Link} to={`/users/${id}/user-procedures`}>Enrollments</Button>
+                        </ListItem>
+                     }
+                     {userData && userData.role === "master" &&
+                        <ListItem>
+                           <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
                         </ListItem>
                      }
                      <ListItem component="li">
@@ -128,6 +138,11 @@ const Navbar = () => {
                {userData && userData.role === "user" &&
                   <ListItem component="li">
                      <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
+                  </ListItem>
+               }
+               {userData && userData.role === "master" &&
+                  <ListItem>
+                     <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
                   </ListItem>
                }
                <ListItem sx={{ margin: '0 10px' }}>

@@ -7,6 +7,7 @@ import userService from "../services/userService";
 import { User } from "../misc/types";
 import { BadRequestError } from "../errors/ApiError";
 
+
 export async function getUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;
@@ -19,12 +20,14 @@ export async function getUserProcedure(req: Request, res: Response, next: NextFu
 
 export async function getSingleMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { id } = req.params;
-      return await userService.getSingleMasterProcedure(id!)
+      const { id: masterId, procedureId } = req.params;
+      console.log("Params:", req.params);
+      const masterProcedure = await userService.getSingleMasterProcedure(masterId, procedureId);
+      res.json(masterProcedure);
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function googleLogin(req: Request, res: Response, next: NextFunction) {
    try {
@@ -103,9 +106,6 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
    try {
       const { id: userId } = req.params;
       const { procedureId, masterId } = req.query;
-      console.log("procedureId: ", procedureId)
-      console.log("masterId: ", masterId)
-      console.log("userId: ", userId)
 
       if (!userId || !procedureId || !masterId) {
          res.status(400).json({ error: 'User ID, Procedure ID and Master ID are required', userId, procedureId, masterId });
@@ -120,7 +120,6 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
       await userService.deleteUserProcedure(userId, procedureId as string, masterId as string);
       res.status(200).json({ message: 'Enrollment cancelled' });
    } catch (error) {
-      console.error("error: ",error);
       next(error);
    }
 };

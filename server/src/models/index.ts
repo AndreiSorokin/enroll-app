@@ -7,7 +7,6 @@ import TimeSlot from './timeSlot';
 import Booking from './booking';
 
 
-// User and Procedure for enrolled procedures
 User.belongsToMany(Procedure, { through: UserProcedure, foreignKey: 'userId', as: 'EnrolledProcedures' });
 Procedure.belongsToMany(User, { through: UserProcedure, foreignKey: 'procedureId', as: 'UsersEnrolled' });
 
@@ -17,7 +16,6 @@ UserProcedure.belongsTo(User, { foreignKey: "masterId", as: "Master" });
 Procedure.hasMany(UserProcedure, { foreignKey: "procedureId" });
 UserProcedure.belongsTo(Procedure, { foreignKey: "procedureId", as: "Procedure" });
 
-// User (master) and Procedure for procedures masters can perform
 User.belongsToMany(Procedure, { through: MasterProcedure, foreignKey: 'masterId', as: 'MasterProcedures' });
 Procedure.belongsToMany(User, { through: MasterProcedure, foreignKey: 'procedureId', as: 'Masters' });
 
@@ -31,10 +29,10 @@ User.hasMany(TimeSlot, { foreignKey: 'masterId', as: 'timeSlots' });
 TimeSlot.belongsTo(User, { foreignKey: 'masterId', as: 'master' });
 
 UserProcedure.hasMany(Booking, { foreignKey: "userProcedureId", as: "Bookings" });
-Booking.belongsTo(UserProcedure, { foreignKey: "userProcedureId" });
+Booking.belongsTo(UserProcedure, { foreignKey: "userProcedureId", as: "UserProcedure" });
 
 User.hasMany(Booking, { foreignKey: 'userId' });
-TimeSlot.hasMany(Booking, { foreignKey: 'timeSlotId' });
+TimeSlot.hasMany(Booking, { foreignKey: "timeSlotId", as: "Bookings" });
 Booking.belongsTo(User, { foreignKey: 'userId', as: "User" });
 Booking.belongsTo(TimeSlot, { foreignKey: "timeSlotId", as: "TimeSlot" });
 

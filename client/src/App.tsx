@@ -9,9 +9,10 @@ import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import UserProcedures from "./pages/UserProcedures";
+import Master from "./pages/Master";
 
 //TODO: User: ban users
-//TODO: Procedures: add/remove procedure, add/remove master proccedure
+//TODO: add/remove/update master proccedure, add time slots
 //TODO: Other: tests, CI/CD
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/users/reset-password" element={<ResetPassword/>}/>
         <Route path="/users/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/users/:id/user-procedures" element={<UserProcedures/>}/>
+        <Route path="/users/:id/master-procedures" element={<Master/>}/>
       </Routes>
     </div>
   )

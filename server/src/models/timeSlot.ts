@@ -11,7 +11,7 @@ interface TimeSlotAttributes {
    isAvailable: boolean;
    createdAt?: Date;
    slotDuration?: number;
-   userProcedureId?: string;
+   userProcedureId: string | null;
 }
 
 interface TimeSlotCreationAttributes extends Optional<TimeSlotAttributes, 'id'> {}

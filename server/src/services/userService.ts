@@ -31,17 +31,16 @@ const getUserProcedure = async (userId: string) => {
           as: "Master",
         },
         {
-          model: TimeSlot,
-          as: "TimeSlots",
+          model: Booking,
+          as: "Bookings",
+          required: false,
           include: [
             {
-              model: Booking,
-              as: "Bookings",
-              where: { userId },
-              required: false,
-            }
+              model: TimeSlot,
+              as: "TimeSlot",
+            },
           ]
-        }
+        },
       ]
     });
 
@@ -51,7 +50,6 @@ const getUserProcedure = async (userId: string) => {
 
     return userProcedures;
   } catch (error) {
-    console.error("Error: ",error)
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
@@ -59,10 +57,19 @@ const getUserProcedure = async (userId: string) => {
   }
 };
 
-const getSingleMasterProcedure = async (id: string) => {
+const getSingleMasterProcedure = async (masterId: string, procedureId: string) => {
   try {
-    const user = await User.findByPk(id);
+    const masterProcedure = await MasterProcedure.findOne({
+      where: { masterId, procedureId },
+    });
+
+    if (!masterProcedure) {
+      throw new NotFoundError('Master Procedure not found');
+    };
+
+    return masterProcedure;
   } catch (error) {
+    console.error(error);
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
@@ -182,13 +189,6 @@ const deleteUserProcedure = async (userId: string, procedureId: string, masterId
     }
 
     await userProcedure.destroy();
-
-    // const timeSlot = await TimeSlot.findByPk(timeSlotId);
-
-    // await timeSlot.update(
-    //   { isAvailable: true }      
-    // );
-    // await timeSlot.reload();
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;

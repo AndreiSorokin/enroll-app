@@ -23,10 +23,21 @@ export const bookingApi = createApi({
             },
             body: { userId, timeSlotId }
          })
+      }),
+      deleteBooking: builder.mutation<void, { id: string; timeSlotId: string; token: string }>({
+         query: ({ id, timeSlotId, token }) => ({
+            url: `bookings/${id}`,
+            params: { timeSlotId },
+            method: "DELETE",
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         })
       })
    })
 })
 
 export const {
    useCreateBookingMutation,
+   useDeleteBookingMutation
 } = bookingApi;

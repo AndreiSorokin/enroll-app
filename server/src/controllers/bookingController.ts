@@ -40,8 +40,8 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
 export async function deleteBooking(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;
-      const { timeSlotId } = req.body;
-      await bookingService.deleteBooking(id, timeSlotId);
+      const { timeSlotId } = req.query;
+      await bookingService.deleteBooking(id, timeSlotId as string);
 
       res.status(204).json({ message: "Booking has been deleted successfully" });
    } catch (error) {

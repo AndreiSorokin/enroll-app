@@ -1,6 +1,20 @@
 import { sequelize, DataTypes, Model } from '../utils/db';
 
-class UserProcedure extends Model {}
+interface UserProcedureAttributes {
+   id: string;
+   userId: string;
+   procedureId: string;
+   masterId: string;
+}
+
+interface CreateUserProcedureAttributes extends Omit<UserProcedureAttributes, 'id'> {}
+
+class UserProcedure extends Model<UserProcedureAttributes, CreateUserProcedureAttributes> {
+   public id!: string;
+   public userId!: string;
+   public procedureId!: string;
+   public masterId!: string;
+}
 
    UserProcedure.init({
       id: {
