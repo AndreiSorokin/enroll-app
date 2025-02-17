@@ -4,7 +4,8 @@ import { useCreateTimeSlotsMutation, useGetAllMasterProceduresQuery } from '../r
 import { useState } from 'react';
 
 import { DatePicker, TimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const MasterProcedures = () => {
    const { id } = useParams<{ id: string }>();
@@ -12,10 +13,10 @@ const MasterProcedures = () => {
    const [createTimeSlots] = useCreateTimeSlotsMutation();
 
    const [procedureId, setProcedureId] = useState("");
-   const [date, setDate] = useState("");
-   const [startTime, setStartTime] = useState("");
-   const [endTime, setEndTime] = useState("");
-   const [slotDuration, setSlotDuration] = useState(30);
+   const [date, setDate] = useState<Dayjs | null>(null);
+   const [startTime, setStartTime] = useState<Dayjs | null>(null);
+   const [endTime, setEndTime] = useState<Dayjs | null>(null);
+   const [slotDuration, setSlotDuration] = useState<number>(30);
    
    if(isLoading) {
       return <p>Loading procedures...</p>
@@ -26,22 +27,26 @@ const MasterProcedures = () => {
    if(!data) {
       return <p>No procedures found for this master</p>
    }
-console.log(data)
+   
    const handleCreateTimeSlot = async () => {
       if (!procedureId || !date || !startTime || !endTime || slotDuration <= 0) {
         alert("Please provide all required details.");
         return;
       }
 
-      console.log(procedureId)
+      const formattedDate = dayjs(date).format("YYYY-MM-DD");
+      const formattedStartTime = dayjs(startTime).format("HH:mm:ss");
+      const formattedEndTime = dayjs(endTime).format("HH:mm:ss");
+  
+
   
       try {
         await createTimeSlots({
           masterId: id!,
           procedureId,
-          date,
-          startTime,
-          endTime,
+          date: formattedDate,
+         startTime: formattedStartTime,
+         endTime: formattedEndTime,
           slotDuration,
         });
         console.log("Time slots created successfully");
@@ -58,12 +63,7 @@ console.log(data)
             <ul key={procedure.id}>
                <li>Name: {procedure.procedure.name}</li>
                <li>Price: {procedure.price}$</li>
-               <Button onClick={() => {
-                  console.log("Procedure object:", procedure);
-                  console.log("procedure.procedure:", procedure.procedure);
-                  console.log("procedure.procedure.id:", procedure.procedure.id);
-                  setProcedureId(procedure.procedure.id)}}>Set time</Button>
-
+               <Button onClick={() => setProcedureId(procedure.procedure.id)}>Set time</Button>
                <Button>Change price</Button>
                <Button>Delete procedure</Button>
             </ul>
@@ -71,7 +71,7 @@ console.log(data)
          <Button>Add new procedure</Button>
 
          {procedureId && (
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
                <Box>
                   <h3>Create Time Slot</h3>
                   <DatePicker

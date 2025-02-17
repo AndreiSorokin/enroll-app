@@ -49,8 +49,9 @@ const createTimeSlots = async (masterId: string, procedureId: string, date: stri
          );
       }
       
-      const workingStart = new Date(`${date}T${startTime}`);
-      const workingEnd = new Date(`${date}T${endTime}`);
+      const workingStart = new Date(`${date}T${startTime}Z`);
+      const workingEnd = new Date(`${date}T${endTime}Z`);
+
       
       if (isNaN(workingStart.getTime()) || isNaN(workingEnd.getTime())) {
          throw new BadRequestError('Invalid working hours format');
@@ -63,7 +64,7 @@ const createTimeSlots = async (masterId: string, procedureId: string, date: stri
       let currentTime = workingStart;
       
       while (currentTime < workingEnd) {
-        const nextTime = new Date(currentTime.getTime() + slotDuration * 60 * 60000);
+        const nextTime = new Date(currentTime.getTime() + slotDuration * 60 * 1000);
          if (nextTime > workingEnd) break;
          
          const formattedStartTime = currentTime.toISOString().split('T')[1].split('.')[0];
