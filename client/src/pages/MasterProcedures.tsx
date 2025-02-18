@@ -21,7 +21,6 @@ const MasterProcedures = () => {
    const [endTime, setEndTime] = useState<Dayjs | null>(null);
    const [slotDuration, setSlotDuration] = useState<number>(30);
    const [priceDialogOpen, setPriceDialogOpen] = useState(false);
-   const [newPrice, setNewPrice] = useState<number | "">("");
    
    const handleCreateTimeSlot = async () => {
       if (!procedureId || !date || !startTime || !endTime || slotDuration <= 0) {

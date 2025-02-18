@@ -20,6 +20,9 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      getAllUsers: builder.query<User[], void>({
+         query: () => `users`
+      }),
       updateMasterProcedure: builder.mutation<MasterProcedure, { masterId: string, procedureId: string, price: number }>({
          query: ({ masterId, procedureId, price }) => ({
             url: `users/${masterId}/master-procedures/${procedureId}`,
@@ -135,6 +138,13 @@ export const userApi = createApi({
                console.error('Registration failed:', error);
             }
          }
+      }),
+      updateUserStatus: builder.mutation<User, { id: string, active: boolean }>({
+         query: ({ id, active }) => ({
+            url: `users/${id}/update-user-status`,
+            method: 'PUT',
+            body: { userId: id, active }
+         })
       })
    })
 });
@@ -151,5 +161,7 @@ export const {
    useAddUserProcedureMutation,
    useDeleteUserProcedureMutation,
    useGetAllMasterProceduresQuery,
-   useUpdateMasterProcedureMutation
+   useUpdateMasterProcedureMutation,
+   useGetAllUsersQuery,
+   useUpdateUserStatusMutation
 } = userApi;

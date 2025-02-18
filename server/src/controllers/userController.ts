@@ -63,7 +63,7 @@ export async function googleLogin(req: Request, res: Response, next: NextFunctio
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function updateUserStatus(req: Request, res: Response, next: NextFunction) {
    try {
@@ -78,7 +78,7 @@ export async function updateUserStatus(req: Request, res: Response, next: NextFu
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function updateMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {

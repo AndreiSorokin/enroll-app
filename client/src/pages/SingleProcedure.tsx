@@ -36,7 +36,7 @@ const SingleProcedure = () => {
                   <li>Master: {master.name}</li>
                   <li>Price: {master.masterProcedures[0].price}$</li>
                   <img style={{width:50, height:50}} src={master.image!}></img>
-                  {userData?.role === "user" && 
+                  {userData && 
                   (
                      <Button
                         size="small"

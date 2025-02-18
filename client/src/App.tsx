@@ -10,9 +10,9 @@ import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import UserProcedures from "./pages/UserProcedures";
 import MasterProcedures from "./pages/MasterProcedures";
+import Admin from "./pages/Admin";
 
-//TODO: User: ban users
-//TODO: add/remove/update master proccedure, add time slots
+//TODO: Google login
 //TODO: Other: tests, CI/CD
 function App() {
 
@@ -29,6 +29,7 @@ function App() {
         <Route path="/users/forgot-password" element={<ForgotPassword/>}/>
         <Route path="/users/:id/user-procedures" element={<UserProcedures/>}/>
         <Route path="/users/:id/master-procedures" element={<MasterProcedures/>}/>
+        <Route path="/users/admin" element={<Admin/>}/>
       </Routes>
     </div>
   )

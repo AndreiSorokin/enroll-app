@@ -109,7 +109,7 @@ const updateUserStatus = async(userId: string, active: boolean) => {
     if(!user) {
       throw new NotFoundError('User not found');
     }
-
+    
     await user.update({ active });
     return user;
   } catch (error) {

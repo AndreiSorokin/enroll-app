@@ -89,9 +89,19 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      }
-                     {userData && userData.role === "user" &&
+                     {userData && userData.role === "user"  || userData?.role === "admin" &&
                         <ListItem component="li">
-                           <Button component={Link} to={`/users/${id}/user-procedures`}>Enrollments</Button>
+                           <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
+                        </ListItem>
+                     }
+                     {userData && userData.role === "master" &&
+                        <ListItem>
+                           <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
+                        </ListItem>
+                     }
+                     {userData && userData.role === "admin" &&
+                        <ListItem component="li">
+                           <Button component={Link} to={`/users/admin`}>Admin</Button>
                         </ListItem>
                      }
                      <ListItem component="li">
@@ -135,7 +145,7 @@ const Navbar = () => {
                      </Button>
                   </ListItem>
                }
-               {userData && userData.role === "user" &&
+               {userData && userData.role === "user"  || userData?.role === "admin" &&
                   <ListItem component="li">
                      <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                   </ListItem>
@@ -143,6 +153,11 @@ const Navbar = () => {
                {userData && userData.role === "master" &&
                   <ListItem>
                      <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
+                  </ListItem>
+               }
+               {userData && userData.role === "admin" &&
+                  <ListItem component="li">
+                     <Button component={Link} to={`/users/admin`} color="inherit">Admin</Button>
                   </ListItem>
                }
                <ListItem sx={{ margin: '0 10px' }}>

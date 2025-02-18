@@ -2,7 +2,7 @@ export { default as store } from './store';
 export type { RootState, AppDispatch } from './store';
 
 export { userApi } from '../api/userApi';
-export { 
+export {
    useGetUserByIdQuery,
    useLoginMutation,
    useRegistrationMutation,
@@ -14,7 +14,9 @@ export {
    useAddUserProcedureMutation,
    useDeleteUserProcedureMutation,
    useGetAllMasterProceduresQuery,
-   useUpdateMasterProcedureMutation
+   useUpdateMasterProcedureMutation,
+   useGetAllUsersQuery,
+   useUpdateUserStatusMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';
