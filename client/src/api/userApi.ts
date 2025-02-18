@@ -20,6 +20,16 @@ export const userApi = createApi({
       getUserById: builder.query<User, string>({
          query: (id) => `users/${id}`
       }),
+      updateMasterProcedure: builder.mutation<MasterProcedure, { masterId: string, procedureId: string, price: number }>({
+         query: ({ masterId, procedureId, price }) => ({
+            url: `users/${masterId}/master-procedures/${procedureId}`,
+            method: 'PUT',
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: { masterId, procedureId, price }
+         })
+      }),
       deleteUserProcedure: builder.mutation<void, { userId: string; procedureId: string; masterId: string; token: string }>({
          query: ({ userId, procedureId, masterId, token }) => ({
             url: `users/${userId}/user-procedures`,
@@ -140,5 +150,6 @@ export const {
    useResetPasswordMutation,
    useAddUserProcedureMutation,
    useDeleteUserProcedureMutation,
-   useGetAllMasterProceduresQuery
+   useGetAllMasterProceduresQuery,
+   useUpdateMasterProcedureMutation
 } = userApi;

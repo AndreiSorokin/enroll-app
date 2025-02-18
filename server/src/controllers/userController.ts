@@ -94,7 +94,7 @@ export async function updateMasterProcedure(req: Request, res: Response, next: N
    } catch (error) {
       next(error);
    }
-}
+};
 
 export async function deleteMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {

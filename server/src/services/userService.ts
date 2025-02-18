@@ -142,8 +142,8 @@ const updateMasterProcedure = async (masterId: string, procedureId: string, pric
     if (!masterProcedure) {
       throw new NotFoundError('Master Procedure not found');
     };
-
     return await masterProcedure.update({ price });
+    
   } catch (error) {
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;

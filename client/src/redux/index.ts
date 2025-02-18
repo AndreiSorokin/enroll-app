@@ -13,7 +13,8 @@ export {
    useGetUserProcedureQuery,
    useAddUserProcedureMutation,
    useDeleteUserProcedureMutation,
-   useGetAllMasterProceduresQuery
+   useGetAllMasterProceduresQuery,
+   useUpdateMasterProcedureMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

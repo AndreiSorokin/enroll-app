@@ -58,7 +58,7 @@ router.get('/:id/master-procedures', authMiddleware, getAllMasterProcedures);
 router.get('/:id/master-procedures/:procedureId', authMiddleware, getSingleMasterProcedure);
 router.post('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, addMasterProcedure);
 router.delete('/:id/master-procedures', authMiddleware, authOwnershipMiddleware, userStatusCheck, deleteMasterProcedure);
-router.put('/:id/master-procedures/:procedureId', updateMasterProcedure);
+router.put('/:id/master-procedures/:procedureId', authMiddleware, authOwnershipMiddleware, updateMasterProcedure);
 
 router.post('/:id/update-user-status', authMiddleware, adminCheck, updateUserStatus);
 

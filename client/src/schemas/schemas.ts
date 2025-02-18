@@ -33,3 +33,10 @@ export const resetPasswordSchema = z.object({
 export const emailSchema = z.object({
    email: z.string().email('Invalid email address'),
 });
+
+export const updateMasterProcedureSchema = z.object({
+   price: z.preprocess(
+      (val) => (typeof val === "string" ? Number(val) : val), 
+      z.number().positive("Price must be a positive number").min(1, "Please set a correct number")
+   ),
+});
