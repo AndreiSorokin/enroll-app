@@ -100,10 +100,11 @@ export async function updateMasterProcedure(req: Request, res: Response, next: N
 
 export async function deleteMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { masterId, procedureId } = req.body;
+      const { id: masterId } = req.params;
+      const { procedureId } = req.body;
 
-      if (!masterId || !procedureId) {
-         res.status(400).json({ error: 'Master ID and Procedure ID are required' });
+      if (!procedureId) {
+         res.status(400).json({ error: 'Procedure ID is required' });
          return;
       }
 
@@ -138,21 +139,21 @@ export async function deleteUserProcedure(req: Request, res: Response, next: Nex
 
 export async function addMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
-      const { masterId, procedureName, price, duration } = req.body;
+      const { id: masterId } = req.params;
+      const { procedureName, price, duration } = req.body;
 
-      if (!masterId || !procedureName || price === undefined) {
-         res.status(400).json({ error: 'Master ID, procedure name, and price are required' });
+      if (!procedureName || price === undefined) {
+         res.status(400).json({ error: 'Procedure name, and price are required' });
          return;
       }
 
-      await userService.addMasterProcedure(masterId, procedureName, price, duration);
-      res.status(200).json({ message: 'Procedure listed' });
+      const masterProcedure = await userService.addMasterProcedure(masterId, procedureName, price, duration);
+      res.status(200).json({ message: 'Procedure listed', masterProcedure });
    } catch (error) {
       console.log(error);
       next(error);
    }
 };
-
 export async function addUserProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { userId, procedureId, masterId } = req.body;

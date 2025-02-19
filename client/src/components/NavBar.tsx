@@ -26,6 +26,10 @@ const Navbar = () => {
    const userData = useSelector((state: RootState) => state.user.userData);
    const id = userData?.id;
    const isActive = userData?.active === true;
+
+   console.log({
+      isActive
+   })
    
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);

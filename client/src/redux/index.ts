@@ -16,7 +16,9 @@ export {
    useGetAllMasterProceduresQuery,
    useUpdateMasterProcedureMutation,
    useGetAllUsersQuery,
-   useUpdateUserStatusMutation
+   useUpdateUserStatusMutation,
+   useAddMasterProcedureMutation,
+   useDeleteMasterProcedureMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';

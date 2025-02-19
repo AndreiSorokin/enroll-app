@@ -23,6 +23,26 @@ export const userApi = createApi({
       getAllUsers: builder.query<User[], void>({
          query: () => `users`
       }),
+      deleteMasterProcedure: builder.mutation<void, { masterId: string, procedureId: string }>({
+         query: ({ masterId, procedureId }) => ({
+            url: `users/${masterId}/master-procedures`,
+            method: "DELETE",
+            headers: {
+               "Content-Type": "application/json",
+            }, 
+            body: { procedureId }
+         })
+      }),
+      addMasterProcedure: builder.mutation<MasterProcedure, { masterId: string, procedureName: string, price: number, duration: number }>({
+         query: ({ masterId, procedureName, price, duration }) => ({
+            url: `users/${masterId}/master-procedures`,
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: { procedureName, price, duration }
+         })
+      }),
       updateMasterProcedure: builder.mutation<MasterProcedure, { masterId: string, procedureId: string, price: number }>({
          query: ({ masterId, procedureId, price }) => ({
             url: `users/${masterId}/master-procedures/${procedureId}`,
@@ -163,5 +183,7 @@ export const {
    useGetAllMasterProceduresQuery,
    useUpdateMasterProcedureMutation,
    useGetAllUsersQuery,
-   useUpdateUserStatusMutation
+   useUpdateUserStatusMutation,
+   useAddMasterProcedureMutation,
+   useDeleteMasterProcedureMutation
 } = userApi;

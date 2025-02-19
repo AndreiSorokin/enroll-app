@@ -20,6 +20,12 @@ function App() {
   const isAdmin = userData?.role === 'admin';
   const isActive = userData?.active === true;
 
+  console.log({
+    userData,
+    isAdmin,
+    isActive,
+  })
+
   return (
     <div>
       <NavBar/>

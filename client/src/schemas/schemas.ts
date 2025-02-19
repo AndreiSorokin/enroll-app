@@ -40,3 +40,9 @@ export const updateMasterProcedureSchema = z.object({
       z.number().positive("Price must be a positive number").min(1, "Please set a correct number")
    ),
 });
+
+export const createMasterProcedureSchema = z.object({
+   procedureName: z.string().min(1, "Procedure name is required"),
+   price: z.number().positive("Price must be a positive number").min(1, "Please set a correct number"),
+   duration: z.number().positive("duration must be a positive number")
+});
