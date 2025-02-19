@@ -1,15 +1,17 @@
 import { useNavigate, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
-import { useLoginMutation } from '../redux';
+import { useGoogleLoginMutation, useLoginMutation } from '../redux';
 import useInput from '../hooks/UseInput';
 import { loginSchema } from "../schemas/schemas";
 
 const Login = () => {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
+  const [googleLogin] = useGoogleLoginMutation();
 
   const handleLogin = async() => {
     try {
@@ -28,6 +30,21 @@ const Login = () => {
     handleLogin
   );
 
+  const handleGoogleLogin = async (credentialResponse) => {
+    console.log("Google login response:", credentialResponse);
+
+    if (!credentialResponse || !credentialResponse.credential) {
+       console.error("No Google credential found!");
+       return;
+    }
+
+    try {
+       await googleLogin({ googleToken: credentialResponse.credential }).unwrap();
+    } catch (error) {
+       console.error("Google login API call failed:", error);
+    }
+ };
+
   return (
     <Container component="main" maxWidth="xs">
       <ToastContainer/>
@@ -44,6 +61,14 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_ID}>
+        <Box>
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => console.error("Google Login Failed")}
+          />
+        </Box>
+      </GoogleOAuthProvider>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"

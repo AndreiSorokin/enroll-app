@@ -165,7 +165,29 @@ export const userApi = createApi({
             method: 'POST',
             body: { active }
          })
-      })
+      }),
+      googleLogin: builder.mutation<{ token: string; refreshToken: string }, { googleToken: string }>({
+         query: ({ googleToken }) => {
+            console.log("Sending Google login request:", googleToken);
+            return {
+               url: `users/auth/google`,
+               method: "POST",
+               body: { id_token: googleToken },
+               headers: {
+                  "Content-Type": "application/json",
+               },
+            };
+         },
+         onQueryStarted: async (_, { queryFulfilled }) => {
+            try {
+               const { data } = await queryFulfilled;
+               console.log("Google login successful:", data);
+            } catch (error) {
+               console.error("Google login failed:", error);
+            }
+         },
+      }),
+
    })
 });
 
@@ -185,5 +207,6 @@ export const {
    useGetAllUsersQuery,
    useUpdateUserStatusMutation,
    useAddMasterProcedureMutation,
-   useDeleteMasterProcedureMutation
+   useDeleteMasterProcedureMutation,
+   useGoogleLoginMutation
 } = userApi;

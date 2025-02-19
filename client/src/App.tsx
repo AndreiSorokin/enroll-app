@@ -13,8 +13,8 @@ import MasterProcedures from "./pages/MasterProcedures";
 import Admin from "./pages/Admin";
 import parseJwt from "./helpers/decode";
 
-//TODO: add/delete master procedure, Google login
-//TODO: Other: tests, CI/CD
+//TODO: Google login
+//TODO: Other: tests, style, CI/CD
 function App() {
   const userData = parseJwt(localStorage.getItem('token'));
   const isAdmin = userData?.role === 'admin';

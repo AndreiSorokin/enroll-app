@@ -18,7 +18,8 @@ export {
    useGetAllUsersQuery,
    useUpdateUserStatusMutation,
    useAddMasterProcedureMutation,
-   useDeleteMasterProcedureMutation
+   useDeleteMasterProcedureMutation,
+   useGoogleLoginMutation
    } from '../api/userApi';
 
 export { procedureApi } from '../api/procedureApi';
