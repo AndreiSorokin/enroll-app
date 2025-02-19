@@ -67,15 +67,17 @@ export async function googleLogin(req: Request, res: Response, next: NextFunctio
 
 export async function updateUserStatus(req: Request, res: Response, next: NextFunction) {
    try {
-      const { userId, active } = req.body;
+      const { id } = req.params;
+      const { active } = req.body;
 
-      if (typeof userId !== 'string' || typeof active !== 'boolean') {
-         throw new BadRequestError('Invalid input: userId must be a string and active must be a boolean');
+      if (typeof active !== 'boolean') {
+         throw new BadRequestError('active must be a boolean');
       };
 
-      const updatedUser = await userService.updateUserStatus(userId, active);
+      const updatedUser = await userService.updateUserStatus(id, active);
       res.status(200).json({ message: 'User status updated', user: updatedUser });
    } catch (error) {
+      console.error(error);
       next(error);
    }
 };

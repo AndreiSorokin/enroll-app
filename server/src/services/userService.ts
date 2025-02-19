@@ -100,10 +100,10 @@ const getSingleMasterProcedure = async (masterId: string, procedureId: string) =
   }
 };
 
-const updateUserStatus = async(userId: string, active: boolean) => {
+const updateUserStatus = async(id: string, active: boolean) => {
   try {
     const user = await User.findOne({
-      where: { id: userId },
+      where: { id },
     });
 
     if(!user) {
@@ -113,6 +113,7 @@ const updateUserStatus = async(userId: string, active: boolean) => {
     await user.update({ active });
     return user;
   } catch (error) {
+    console.error(error);
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }

@@ -5,6 +5,8 @@ const Admin = () => {
    const { data, refetch } = useGetAllUsersQuery();
    const [toggleUserStatus] = useUpdateUserStatusMutation();
 
+   console.log(data)
+
    const handleToggleUserStatus = async (id: string, active: boolean) => {
       await toggleUserStatus({ id, active: !active });
       refetch();

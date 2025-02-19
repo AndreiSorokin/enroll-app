@@ -142,8 +142,8 @@ export const userApi = createApi({
       updateUserStatus: builder.mutation<User, { id: string, active: boolean }>({
          query: ({ id, active }) => ({
             url: `users/${id}/update-user-status`,
-            method: 'PUT',
-            body: { userId: id, active }
+            method: 'POST',
+            body: { active }
          })
       })
    })
