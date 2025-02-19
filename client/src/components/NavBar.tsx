@@ -25,7 +25,7 @@ const Navbar = () => {
 
    const userData = useSelector((state: RootState) => state.user.userData);
    const id = userData?.id;
-   console.log(id)
+   const isActive = userData?.active === true;
    
    const handleDrawerToggle = () => {
       setOpenDrawer(!openDrawer);
@@ -73,7 +73,7 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      <ListItem component="li">
-                        {userData?.role === "master"
+                        {userData?.role === "master" && isActive
                            ?<Button component={Link} to={`/users/${id}/master-procedures`} color="inherit" onClick={handleDrawerToggle}>
                               Procedures
                            </Button>
@@ -82,7 +82,7 @@ const Navbar = () => {
                            </Button>
                         }
                      </ListItem>
-                     {userData && 
+                     {userData &&
                      <ListItem component="li">
                         <Button component={Link} to={`/users/${id}`} color="inherit" onClick={handleDrawerToggle}>
                            Profile
@@ -94,12 +94,7 @@ const Navbar = () => {
                            <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                         </ListItem>
                      }
-                     {userData && userData.role === "master" &&
-                        <ListItem>
-                           <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
-                        </ListItem>
-                     }
-                     {userData && userData.role === "admin" &&
+                     {userData && userData.role === "admin" && isActive &&
                         <ListItem component="li">
                            <Button component={Link} to={`/users/admin`}>Admin</Button>
                         </ListItem>
@@ -129,7 +124,7 @@ const Navbar = () => {
                   </Button>
                </ListItem>
                <ListItem component="li">
-                  {userData?.role === "master"
+                  {userData?.role === "master" && isActive
                      ?<Button component={Link} to={`/users/${id}/master-procedures`} color="inherit" onClick={handleDrawerToggle}>
                         Procedures
                      </Button>
@@ -150,12 +145,7 @@ const Navbar = () => {
                      <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                   </ListItem>
                }
-               {userData && userData.role === "master" &&
-                  <ListItem>
-                     <Button component={Link} to={`/users/${id}/master-procedures`} color="inherit">Master</Button>
-                  </ListItem>
-               }
-               {userData && userData.role === "admin" &&
+               {userData && userData.role === "admin" && isActive &&
                   <ListItem component="li">
                      <Button component={Link} to={`/users/admin`} color="inherit">Admin</Button>
                   </ListItem>
