@@ -93,7 +93,8 @@ const Navbar = () => {
                         </Button>
                      </ListItem>
                      }
-                     {userData && userData.role === "user"  || userData?.role === "admin" &&
+                     {
+                        (userData && (userData.role === "user" || userData?.role === "admin")) &&
                         <ListItem component="li">
                            <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                         </ListItem>
@@ -144,7 +145,8 @@ const Navbar = () => {
                      </Button>
                   </ListItem>
                }
-               {userData && userData.role === "user"  || userData?.role === "admin" &&
+               {
+                  (userData && (userData.role === "user" || userData?.role === "admin")) &&
                   <ListItem component="li">
                      <Button component={Link} to={`/users/${id}/user-procedures`} color="inherit">Enrollments</Button>
                   </ListItem>

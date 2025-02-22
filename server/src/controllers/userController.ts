@@ -41,6 +41,7 @@ export async function getSingleMasterProcedure(req: Request, res: Response, next
 
 export async function googleLogin(req: Request, res: Response, next: NextFunction) {
    try {
+      console.log("Received Google auth request", req.body);
       const user = req.user as User;
 
       const token = jwt.sign({
@@ -61,6 +62,7 @@ export async function googleLogin(req: Request, res: Response, next: NextFunctio
 
       res.status(200).json({ message: 'Google login successful', token, refreshToken });
    } catch (error) {
+      console.error("Google login error:", error);
       next(error);
    }
 };

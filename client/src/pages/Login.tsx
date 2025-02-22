@@ -2,7 +2,6 @@ import { useNavigate, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
-
 import { Avatar, Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
 import { useGoogleLoginMutation, useLoginMutation } from '../redux';
 import useInput from '../hooks/UseInput';
@@ -39,11 +38,13 @@ const Login = () => {
     }
 
     try {
-       await googleLogin({ googleToken: credentialResponse.credential }).unwrap();
+       const response = await googleLogin({ googleToken: credentialResponse.credential }).unwrap();
+       console.log("Google login API response:", response);
     } catch (error) {
        console.error("Google login API call failed:", error);
     }
  };
+
 
   return (
     <Container component="main" maxWidth="xs">
