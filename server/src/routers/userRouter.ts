@@ -36,10 +36,6 @@ const upload = multer({ storage: storage });
 
 router.post(
    "/auth/google",
-   (req, res, next) => {
-      console.log("Incoming Google login request:", req.body);  
-      next();
-   },
    passport.authenticate("google-id-token", { session: false }),
    googleLogin
 );

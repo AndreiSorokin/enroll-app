@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "./config/passport";
 import cors from "cors";
+import helmet from "helmet";
 
 import userRouter from "./routers/userRouter";
 import procedureRouter from "./routers/procedureRouter";
@@ -22,9 +23,12 @@ const corsOptions = {
    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 };
 
+app.use(helmet({
+   crossOriginOpenerPolicy: { policy: "unsafe-none" }, // Add this to relax COOP
+}));
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(passport.initialize()); 
+app.use(passport.initialize());
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/procedures", procedureRouter);
