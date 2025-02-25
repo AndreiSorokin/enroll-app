@@ -24,13 +24,17 @@
     "start": "node dist/src/server.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts",
     "build": "tsc -p . && ls dist",
-    "migration:down": "node -r ts-node/register src/utils/rollback.ts"
+    "migration:down": "node -r ts-node/register src/utils/rollback.ts",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:coverage": "jest --runInBand --detectOpenHandles --coverage",
+    "test:ci": "jest --runInBand --forceExit --verbose false"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.10.2",
@@ -44,6 +48,7 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "npm": "^11.0.0",
+    "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }

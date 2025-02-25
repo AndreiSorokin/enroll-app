@@ -75,7 +75,7 @@ export async function createTimeSlots(req: Request, res: Response, next: NextFun
          return;
       }
 
-      const createrTimeSlot = await timeSlotService.createTimeSlots(
+      const createdTimeSlot = await timeSlotService.createTimeSlots(
          masterId,
          procedureId, 
          date, 
@@ -84,7 +84,7 @@ export async function createTimeSlots(req: Request, res: Response, next: NextFun
          slotDuration
       );
 
-      res.status(201).json({createrTimeSlot, message: 'Time slots successfully created' });
+      res.status(201).json({createdTimeSlot, message: 'Time slots successfully created' });
    } catch (error) {
       next(error);
    }
