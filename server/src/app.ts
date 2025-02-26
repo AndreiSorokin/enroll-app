@@ -24,7 +24,7 @@ const corsOptions = {
 };
 
 app.use(helmet({
-   crossOriginOpenerPolicy: { policy: "unsafe-none" }, // Add this to relax COOP
+   crossOriginOpenerPolicy: { policy: "unsafe-none" },
 }));
 app.use(cors(corsOptions));
 app.use(express.json());
