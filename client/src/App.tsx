@@ -112,7 +112,7 @@ function App() {
                 path="/users/reset-password"
                 element={
                   <AnimatedPage>
-                    {isActive ? <ResetPassword /> : <Navigate to="/" replace />}
+                    {<ResetPassword />}
                   </AnimatedPage>
                 }
               />

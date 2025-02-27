@@ -48,11 +48,11 @@ const FancyButton = styled(Button)(({ theme }) => ({
 const ForgotPassword = () => {
   const [forgotPassword] = useForgotPasswordMutation();
 
-  const handleForgotPassword = async (email: string) => {
-   console.log(email)
+  const handleForgotPassword = async (values: { email: string }) => {
+    const { email } = values;
     try {
-      await forgotPassword({ email }).unwrap();
-      toast.success('Password reset email sent successfully!');
+        await forgotPassword({ email }).unwrap();
+        toast.success('Password reset email sent successfully!');
     } catch {
       toast.error('Unexpected error occurred');
     }

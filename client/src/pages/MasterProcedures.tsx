@@ -40,7 +40,7 @@ const FancyButton = styled(Button)(({ theme }) => ({
 
 const SecondaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: '#fff',
-  color: theme.palette.primary.main, 
+  color: theme.palette.primary.main,
   fontFamily: 'Playfair Display, serif',
   fontWeight: 500,
   padding: '8px 16px',
@@ -76,6 +76,7 @@ const MasterProcedures = () => {
   const [slotDuration, setSlotDuration] = useState<number>(30);
   const [priceDialogOpen, setPriceDialogOpen] = useState(false);
   const [createProcedureDialogOpen, setCreateProcedureDialogOpen] = useState(false);
+  const [timeSlotDialogOpen, setTimeSlotDialogOpen] = useState(false);
 
   const handleCreateTimeSlot = async () => {
     if (!procedureId || !date || !startTime || !endTime || slotDuration <= 0) {
@@ -102,6 +103,7 @@ const MasterProcedures = () => {
       setEndTime(null);
       setSlotDuration(30);
       setProcedureId('');
+      setTimeSlotDialogOpen(false);
     } catch (error) {
       toast.error('Error creating time slots');
     }
@@ -196,7 +198,9 @@ const MasterProcedures = () => {
                 </Typography>
               </CardContent>
               <CardActions sx={{ justifyContent: 'center', flexWrap: 'wrap', gap: 1, pb: 2 }}>
-                <FancyButton onClick={() => setProcedureId(procedure.procedure.id)}>Set Time</FancyButton>
+                <FancyButton onClick={() => { setProcedureId(procedure.procedure.id); setTimeSlotDialogOpen(true); }}>
+                  Set Time
+                </FancyButton>
                 <FancyButton onClick={() => { setProcedureId(procedure.procedure.id); setPriceDialogOpen(true); }}>
                   Change Price
                 </FancyButton>
@@ -212,30 +216,30 @@ const MasterProcedures = () => {
         <FancyButton onClick={() => setCreateProcedureDialogOpen(true)}>Add New Procedure</FancyButton>
       </Box>
 
-      {procedureId && (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4, p: 3, backgroundColor: '#fff', borderRadius: '15px', boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)' }}>
-            <HeaderTypography variant="h5" sx={{ mb: 2 }}>Create Time Slots</HeaderTypography>
+      <Dialog open={timeSlotDialogOpen} onClose={() => setTimeSlotDialogOpen(false)}>
+        <DialogTitle sx={{ fontFamily: 'Playfair Display, serif', color: '#8d5524' }}>Create Time Slots</DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Select Date"
               value={date}
               onChange={(newValue) => setDate(newValue)}
               slots={{ textField: TextField }}
-              slotProps={{ textField: { fullWidth: true, sx: { mb: 2, '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense', sx: { '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
             />
             <TimePicker
               label="Start Time"
               value={startTime}
               onChange={(newValue) => setStartTime(newValue)}
               slots={{ textField: TextField }}
-              slotProps={{ textField: { fullWidth: true, sx: { mb: 2, '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense', sx: { '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
             />
             <TimePicker
               label="End Time"
               value={endTime}
               onChange={(newValue) => setEndTime(newValue)}
               slots={{ textField: TextField }}
-              slotProps={{ textField: { fullWidth: true, sx: { mb: 2, '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
+              slotProps={{ textField: { fullWidth: true, margin: 'dense', sx: { '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } } } }}
             />
             <TextField
               label="Slot Duration (minutes)"
@@ -243,12 +247,16 @@ const MasterProcedures = () => {
               value={slotDuration}
               onChange={(e) => setSlotDuration(Number(e.target.value))}
               fullWidth
-              sx={{ mb: 2, '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } }}
+              margin="dense"
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '10px', '&:hover fieldset': { borderColor: '#f06292' }, '&.Mui-focused fieldset': { borderColor: '#8d5524' } } }}
             />
-            <FancyButton fullWidth onClick={handleCreateTimeSlot}>Submit</FancyButton>
-          </Box>
-        </LocalizationProvider>
-      )}
+          </LocalizationProvider>
+        </DialogContent>
+        <DialogActions>
+          <SecondaryButton onClick={() => setTimeSlotDialogOpen(false)}>Cancel</SecondaryButton>
+          <FancyButton onClick={handleCreateTimeSlot}>Submit</FancyButton>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={priceDialogOpen} onClose={() => setPriceDialogOpen(false)}>
         <DialogTitle sx={{ fontFamily: 'Playfair Display, serif', color: '#8d5524' }}>Update Price</DialogTitle>
