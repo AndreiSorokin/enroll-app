@@ -1,0 +1,48 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+jobs:
+
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install server dependencies
+        run: npm install
+        working-directory: ./server
+      - name: Install client dependencies
+        run: npm install
+        working-directory: ./client
+      - name: Build server
+        run: npm run build
+        working-directory: ./server
+      - name: Build client
+        run: npm run build
+        working-directory: ./client
+  
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.70.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          RELEASE_BRANCHES: master
+        with:
+          DEFAULT_BUMP: patch
+        if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
