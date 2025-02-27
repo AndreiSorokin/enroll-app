@@ -75,6 +75,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const credentials = { email: values.email, password: values.password };
+      console.log("token: ",localStorage.getItem('token'))
       await login(credentials).unwrap();
       toast.success('Login successful!');
       navigate('/procedures');

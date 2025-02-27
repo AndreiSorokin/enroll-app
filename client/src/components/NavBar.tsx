@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from "../redux/store";
+import { RootState } from '../redux/store';
 import {
-   AppBar,
-   Toolbar,
-   Typography,
-   Button,
-   Drawer,
-   List,
-   ListItem,
-   IconButton,
-   useMediaQuery,
-   useTheme,
-   styled,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  styled,
+  Box,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { clearUser } from "../redux/userSlice";
+import CloseIcon from '@mui/icons-material/Close';
+import { clearUser } from '../redux/userSlice';
 
 const FancyAppBar = styled(AppBar)(({ theme }) => ({
   background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -48,6 +50,7 @@ const FancyDrawer = styled(Drawer)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
     color: '#fff',
     width: 250,
+    padding: theme.spacing(2),
   },
 }));
 
@@ -61,6 +64,8 @@ const Navbar = () => {
   const id = userData?.id;
   const isActive = userData?.active === true;
 
+  console.log(userData?.id)
+
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
   };
@@ -68,7 +73,7 @@ const Navbar = () => {
   const handleLogout = () => {
     try {
       dispatch(clearUser());
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +87,7 @@ const Navbar = () => {
         </NavButton>
       </ListItem>
       <ListItem sx={{ margin: isMobile ? '0' : '0 10px' }}>
-        {userData?.role === "master" && isActive ? (
+        {userData?.role === 'master' && isActive ? (
           <NavButton component={Link} to={`/users/${id}/master-procedures`} onClick={isMobile ? handleDrawerToggle : undefined}>
             Procedures
           </NavButton>
@@ -99,14 +104,14 @@ const Navbar = () => {
           </NavButton>
         </ListItem>
       )}
-      {(userData && (userData.role === "user" || userData?.role === "admin")) && (
+      {(userData && (userData.role === 'user' || userData?.role === 'admin')) && (
         <ListItem sx={{ margin: isMobile ? '0' : '0 10px' }}>
           <NavButton component={Link} to={`/users/${id}/user-procedures`} onClick={isMobile ? handleDrawerToggle : undefined}>
             Enrollments
           </NavButton>
         </ListItem>
       )}
-      {userData && userData.role === "admin" && isActive && (
+      {userData && userData.role === 'admin' && isActive && (
         <ListItem sx={{ margin: isMobile ? '0' : '0 10px' }}>
           <NavButton component={Link} to={`/users/admin`} onClick={isMobile ? handleDrawerToggle : undefined}>
             Admin
@@ -150,6 +155,15 @@ const Navbar = () => {
               <MenuIcon />
             </IconButton>
             <FancyDrawer anchor="right" open={openDrawer} onClose={handleDrawerToggle}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+                <IconButton
+                  color="inherit"
+                  onClick={handleDrawerToggle}
+                  sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' } }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
               {navItems}
             </FancyDrawer>
           </>

@@ -1,46 +1,127 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography, Grid, Card, CardContent, CardActions, styled } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useDeleteBookingMutation, useDeleteUserProcedureMutation, useGetUserProcedureQuery } from '../redux';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+
+// Styled Full-Width Background Box
+const BackgroundBox = styled(Box)(({ theme }) => ({
+  backgroundColor: '#f9f6f2', // Soft beige
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  padding: theme.spacing(4),
+  width: '100vw', // Full viewport width
+}));
+
+// Styled Card for Procedures
+const ProcedureCard = styled(Card)(({ theme }) => ({
+  background: '#fff',
+  borderRadius: '15px',
+  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)', // Soft shadow
+  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-5px)', // Lift on hover
+    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
+  },
+  padding: theme.spacing(2),
+}));
+
+// Styled Button
+const FancyButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main, // Soft pink
+  color: '#fff',
+  fontFamily: 'Playfair Display, serif',
+  fontWeight: 500,
+  padding: '8px 16px',
+  borderRadius: '25px',
+  border: `2px solid ${theme.palette.secondary.main}`,
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    backgroundColor: '#fff',
+    color: theme.palette.secondary.main,
+    borderColor: theme.palette.secondary.main,
+    transform: 'scale(1.05)', // Slight scale-up
+  },
+}));
+
+// Styled Typography for headers
+const HeaderTypography = styled(Typography)(({ theme }) => ({
+  fontFamily: 'Playfair Display, serif',
+  fontWeight: 700,
+  color: theme.palette.primary.main, // Warm brown
+  textAlign: 'center',
+}));
 
 const UserProcedures = () => {
-   const { id } = useParams<{ id:string }>();
-   const { data, refetch } = useGetUserProcedureQuery(id!);
-   const [deleteUserProcedure] = useDeleteUserProcedureMutation();
-   const [deleteBooking] = useDeleteBookingMutation();
-   const token = localStorage.getItem("token");
+  const { id } = useParams<{ id: string }>();
+  const { data, refetch, isLoading, error } = useGetUserProcedureQuery(id!);
+  const [deleteUserProcedure] = useDeleteUserProcedureMutation();
+  const [deleteBooking] = useDeleteBookingMutation();
+  const token = localStorage.getItem('token');
 
-   if(!data || !token) {
-      return <Box>You don't have enrollments yet</Box>
-   }
+  const handleDelete = async (userId: string, procedureId: string, masterId: string, id: string, timeSlotId: string) => {
+    try {
+      await deleteUserProcedure({ userId, procedureId, masterId, token: token! }).unwrap();
+      await deleteBooking({ id, timeSlotId, token: token! }).unwrap();
+      await refetch();
+      toast.success('Enrollment cancelled successfully');
+    } catch {
+      toast.error('Error removing procedure');
+    }
+  };
 
-   const handleDelete = async(userId: string, procedureId: string, masterId: string, id: string, timeSlotId: string) => {
-      try {
-         await deleteUserProcedure({ userId, procedureId, masterId, token }).unwrap();
-         await deleteBooking({ id, timeSlotId, token }).unwrap();
-         await refetch();
-         toast.success("Enrollment cancelled successfully");
-      } catch {
-         toast.error("Error removing procedure");
-      }
-   }
+  if (isLoading) {
+    return <Typography align="center" sx={{ mt: 4, fontStyle: 'italic' }}>Loading enrollments...</Typography>;
+  }
 
+  if (error) {
+    return <Typography color="error" align="center" sx={{ mt: 4 }}>Error loading enrollments</Typography>;
+  }
 
-   return (
-      <Box>
-         <h1>Your enrollments:</h1>
-         <ul>
-            {data.map((procedure) => (
-               <li key={procedure.id}>
-                  <p>Procedure: {procedure.Procedure.name}</p>
-                  <p>Duration: {procedure.Procedure.duration}</p>
-                  <p>Master: {procedure.Master.name}</p>
-                  <Button onClick={() => handleDelete(procedure.userId, procedure.procedureId, procedure.Master.id, procedure.Bookings[0].id, procedure.Bookings[0].timeSlotId)}>Cancel</Button>
-               </li>
-            ))}
-         </ul>
-      </Box>
-   )
-}
+  if (!data || !token || data.length === 0) {
+    return (
+      <BackgroundBox>
+        <Typography align="center" sx={{ mt: 4, fontFamily: 'Playfair Display, serif', color: '#8d5524' }}>
+          You don’t have any enrollments yet.
+        </Typography>
+      </BackgroundBox>
+    );
+  }
 
-export default UserProcedures
+  return (
+    <BackgroundBox>
+      <ToastContainer />
+      <HeaderTypography variant="h3" component="h1" sx={{ mb: 4 }}>
+        Your Enrollments
+      </HeaderTypography>
+      <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>
+        {data.map((procedure) => (
+          <Grid item xs={12} sm={6} md={4} key={procedure.id}>
+            <ProcedureCard elevation={0}>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h6" sx={{ fontFamily: 'Playfair Display, serif', fontWeight: 600, color: '#8d5524' }}>
+                  {procedure.Procedure.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  Duration: {procedure.Procedure.duration} {procedure.Procedure.duration > 1 ? 'hours' : 'hour'}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Master: {procedure.Master.name}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
+                <FancyButton
+                  onClick={() => handleDelete(procedure.userId, procedure.procedureId, procedure.Master.id, procedure.Bookings[0].id, procedure.Bookings[0].timeSlotId)}
+                >
+                  Cancel
+                </FancyButton>
+              </CardActions>
+            </ProcedureCard>
+          </Grid>
+        ))}
+      </Grid>
+    </BackgroundBox>
+  );
+};
+
+export default UserProcedures;
