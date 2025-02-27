@@ -3,32 +3,29 @@ import { useParams } from 'react-router-dom';
 import { useDeleteBookingMutation, useDeleteUserProcedureMutation, useGetUserProcedureQuery } from '../redux';
 import { toast, ToastContainer } from 'react-toastify';
 
-// Styled Full-Width Background Box
 const BackgroundBox = styled(Box)(({ theme }) => ({
-  backgroundColor: '#f9f6f2', // Soft beige
+  backgroundColor: '#f9f6f2',
   minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   padding: theme.spacing(4),
-  width: '100vw', // Full viewport width
+  width: '100vw',
 }));
 
-// Styled Card for Procedures
 const ProcedureCard = styled(Card)(({ theme }) => ({
   background: '#fff',
   borderRadius: '15px',
-  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)', // Soft shadow
+  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
   transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
   '&:hover': {
-    transform: 'translateY(-5px)', // Lift on hover
+    transform: 'translateY(-5px)',
     boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
   },
   padding: theme.spacing(2),
 }));
 
-// Styled Button
 const FancyButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.main, // Soft pink
+  backgroundColor: theme.palette.secondary.main,
   color: '#fff',
   fontFamily: 'Playfair Display, serif',
   fontWeight: 500,
@@ -40,15 +37,14 @@ const FancyButton = styled(Button)(({ theme }) => ({
     backgroundColor: '#fff',
     color: theme.palette.secondary.main,
     borderColor: theme.palette.secondary.main,
-    transform: 'scale(1.05)', // Slight scale-up
+    transform: 'scale(1.05)',
   },
 }));
 
-// Styled Typography for headers
 const HeaderTypography = styled(Typography)(({ theme }) => ({
   fontFamily: 'Playfair Display, serif',
   fontWeight: 700,
-  color: theme.palette.primary.main, // Warm brown
+  color: theme.palette.primary.main,
   textAlign: 'center',
 }));
 
@@ -72,6 +68,16 @@ const UserProcedures = () => {
 
   if (isLoading) {
     return <Typography align="center" sx={{ mt: 4, fontStyle: 'italic' }}>Loading enrollments...</Typography>;
+  }
+
+  if(!data) {
+    return (
+      <BackgroundBox>
+        <Typography align="center" sx={{ mt: 4, fontFamily: 'Playfair Display, serif', color: '#8d5524' }}>
+          No enrollments so far
+        </Typography>
+      </BackgroundBox>
+    );
   }
 
   if (error) {

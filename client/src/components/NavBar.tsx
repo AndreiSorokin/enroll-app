@@ -65,6 +65,7 @@ const Navbar = () => {
   const isActive = userData?.active === true;
 
   console.log(userData?.id)
+  console.log("token: ",localStorage.getItem('token'))
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);

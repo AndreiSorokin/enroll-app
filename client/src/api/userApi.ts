@@ -131,6 +131,7 @@ export const userApi = createApi({
          onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
             try {
                const { data } = await queryFulfilled;
+               localStorage.setItem('token', data.token!);
                const userData = parseJwt(data.token);
                dispatch(setUser(userData));
             } catch (error) {
@@ -178,6 +179,7 @@ export const userApi = createApi({
          onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
             try {
                const { data } = await queryFulfilled;
+               localStorage.setItem('token', data.token!);
                const userData = parseJwt(data.token);
                dispatch(setUser(userData));
             } catch (error) {

@@ -2,8 +2,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import { Provider, useSelector } from 'react-redux';
+import store, { RootState } from './redux/store';
 
 import Procedures from './pages/Procedures';
 import NavBar from './components/NavBar';
@@ -47,7 +47,7 @@ const AnimatedPage = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
-  const userData = parseJwt(localStorage.getItem('token'));
+  const { userData } = useSelector((state: RootState) => state.user);
   const isAdmin = userData?.role === 'admin';
   const isActive = userData?.active === true;
 
