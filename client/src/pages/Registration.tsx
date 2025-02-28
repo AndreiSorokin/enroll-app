@@ -1,49 +1,49 @@
-import { Avatar, Box, Button, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography, styled } from '@mui/material';
+import { Avatar, Box, Button, ButtonProps, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography, styled } from '@mui/material';
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, LinkProps } from 'react-router-dom';
 import { z } from 'zod';
 import { useRegistrationMutation } from '../redux';
 import useInput from '../hooks/UseInput';
 import { toast } from 'react-toastify';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-// Registration Schema (unchanged)
 export const registrationSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must contain letters and numbers and be at least 6 characters long'),
 });
 
-// Styled Full-Width Background Box
 const BackgroundBox = styled(Box)(({ theme }) => ({
-  backgroundColor: '#f9f6f2', // Soft beige
+  backgroundColor: '#f9f6f2',
   minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   padding: theme.spacing(4),
-  width: '100vw', // Full viewport width
+  width: '100vw',
 }));
 
-// Styled Form Box
 const FormBox = styled(Box)(({ theme }) => ({
   background: '#fff',
   padding: theme.spacing(4),
   borderRadius: '15px',
-  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)', // Soft shadow
+  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
 }));
 
-// Styled Typography for header
 const HeaderTypography = styled(Typography)(({ theme }) => ({
   fontFamily: 'Playfair Display, serif',
   fontWeight: 700,
-  color: theme.palette.primary.main, // Warm brown
+  color: theme.palette.primary.main,
   textAlign: 'center',
 }));
 
-// Styled Button
-const FancyButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.main, // Soft pink
+interface FancyButtonProps extends ButtonProps {
+  to?: LinkProps['to'];
+  component?: React.ElementType;
+};
+
+const FancyButton = styled(Button)<FancyButtonProps>(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main,
   color: '#fff',
   fontFamily: 'Playfair Display, serif',
   fontWeight: 500,
@@ -55,11 +55,10 @@ const FancyButton = styled(Button)(({ theme }) => ({
     backgroundColor: '#fff',
     color: theme.palette.secondary.main,
     borderColor: theme.palette.secondary.main,
-    transform: 'scale(1.05)', // Slight scale-up
+    transform: 'scale(1.05)',
   },
 }));
 
-// Styled Link
 const FancyLink = styled(Link)(({ theme }) => ({
   color: theme.palette.secondary.main,
   textDecoration: 'none',
@@ -114,7 +113,7 @@ const Registration = () => {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <PersonAddIcon />
           </Avatar>
-          <HeaderTypography component="h1" variant="h4">
+          <HeaderTypography variant="h4">
             Sign Up
           </HeaderTypography>
           <Box component="form" noValidate sx={{ mt: 3, width: '100%' }} onSubmit={handleSubmit}>

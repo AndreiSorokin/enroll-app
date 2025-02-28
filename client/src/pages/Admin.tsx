@@ -75,7 +75,7 @@ const Admin = () => {
 
   return (
     <Box sx={{ py: 6, backgroundColor: '#f9f6f2', minHeight: '100vh' }}>
-      <HeaderTypography variant="h3" component="h1">
+      <HeaderTypography variant="h3">
         Admin Dashboard
       </HeaderTypography>
       <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>

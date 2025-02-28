@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -8,11 +8,12 @@ import {
   Grid,
   Box,
   styled,
+  ButtonProps,
 } from '@mui/material';
 import { useGetAllProceduresQuery } from '../redux/index';
 import { Procedure } from '../misc/types';
 
-const FancyCard = styled(Card)(({ theme }) => ({
+const FancyCard = styled(Card)(() => ({
   background: '#fff',
   borderRadius: '15px',
   boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
@@ -27,7 +28,12 @@ const FancyCard = styled(Card)(({ theme }) => ({
   height: '100%',
 }));
 
-const FancyButton = styled(Button)(({ theme }) => ({
+interface FancyButtonProps extends ButtonProps {
+  to?: LinkProps['to'];
+  component?: React.ElementType;
+}
+
+const FancyButton = styled(Button)<FancyButtonProps>(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
   color: '#fff',
   fontFamily: 'Playfair Display, serif',
@@ -73,7 +79,7 @@ const Procedures = () => {
 
   return (
     <Box sx={{ py: 6, backgroundColor: '#f9f6f2', minHeight: '100vh' }}>
-      <HeaderTypography variant="h3" component="h1">
+      <HeaderTypography variant="h3">
         Our Signature Procedures
       </HeaderTypography>
       <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>

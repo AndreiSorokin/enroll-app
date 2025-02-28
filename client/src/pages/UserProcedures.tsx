@@ -55,6 +55,8 @@ const UserProcedures = () => {
   const [deleteBooking] = useDeleteBookingMutation();
   const token = localStorage.getItem('token');
 
+  console.log(data?.map(p => p))
+
   const handleDelete = async (userId: string, procedureId: string, masterId: string, id: string, timeSlotId: string) => {
     try {
       await deleteUserProcedure({ userId, procedureId, masterId, token: token! }).unwrap();
@@ -97,7 +99,7 @@ const UserProcedures = () => {
   return (
     <BackgroundBox>
       <ToastContainer />
-      <HeaderTypography variant="h3" component="h1" sx={{ mb: 4 }}>
+      <HeaderTypography variant="h3" sx={{ mb: 4 }}>
         Your Enrollments
       </HeaderTypography>
       <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>

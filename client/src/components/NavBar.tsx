@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import {
@@ -15,6 +15,7 @@ import {
   useTheme,
   styled,
   Box,
+  ButtonProps,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,7 +26,12 @@ const FancyAppBar = styled(AppBar)(({ theme }) => ({
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
 }));
 
-const NavButton = styled(Button)(({ theme }) => ({
+interface NavButtonProps extends ButtonProps {
+  to?: LinkProps['to'];
+  component?: React.ElementType;
+}
+
+const NavButton = styled(Button)<NavButtonProps>(() => ({
   color: '#fff',
   fontFamily: 'Playfair Display, serif',
   fontWeight: 500,

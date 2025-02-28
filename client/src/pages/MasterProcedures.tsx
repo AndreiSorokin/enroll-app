@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, Grid, Card, CardContent, CardActions, styled, CssBaseline } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { DatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
@@ -104,7 +104,7 @@ const MasterProcedures = () => {
       setSlotDuration(30);
       setProcedureId('');
       setTimeSlotDialogOpen(false);
-    } catch (error) {
+    } catch {
       toast.error('Error creating time slots');
     }
   };
@@ -124,7 +124,7 @@ const MasterProcedures = () => {
       refetch();
       toast.success('Price updated successfully');
       setPriceDialogOpen(false);
-    } catch (error) {
+    } catch {
       toast.error('Error updating price');
     }
   };
@@ -182,7 +182,7 @@ const MasterProcedures = () => {
     <Box sx={{ py: 6, backgroundColor: '#f9f6f2', minHeight: '100vh' }}>
       <ToastContainer />
       <CssBaseline />
-      <HeaderTypography variant="h3" component="h1" sx={{ mb: 4 }}>
+      <HeaderTypography variant="h3" sx={{ mb: 4 }}>
         Your Procedures
       </HeaderTypography>
       <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>
@@ -276,7 +276,7 @@ const MasterProcedures = () => {
         </DialogContent>
         <DialogActions>
           <SecondaryButton onClick={() => setPriceDialogOpen(false)}>Cancel</SecondaryButton>
-          <FancyButton onClick={updateHandleSubmit}>Update</FancyButton>
+          <FancyButton onClick={(e) => updateHandleSubmit(e as unknown as FormEvent<HTMLFormElement>)}>Update</FancyButton>
         </DialogActions>
       </Dialog>
 
@@ -324,7 +324,7 @@ const MasterProcedures = () => {
         </DialogContent>
         <DialogActions>
           <SecondaryButton onClick={() => setCreateProcedureDialogOpen(false)}>Cancel</SecondaryButton>
-          <FancyButton onClick={createHandleSubmit}>Create</FancyButton>
+          <FancyButton onClick={(e) => {createHandleSubmit(e as unknown as FormEvent<HTMLFormElement>)}}>Create</FancyButton>
         </DialogActions>
       </Dialog>
     </Box>
