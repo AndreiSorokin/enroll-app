@@ -5,11 +5,20 @@ export const loginSchema = z.object({
    password: z.string().min(6, 'Password must contain letters and numbers and to be at least 6 characters long'),
 });
 
+export const registrationSchema = z.object({
+   email: z.string().email('Invalid email address').min(1, 'Email is required'),
+   password: z.string().min(6, 'Password must be at least 6 characters'),
+   name: z.string().min(1, 'Name is required'),
+   role: z.enum(['user', 'admin']).default('user'),
+   image: z.any().nullable().optional(),
+});
+
 export const updateUserSchema = z.object({
    name: z.string().min(1, 'Invalid name'),
 });
 
 export const updatePasswordSchema = z.object({
+   currentPassword: z.string().min(1, 'Current password is required'),
    newPassword: z
    .string()
       .min(6, "Password must be at least 6 characters long")
