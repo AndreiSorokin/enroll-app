@@ -1,15 +1,17 @@
-import { useFormik } from 'formik';
-import { z } from 'zod';
+import { useFormik, FormikValues, FormikHelpers } from 'formik';
+import { ZodSchema } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
-export default function UseInput(schema: z.ZodSchema<any>, initialValues: Record<string, any>, onSubmit: (values: any) => void) {
-   const formik = useFormik({
-      initialValues,
-      validationSchema: toFormikValidationSchema(schema),
-      onSubmit,
-   });
+export default function useInput<T extends FormikValues>(
+  schema: ZodSchema<T>, 
+  initialValues: T, 
+  onSubmit: (values: T, formikHelpers: FormikHelpers<T>) => void
+) {
+  const formik = useFormik<T>({
+    initialValues,
+    validationSchema: toFormikValidationSchema(schema),
+    onSubmit,
+  });
 
-   return {
-      ...formik
-   };
+  return formik;
 }

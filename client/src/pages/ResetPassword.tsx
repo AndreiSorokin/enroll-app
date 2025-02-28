@@ -79,7 +79,7 @@ const ResetPassword = () => {
       <ToastContainer />
       <Container maxWidth="xs">
         <CssBaseline />
-        <FormBox component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <FormBox onSubmit={(e) => handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>)} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <HeaderTypography variant="h4" sx={{ mb: 3 }}>
             Enter New Password
           </HeaderTypography>
