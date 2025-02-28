@@ -13,6 +13,7 @@ import {
 import { useSelector } from 'react-redux';
 import BookingModal from '../components/BookingModal';
 import { useState } from 'react';
+import { Master } from '../misc/types';
 
 const MasterCard = styled(Card)(({ theme }) => ({
   background: '#fff',
@@ -59,10 +60,10 @@ const SingleProcedure = () => {
   const userData = useSelector((state: RootState) => state.user.userData);
   const { data, error, isLoading } = useGetMastersByProcedureQuery(id!);
   const [open, setOpen] = useState(false);
-  const [selectedMaster, setSelectedMaster] = useState<any>(null);
+  const [selectedMaster, setSelectedMaster] = useState<Master | null>(null);
   const token = localStorage.getItem('token');
 
-  const handleOpen = (master: any) => {
+  const handleOpen = (master: Master) => {
     setSelectedMaster(master);
     setOpen(true);
   };
@@ -85,7 +86,7 @@ const SingleProcedure = () => {
 
   return (
     <Box sx={{ py: 6, backgroundColor: '#f9f6f2', minHeight: '100vh' }}>
-      <HeaderTypography variant="h3" component="h1">
+      <HeaderTypography variant="h3">
         Meet Our Masters
       </HeaderTypography>
       <BookingModal

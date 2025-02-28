@@ -17,7 +17,6 @@ import UserProcedures from './pages/UserProcedures';
 import MasterProcedures from './pages/MasterProcedures';
 import Admin from './pages/Admin';
 import Landing from './pages/Landing';
-import parseJwt from './helpers/decode';
 
 const theme = createTheme({
   palette: {

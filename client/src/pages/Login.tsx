@@ -99,7 +99,7 @@ const Login = () => {
       await googleLogin({ googleToken: credentialResponse.credential }).unwrap();
       toast.success('Google Login Successful!');
       navigate('/procedures');
-    } catch (error) {
+    } catch {
       toast.error('Google Login Failed!');
     }
   };
@@ -113,7 +113,7 @@ const Login = () => {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <HeaderTypography component="h1" variant="h4">
+          <HeaderTypography variant="h4">
             Sign In
           </HeaderTypography>
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_ID}>

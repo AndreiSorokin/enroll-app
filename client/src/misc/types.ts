@@ -44,15 +44,16 @@ export type Master = {
 }
 
 export type UserProcedure = {
+   Bookings: Booking[];
    id: string;
    userId: string;
    procedureId: string;
    masterId: string;
-   Procedure: Procedure[];
+   Procedure: Procedure;
    Master: User;
 }
 
-export type userProcedures = UserProcedure[];
+export type UserProcedures = UserProcedure[];
 
 export type Procedure = {
    id: string;

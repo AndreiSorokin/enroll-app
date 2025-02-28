@@ -70,7 +70,7 @@ const ForgotPassword = () => {
       <Container maxWidth="xs">
         <CssBaseline />
         <FormBox component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <HeaderTypography component="h1" variant="h4" sx={{ mb: 3 }}>
+          <HeaderTypography variant="h4" sx={{ mb: 3 }}>
             Reset Your Password
           </HeaderTypography>
           <TextField

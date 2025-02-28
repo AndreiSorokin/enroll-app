@@ -104,7 +104,7 @@ const MasterProcedures = () => {
       setSlotDuration(30);
       setProcedureId('');
       setTimeSlotDialogOpen(false);
-    } catch (error) {
+    } catch {
       toast.error('Error creating time slots');
     }
   };
@@ -124,7 +124,7 @@ const MasterProcedures = () => {
       refetch();
       toast.success('Price updated successfully');
       setPriceDialogOpen(false);
-    } catch (error) {
+    } catch {
       toast.error('Error updating price');
     }
   };
@@ -182,7 +182,7 @@ const MasterProcedures = () => {
     <Box sx={{ py: 6, backgroundColor: '#f9f6f2', minHeight: '100vh' }}>
       <ToastContainer />
       <CssBaseline />
-      <HeaderTypography variant="h3" component="h1" sx={{ mb: 4 }}>
+      <HeaderTypography variant="h3" sx={{ mb: 4 }}>
         Your Procedures
       </HeaderTypography>
       <Grid container spacing={4} padding={{ xs: 2, md: 4 }}>
