@@ -50,6 +50,11 @@ const FancyButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+interface PasswordFormValues {
+  currentPassword: string;
+  newPassword: string;
+}
+
 const Profile = () => {
   const { id } = useParams<{ id: string }>();
   const { data, refetch, isLoading, error } = useGetUserByIdQuery(id!);
@@ -77,12 +82,12 @@ const Profile = () => {
     handleUpdate
   );
 
-  const handlePasswordUpdate = async () => {
+  const handlePasswordUpdate = async (values: PasswordFormValues) => {
     try {
       await updatePassword({
         id: id!,
-        currentPassword: passwordValues.currentPassword,
-        newPassword: passwordValues.newPassword,
+        currentPassword: values.currentPassword,
+        newPassword: values.newPassword,
         token: token!,
       }).unwrap();
       toast.success('Password updated successfully!');
@@ -92,7 +97,7 @@ const Profile = () => {
     }
   };
 
-  const { values: passwordValues, errors: passwordErrors, touched: passwordTouched, handleChange: handlePasswordChange, handleBlur: handlePasswordBlur, handleSubmit: handlePasswordSubmit } = useInput(
+  const { values: passwordValues, errors: passwordErrors, touched: passwordTouched, handleChange: handlePasswordChange, handleBlur: handlePasswordBlur, handleSubmit: handlePasswordSubmit } = useInput<PasswordFormValues>(
     updatePasswordSchema,
     { currentPassword: '', newPassword: '' },
     handlePasswordUpdate

@@ -1,17 +1,11 @@
 import { Avatar, Box, Button, ButtonProps, Checkbox, Container, CssBaseline, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography, styled } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate, Link, LinkProps } from 'react-router-dom';
-import { z } from 'zod';
 import { useRegistrationMutation } from '../redux';
 import useInput from '../hooks/UseInput';
 import { toast } from 'react-toastify';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-
-export const registrationSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must contain letters and numbers and be at least 6 characters long'),
-});
+import { registrationSchema } from '../schemas/schemas';
 
 const BackgroundBox = styled(Box)(({ theme }) => ({
   backgroundColor: '#f9f6f2',
@@ -78,7 +72,7 @@ const Registration = () => {
     formData.append('name', values.name);
     formData.append('email', values.email);
     formData.append('password', values.password);
-    formData.append('role', values.role);
+    formData.append('role', values.role!);
 
     if (avatar) {
       formData.append('image', avatar);
