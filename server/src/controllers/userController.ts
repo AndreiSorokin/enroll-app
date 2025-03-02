@@ -31,7 +31,6 @@ export async function getAllMasterProcedures(req: Request, res: Response, next: 
 export async function getSingleMasterProcedure(req: Request, res: Response, next: NextFunction) {
    try {
       const { id: masterId, procedureId } = req.params;
-      console.log("Params:", req.params);
       const masterProcedure = await userService.getSingleMasterProcedure(masterId, procedureId);
       res.json(masterProcedure);
    } catch (error) {
@@ -41,7 +40,6 @@ export async function getSingleMasterProcedure(req: Request, res: Response, next
 
 export async function googleLogin(req: Request, res: Response, next: NextFunction) {
    try {
-      console.log("Received Google auth request", req.body);
       const user = req.user as User;
 
       const token = jwt.sign({
@@ -152,7 +150,6 @@ export async function addMasterProcedure(req: Request, res: Response, next: Next
       const masterProcedure = await userService.addMasterProcedure(masterId, procedureName, price, duration);
       res.status(200).json({ message: 'Procedure listed', masterProcedure });
    } catch (error) {
-      console.log(error);
       next(error);
    }
 };
@@ -168,7 +165,6 @@ export async function addUserProcedure(req: Request, res: Response, next: NextFu
       await userService.addUserProcedure(userId, procedureId, masterId);
       res.status(200).json({ message: 'Procedure added successfully' });
    } catch (error) {
-      console.log(error);
       next(error);
    }
 };

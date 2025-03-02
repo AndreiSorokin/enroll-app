@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
    up: async ({ context: queryInterface }) => {
-      console.log('Running migration - Add procedures and active to user');
       await queryInterface.addColumn('users', 'active', {
          type: DataTypes.BOOLEAN,
          defaultValue: true,

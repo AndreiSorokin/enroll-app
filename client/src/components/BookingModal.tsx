@@ -52,7 +52,6 @@ const BookingModal: FC<BookingModalProps> = ({ userData, open, setOpen, selected
 
   const handleBooking = async () => {
     if (!selectedSlot) return alert("Please select a time slot!");
-    console.log("Selected slot before booking:", selectedSlot);
 
     const today = dayjs().startOf("day");
     const chosenDate = dayjs(selectedDate).startOf("day");
@@ -113,7 +112,6 @@ const BookingModal: FC<BookingModalProps> = ({ userData, open, setOpen, selected
             label="Select Date"
             value={selectedDate}
             onChange={(date) => {
-              console.log("Date selected:", date);
               setSelectedDate(date);
             }}
             disablePast

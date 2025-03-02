@@ -50,8 +50,6 @@ function App() {
   const isAdmin = userData?.role === 'admin';
   const isActive = userData?.active === true;
 
-  console.log('userData: ', userData);
-
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

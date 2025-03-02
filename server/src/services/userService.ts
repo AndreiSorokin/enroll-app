@@ -245,12 +245,6 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       defaults: {  name: procedureName, duration },
     });
 
-    if (!created) {
-      console.log(`Procedure "${procedureName}" already exists`);
-    } else {
-      console.log(`Procedure "${procedureName}" has been created`);
-    }
-
     return await MasterProcedure.create({
       masterId,
       procedureId: procedure.id,

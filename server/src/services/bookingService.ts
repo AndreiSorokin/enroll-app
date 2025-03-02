@@ -9,7 +9,6 @@ const getUserBookings = async(userId: string) => {
          include: [{ model: TimeSlot, as: 'TimeSlot' }]
       });
 
-      console.log("bookings: ", bookings)
       if(bookings.length === 0) {
          throw new NotFoundError("No bookings found for this user");
       }
