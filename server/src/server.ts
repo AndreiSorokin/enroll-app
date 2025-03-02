@@ -15,6 +15,11 @@ app.get('*', (req, res) => {
    res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
+app.use((req, res, next) => {
+   console.log(`Incoming request: ${req.method} ${req.url}`);
+   next();
+});
+
 const start = async () => {
    await connectToDatabase();
    app.listen(PORT, () => {
