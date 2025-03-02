@@ -17,7 +17,7 @@ import userStatusCheck from "./middlewares/userStatusCheck";
 
 const app = express();
 const corsOptions = {
-   origin: ["https://enroll-app.onrender.com", "http://localhost:5173"],
+   origin: "*",
    credentials: true,
    allowedHeaders: ["Content-Type", "Authorization"],
    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
