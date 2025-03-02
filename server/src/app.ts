@@ -14,6 +14,7 @@ import { authMiddleware } from "./middlewares/authMiddleware";
 import { authOwnershipMiddleware } from "./middlewares/authOwnershipMiddleware";
 import adminCheck from "./middlewares/adminCheck";
 import userStatusCheck from "./middlewares/userStatusCheck";
+import path from "path";
 
 const app = express();
 const corsOptions = {
@@ -29,6 +30,10 @@ app.use(helmet({
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passport.initialize());
+
+const clientBuildPath = path.join(__dirname, '../../../client/dist');
+console.log("Serving static files from:", clientBuildPath);
+app.use(express.static(clientBuildPath));
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/procedures", procedureRouter);
