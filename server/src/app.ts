@@ -18,7 +18,7 @@ import path from "path";
 
 const app = express();
 const corsOptions = {
-   origin: "*",
+   origin: ["https://enroll-app.onrender.com", "http://localhost:5173"],
    credentials: true,
    allowedHeaders: ["Content-Type", "Authorization"],
    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
