@@ -1,8 +1,16 @@
 import express from 'express';
-import app from './app';
+import path from 'path';
 
+import app from './app';
 import { PORT } from './utils/config';
 import { connectToDatabase } from './utils/db';
+
+const clientBuildPath = path.join(__dirname, '../../client/dist');
+app.use(express.static(clientBuildPath));
+
+app.get('*', (req, res) => {
+   res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
 
 const start = async () => {
    await connectToDatabase();
