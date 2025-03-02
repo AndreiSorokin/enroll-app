@@ -4,7 +4,7 @@ import { Master, Procedure } from "../misc/types";
 export const procedureApi = createApi({
    reducerPath: "procedureApi",
    baseQuery: fetchBaseQuery({
-      baseUrl: import.meta.env.VITE_BASE_URL,
+      baseUrl: import.meta.env.VITE_BASE_URL || '/api/v1/',
       prepareHeaders: (headers) => {
          const token = localStorage.getItem('token');
          if (token) {
