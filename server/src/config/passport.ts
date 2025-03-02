@@ -9,7 +9,6 @@ const googleAuthStrategy = new GoogleTokenStrategy(
    },
    async (parsedToken: any, googleId: string, done: any) => {
       try {
-         console.log("Received Google token:", parsedToken);
          const { email, name, picture } = parsedToken.payload;
 
          if (!email) {
@@ -20,7 +19,6 @@ const googleAuthStrategy = new GoogleTokenStrategy(
          let user = await User.findOne({ where: { email } });
 
          if (!user) {
-            console.log("Creating new user from Google login...");
             const saltRound = 10;
             const defaultPassword = `google_${new Date().getTime()}`;
             const hashedPassword = await bcrypt.hash(defaultPassword, saltRound);
@@ -36,7 +34,6 @@ const googleAuthStrategy = new GoogleTokenStrategy(
             });
          }
 
-         console.log("User authenticated:", user.email);
          return done(null, user);
       } catch (error) {
          console.error("Error processing Google token:", error);

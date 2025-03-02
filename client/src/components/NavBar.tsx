@@ -70,9 +70,6 @@ const Navbar = () => {
   const id = userData?.id;
   const isActive = userData?.active === true;
 
-  console.log(userData?.id)
-  console.log("token: ",localStorage.getItem('token'))
-
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
   };
@@ -82,7 +79,7 @@ const Navbar = () => {
       dispatch(clearUser());
       localStorage.removeItem('token');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

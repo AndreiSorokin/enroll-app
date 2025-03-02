@@ -33,8 +33,6 @@ export async function getSingleProcedure(req: Request, res: Response, next: Next
    try {
       const procedure = await procedureService.getSingleProcedure(req.params.id);
 
-      console.log('procedure: ', procedure)
-
       if(!procedure) {
          res.status(404).json({ message: "Procedure not found" });
          return;

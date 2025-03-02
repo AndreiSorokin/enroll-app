@@ -166,7 +166,6 @@ export const userApi = createApi({
       }),
       googleLogin: builder.mutation<{ token: string; refreshToken: string }, { googleToken: string }>({
          query: ({ googleToken }) => {
-            console.log("Sending Google login request:", googleToken);
             return {
                url: `users/auth/google`,
                method: "POST",
