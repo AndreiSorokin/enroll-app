@@ -50,6 +50,7 @@ const getUserProcedure = async (userId: string) => {
 
     return userProcedures;
   } catch (error) {
+    console.error(error)
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }
@@ -251,6 +252,7 @@ const addMasterProcedure = async (masterId: string, procedureName: string, price
       price,
     });
   } catch (error) {
+    console.error(error);
     if (error instanceof BadRequestError || error instanceof NotFoundError) {
       throw error;
     }

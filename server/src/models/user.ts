@@ -11,6 +11,8 @@ interface UserAttributes {
    resetTokenExpiresAt?: Date | null;
    image?: string | null;
    googleId?: string | null;
+   createdAt?: Date | null;
+   updatedAt?: Date | null;
 }
 
 interface UserCreationAttributes {
@@ -97,7 +99,17 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
          type: DataTypes.STRING,
          allowNull: true,
          defaultValue: null,
-      }
+      },
+      createdAt: {
+         type: DataTypes.DATE,
+         allowNull: false,
+         defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+         type: DataTypes.DATE,
+         allowNull: false,
+         defaultValue: DataTypes.NOW,
+      },
    }, {
       sequelize,
       modelName: 'User',

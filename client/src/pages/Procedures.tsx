@@ -64,7 +64,7 @@ const Procedures = () => {
   if (error) {
     return (
       <Typography color="error" align="center" sx={{ mt: 4 }}>
-        Error fetching procedures
+        No procedures listed
       </Typography>
     );
   }

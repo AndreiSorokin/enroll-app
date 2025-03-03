@@ -5,7 +5,18 @@
 The application allows masters to list procedures they can perform, set dates and time ranges for each procedure
 From the other hand, users can choose dates and time and book procedures
 
-### TODO add test userss
+### Test users
+#### User:
+email: user@user.user
+password: user12345
+
+#### Master:
+email: master@master.master
+password: master12345
+
+#### Admin:
+email: admin@admin.admin
+password: admin12345
 
 ### TODO Link to work hours listing
 

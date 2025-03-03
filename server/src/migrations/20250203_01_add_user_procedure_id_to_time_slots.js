@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    await queryInterface.addColumn("time_slots", "userProcedureId", {
+    await queryInterface.addColumn("time_slots", "user_procedure_id", {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
