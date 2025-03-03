@@ -1,9 +1,11 @@
 ### This application has been made as a finel project for University of Helsinki Full stack development couse
 
-### TODO Link to an address, where the application is running
+### [Live version](https://enroll-app.onrender.com)
 
-The application allows masters to list procedures they can perform, set dates and time ranges for each procedure
-From the other hand, users can choose dates and time and book procedures
+The application allows "masters" to list procedures they can perform, set dates and time ranges for each procedure
+From the other hand, "users" can choose dates and time and book procedures
+And "Admins" can bun and unbun users and masters restricting them to create and enroll in procedures
+
 
 ### Test users
 #### User:
@@ -19,6 +21,11 @@ email: admin@admin.admin
 password: admin12345
 
 ### TODO Link to work hours listing
+
+
+In this application users are able to 
+
+
 
 
 Timeslots are created by masters and are being available times for procedures
