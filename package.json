@@ -1,16 +1,16 @@
 {
-   "name": "enroll-app",
-   "version": "1.0.0",
-   "private": true,
-   "scripts": {
-     "build:client": "cd client && npm install && npm run build",
-     "build:server": "cd server && npm install && npm run build",
-     "build": "NODE_OPTIONS='--max-old-space-size=512' npm ci && npm run build:client && npm run build:server",
-     "start": "npm run build:client && cd server && npm run start",
-     "dev:client": "cd client && npm run dev",
-     "dev:server": "cd server && npm run dev"
-   },
-   "engines": {
-     "node": ">=18.x"
-   }
- }
+  "name": "enroll-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:client": "cd client && npm install && npm run build",
+    "build:server": "cd server && npm install && npm run build",
+    "build": "npm install && npm run build:client && npm run build:server && dir client\\dist",
+    "start": "cd server && npm run start",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

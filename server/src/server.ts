@@ -10,9 +10,11 @@ const clientBuildPath = path.join(__dirname, '../client/dist');
 app.use(express.static(clientBuildPath));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(clientBuildPath, 'index.html'));
+   res.sendFile(path.resolve(clientBuildPath, 'index.html'));
 });
 
+// app.use(express.static(path.join(__dirname, '../../../client/dist')));
+// app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../../../client/dist', 'index.html')));
 
 const start = async () => {
    await connectToDatabase();
