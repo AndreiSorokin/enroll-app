@@ -18,7 +18,7 @@ import path from "path";
 
 const app = express();
 const corsOptions = {
-   origin: "*",
+   origin: "https://enroll-app.onrender.com/",
    credentials: true,
    allowedHeaders: ["Content-Type", "Authorization"],
    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -26,7 +26,16 @@ const corsOptions = {
 
 app.use(helmet({
    crossOriginOpenerPolicy: { policy: "unsafe-none" },
-}));
+   contentSecurityPolicy: {
+     directives: {
+       defaultSrc: ["'self'"],
+       imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "https://images.unsplash.com"],
+       scriptSrc: ["'self'", "https://accounts.google.com"],
+       styleSrc: ["'self'", "'unsafe-inline'"],
+       connectSrc: ["'self'", "https://enroll-app.onrender.com"],
+     },
+   },
+ }));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passport.initialize());
